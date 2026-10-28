@@ -467,6 +467,208 @@ function buildChrome() {
   )
 }
 
+// ---------------------------------------------------------------- GitHub
+
+// GitHub's UI reads Primer CSS variables, so the userstyle only overrides those.
+// Primer sets them per theme on [data-color-mode], which is why every value is !important.
+function githubVars(variant) {
+  const c = VARIANTS[variant]
+  const isDark = variant === 'dark'
+  const { syntax } = zedTheme(variant).style
+  const a = (color, amount) => alpha({ color, amount })
+  const shade = (color, amount) => mix({ from: color, to: isDark ? '#FFFFFF' : '#000000', amount })
+  const inset = isDark ? mix({ from: c.charcoal, to: '#000000', amount: 0.2 }) : c.graphite
+  const brand = c.terracotta
+  const states = {
+    accent: brand,
+    success: c.sage,
+    attention: c.ochre,
+    danger: c.red,
+    done: c.lavender,
+    severe: brand,
+    sponsors: c.rose,
+  }
+  const contribution = [0.25, 0.5, 0.75, 1].map((amount) =>
+    mix({ from: c.graphite, to: brand, amount }),
+  )
+  return {
+    'bgColor-default': c.charcoal,
+    'bgColor-muted': c.graphite,
+    'bgColor-inset': inset,
+    'bgColor-emphasis': c.cloud,
+    'bgColor-inverse': c.cloud,
+    'bgColor-disabled': c.slate,
+    'bgColor-neutral-emphasis': c.comment,
+    'bgColor-neutral-muted': a(c.comment, 0.2),
+    ...Object.fromEntries(
+      Object.entries(states).flatMap(([state, color]) => [
+        [`bgColor-${state}-emphasis`, color],
+        [`bgColor-${state}-muted`, a(color, 0.15)],
+        [`borderColor-${state}-emphasis`, color],
+        [`borderColor-${state}-muted`, a(color, 0.4)],
+        [`fgColor-${state}`, color],
+      ]),
+    ),
+
+    'fgColor-default': c.cloud,
+    'fgColor-muted': c.silver,
+    'fgColor-neutral': c.silver,
+    'fgColor-disabled': c.disabled,
+    'fgColor-link': brand,
+    'fgColor-onEmphasis': c.charcoal,
+    'fgColor-onInverse': c.charcoal,
+
+    'borderColor-default': c.pewter,
+    'borderColor-muted': c['pewter-soft'],
+    'borderColor-emphasis': c['line-number'],
+    'borderColor-disabled': a(c.disabled, 0.2),
+
+    'control-bgColor-rest': c.slate,
+    'control-bgColor-hover': c['slate-hover'],
+    'control-bgColor-active': c['slate-active'],
+    'control-bgColor-disabled': c.graphite,
+    'control-borderColor-selected': c.cloud,
+    'control-checked-bgColor-hover': shade(brand, 0.1),
+    'control-checked-bgColor-active': shade(brand, 0.2),
+    'control-checked-fgColor-disabled': c.charcoal,
+    'control-danger-fgColor-hover': shade(c.red, 0.15),
+    'control-danger-bgColor-active': a(c.red, 0.4),
+    'control-transparent-bgColor-hover': a(c.comment, 0.2),
+    'control-transparent-bgColor-active': a(c.comment, 0.25),
+    'control-transparent-bgColor-selected': a(c.comment, 0.2),
+    'controlKnob-bgColor-rest': c['slate-hover'],
+    'controlKnob-bgColor-checked': c.charcoal,
+    'controlTrack-bgColor-rest': inset,
+    'controlTrack-bgColor-hover': c['slate-hover'],
+    'controlTrack-bgColor-active': c['slate-active'],
+
+    'button-primary-bgColor-rest': brand,
+    'button-primary-bgColor-hover': shade(brand, 0.1),
+    'button-primary-bgColor-active': shade(brand, 0.2),
+    'button-primary-bgColor-disabled': a(brand, 0.4),
+    'button-primary-borderColor-disabled': a(brand, 0.4),
+    'button-primary-fgColor-rest': c.charcoal,
+    'button-primary-fgColor-disabled': a(c.charcoal, 0.6),
+    'button-primary-iconColor-rest': c.charcoal,
+    'buttonCounter-default-bgColor-rest': c['slate-active'],
+    'buttonCounter-primary-bgColor-rest': a(c.charcoal, 0.2),
+    'buttonKeybindingHint-default-bgColor-rest': c['slate-active'],
+    'buttonKeybindingHint-inactive-bgColor': c['slate-active'],
+
+    'header-bgColor': a(c.graphite, 0.95),
+    'header-borderColor-divider': c['line-number'],
+    'header-fgColor-default': c.silver,
+    'header-fgColor-logo': c.cloud,
+    'headerSearch-bgColor': c.charcoal,
+    'headerSearch-borderColor': c['slate-active'],
+
+    'overlay-bgColor': c.graphite,
+    'overlay-backdrop-bgColor': a(c.charcoal, 0.6),
+    'menu-bgColor-active': c.slate,
+    'sideNav-bgColor-selected': c.slate,
+    'timelineBadge-bgColor': c.slate,
+    'selectMenu-bgColor-active': a(brand, 0.2),
+    'selection-bgColor': a(brand, isDark ? 0.3 : 0.25),
+    'underlineNav-borderColor-active': brand,
+    'highlight-neutral-bgColor': a(c.ochre, 0.4),
+    'skeletonLoader-bgColor': a(c.comment, 0.2),
+    'reactionButton-selected-bgColor-rest': a(brand, 0.2),
+    'reactionButton-selected-bgColor-hover': a(brand, 0.35),
+    'reactionButton-selected-fgColor-hover': brand,
+
+    'contribution-default-bgColor-0': c.graphite,
+    ...Object.fromEntries(contribution.map((color, i) => [`contribution-default-bgColor-${i + 1}`, color])),
+
+    'diffBlob-additionNum-bgColor': a(c.sage, 0.3),
+    'diffBlob-additionWord-bgColor': a(c.sage, 0.4),
+    'diffBlob-deletionNum-bgColor': a(c.red, 0.3),
+    'diffBlob-deletionWord-bgColor': a(c.red, 0.4),
+    'diffBlob-hunkLine-bgColor': a(c['dusty-blue'], 0.15),
+    'diffBlob-hunkNum-bgColor-rest': a(c['dusty-blue'], 0.3),
+    'diffBlob-hunkNum-bgColor-hover': c['dusty-blue'],
+
+    'prettylights-syntax-comment': syntax.comment.color,
+    'prettylights-syntax-constant': syntax.constant.color,
+    'prettylights-syntax-constantOtherReferenceLink': syntax.link_text.color,
+    'prettylights-syntax-entity': syntax.function.color,
+    'prettylights-syntax-entityTag': syntax.tag.color,
+    'prettylights-syntax-keyword': syntax.keyword.color,
+    'prettylights-syntax-string': syntax.string.color,
+    'prettylights-syntax-stringRegexp': syntax['string.regex'].color,
+    'prettylights-syntax-variable': syntax['variable.parameter'].color,
+    'prettylights-syntax-storageModifierImport': c.cloud,
+    'prettylights-syntax-bracketHighlighterAngle': c.silver,
+    'prettylights-syntax-bracketHighlighterUnmatched': c.red,
+    'prettylights-syntax-sublimeLinterGutterMark': c.pewter,
+    'prettylights-syntax-metaDiffRange': c.lavender,
+    'prettylights-syntax-markup-heading': brand,
+    'prettylights-syntax-markup-list': c.ochre,
+    'prettylights-syntax-markup-bold': c.cloud,
+    'prettylights-syntax-markup-italic': c.cloud,
+    'prettylights-syntax-markup-inserted-bg': a(c.sage, 0.15),
+    'prettylights-syntax-markup-inserted-text': c.sage,
+    'prettylights-syntax-markup-deleted-bg': a(c.red, 0.15),
+    'prettylights-syntax-markup-deleted-text': c.red,
+    'prettylights-syntax-markup-changed-bg': a(c.ochre, 0.15),
+    'prettylights-syntax-markup-changed-text': c.ochre,
+    'prettylights-syntax-markup-ignored-bg': a(c['dusty-blue'], 0.15),
+    'prettylights-syntax-markup-ignored-text': c['dusty-blue'],
+
+    'codeMirror-syntax-fgColor-comment': syntax.comment.color,
+    'codeMirror-syntax-fgColor-constant': syntax.constant.color,
+    'codeMirror-syntax-fgColor-entity': syntax.function.color,
+    'codeMirror-syntax-fgColor-keyword': syntax.keyword.color,
+    'codeMirror-syntax-fgColor-storage': syntax.keyword.color,
+    'codeMirror-syntax-fgColor-string': syntax.string.color,
+    'codeMirror-syntax-fgColor-support': syntax.type.color,
+    'codeMirror-syntax-fgColor-variable': syntax['variable.parameter'].color,
+  }
+}
+
+// Follows GitHub's own appearance setting: dark, light, or sync with system.
+function githubUserCss() {
+  const block = ({ selector, variant, indent }) => {
+    const pad = ' '.repeat(indent)
+    const decls = Object.entries(githubVars(variant)).map(
+      ([name, value]) => `${pad}  --${name}: ${value} !important;`,
+    )
+    return [
+      `${pad}${selector} {`,
+      `${pad}  color-scheme: ${variant};`,
+      ...decls,
+      `${pad}}`,
+    ].join('\n')
+  }
+  return [
+    '/* ==UserStyle==',
+    '@name         gh44 for GitHub',
+    '@namespace    gh44',
+    `@version      ${TOKENS.version}`,
+    '@description  gh44 colors for GitHub. Follows your GitHub appearance setting. Generated by scripts/build.mjs.',
+    `@author       ${TOKENS.author}`,
+    '==/UserStyle== */',
+    '',
+    '@-moz-document domain("github.com") {',
+    block({ selector: '[data-color-mode="dark"]', variant: 'dark', indent: 2 }),
+    '',
+    block({ selector: '[data-color-mode="light"]', variant: 'light', indent: 2 }),
+    '',
+    '  @media (prefers-color-scheme: dark) {',
+    block({ selector: '[data-color-mode="auto"]', variant: 'dark', indent: 4 }),
+    '  }',
+    '',
+    '  @media (prefers-color-scheme: light) {',
+    block({ selector: '[data-color-mode="auto"]', variant: 'light', indent: 4 }),
+    '  }',
+    '}',
+    '',
+  ].join('\n')
+}
+
+function buildGithub() {
+  return write({ path: join(ROOT, 'github', 'gh44.user.css'), content: githubUserCss() })
+}
+
 // ---------------------------------------------------------------- README images
 
 const MONO = 'JetBrains Mono, SFMono-Regular, Menlo, Consolas, monospace'
@@ -652,7 +854,7 @@ function buildCss() {
   return write({ path: join(ROOT, 'palette', 'gh44.css'), content: css })
 }
 
-const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), buildCss(), ...buildReadmeImages()]
+const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), buildGithub(), buildCss(), ...buildReadmeImages()]
 const swatches = buildSwatches()
 for (const path of built) console.log('built', relative(ROOT, path))
 console.log('built', swatches.length, 'swatches in palette/swatches')
