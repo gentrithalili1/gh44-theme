@@ -13,49 +13,67 @@
     color: #2B2D30 !important;
   }
 
-  /* comment, meta, tag, quote */
+  .syntax-comment,
+  .syntax-markup-quote,
   :is(pre, code) .sx-d5ldbw,
   :is(pre, code) .sx-sy73al {
     color: #6E6A66 !important;
+    font-style: italic;
   }
 
-  /* keyword, operator, function, built-in */
+  .syntax-keyword,
+  .syntax-keyword-operator,
+  .syntax-support-function,
   :is(pre, code) .sx-14rh7hd[style*="#9532A4" i],
   :is(pre, code) .sx-14rh7hd[style*="#E394DC" i] {
     color: #A9502F !important;
   }
 
-  /* string, bullet */
+  .syntax-string,
+  .syntax-markup-list,
   :is(pre, code) .sx-14rh7hd[style*="#025F8C" i],
   :is(pre, code) .sx-14rh7hd[style*="#00C5F0" i] {
     color: #5E7350 !important;
   }
 
-  /* literal, deletion */
+  .syntax-constant-language,
+  .syntax-markup-deleted,
   :is(pre, code) .sx-14rh7hd[style*="#BF1420" i],
   :is(pre, code) .sx-14rh7hd[style*="#EC3B40" i] {
     color: #8C6A2E !important;
   }
 
-  /* title, section, addition */
+  .syntax-entity-name-function,
+  .syntax-meta-embedded,
+  .syntax-markup-heading,
+  .syntax-markup-inserted,
   :is(pre, code) .sx-14rh7hd[style*="#00755C" i],
   :is(pre, code) .sx-14rh7hd[style*="#25F8CA" i] {
     color: #6F58A0 !important;
   }
 
-  /* type, name, selector, regexp, link */
+  .syntax-entity-name-tag,
+  .syntax-entity-name-type,
+  .syntax-entity-other-attribute-name-id,
+  .syntax-entity-other-attribute-name-class,
+  .syntax-string-regexp,
+  .syntax-markup-underline-link,
   :is(pre, code) .sx-14rh7hd[style*="#A74002" i],
   :is(pre, code) .sx-14rh7hd[style*="#EB6E3D" i] {
     color: #3F6A8C !important;
   }
 
-  /* attr, property, variable, params */
+  .syntax-entity-other-attribute-name,
+  .syntax-constant-other-symbol,
+  .syntax-variable-other-property,
+  .syntax-variable,
+  .syntax-variable-parameter,
   :is(pre, code) .sx-14rh7hd[style*="#8A5D00" i],
   :is(pre, code) .sx-14rh7hd[style*="#FCE27D" i] {
     color: #A4506A !important;
   }
 
-  /* number */
+  .syntax-constant-numeric,
   :is(pre, code) .sx-14rh7hd[style*="#00264D" i],
   :is(pre, code) .sx-14rh7hd[style*="#2482D8" i] {
     color: #8C6A2E !important;
