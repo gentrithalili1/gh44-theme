@@ -22,7 +22,8 @@ To install from a local clone instead, open the file in the browser with a
 GitHub colors everything through Primer CSS variables (`--bgColor-default`,
 `--fgColor-accent`, `--prettylights-syntax-keyword`, ...). The userstyle only
 overrides those variables, so it survives most GitHub redesigns. Terracotta
-replaces GitHub's blue and green as the accent and primary button color.
+replaces GitHub's blue as the accent, and sage replaces green on primary
+buttons.
 
 ## Editing
 
