@@ -343,44 +343,58 @@ function linearTheme(variant) {
 
 // Linear's theme doesn't reach code blocks, so they get a Stylus userstyle instead.
 // Linear colors code two ways, and the userstyle covers both:
-// - Editor code blocks and diffs: spans with .syntax-* classes.
+// - Editor code blocks and diffs: one span per token whose class is the TextMate
+//   scope, like <span class="syntax-keyword-control-import">.
 // - Read-only <pre> blocks: spans with an inline color, like
 //   <span class="sx-14rh7hd" style="--x-color: #E394DC">.
-// Each entry is [Zed syntax scope, .syntax-* classes, Linear's light and dark inline colors].
-const LINEAR_CODE_COLORS = [
-  ['comment', ['comment', 'markup-quote'], []],
-  ['keyword', ['keyword', 'keyword-operator', 'support-function'], ['#9532A4', '#E394DC']],
-  ['string', ['string', 'markup-list'], ['#025F8C', '#00C5F0']],
-  ['boolean', ['constant-language', 'markup-deleted'], ['#BF1420', '#EC3B40']],
-  [
-    'function',
-    ['entity-name-function', 'meta-embedded', 'markup-heading', 'markup-inserted'],
-    ['#00755C', '#25F8CA'],
-  ],
-  [
-    'type',
-    [
-      'entity-name-tag',
-      'entity-name-type',
-      'entity-other-attribute-name-id',
-      'entity-other-attribute-name-class',
-      'string-regexp',
-      'markup-underline-link',
-    ],
-    ['#A74002', '#EB6E3D'],
-  ],
-  [
-    'property',
-    [
-      'entity-other-attribute-name',
-      'constant-other-symbol',
-      'variable-other-property',
-      'variable',
-      'variable-parameter',
-    ],
-    ['#8A5D00', '#FCE27D'],
-  ],
-  ['number', ['constant-numeric'], ['#00264D', '#2482D8']],
+// Scopes match by prefix, like editor themes. Later, longer prefixes win, so keep
+// each one after the shorter prefix it refines. Each entry is [scope prefix, Zed scope].
+const LINEAR_SYNTAX_SCOPES = [
+  ['comment', 'comment'],
+  ['string', 'string'],
+  ['string-regexp', 'string.regex'],
+  ['constant', 'constant'],
+  ['constant-numeric', 'number'],
+  ['constant-language', 'boolean'],
+  ['keyword', 'keyword'],
+  ['keyword-operator', 'operator'],
+  ['storage', 'keyword'],
+  ['variable', 'variable'],
+  ['variable-parameter', 'variable.parameter'],
+  ['variable-other-property', 'property'],
+  ['variable-other-object-property', 'property'],
+  ['variable-other-constant', 'constant'],
+  ['support-variable-property', 'property'],
+  ['meta-object-literal-key', 'property'],
+  ['entity-name-function', 'function'],
+  ['support-function', 'function'],
+  ['entity-name-type', 'type'],
+  ['entity-name-class', 'type'],
+  ['entity-other-inherited-class', 'type'],
+  ['support-type', 'type'],
+  ['support-class', 'type'],
+  ['entity-name-tag', 'tag'],
+  ['support-class-component', 'type'],
+  ['entity-other-attribute-name', 'attribute'],
+  ['punctuation', 'punctuation'],
+  ['markup-heading', 'title'],
+  ['markup-bold', 'emphasis.strong'],
+  ['markup-italic', 'emphasis'],
+  ['markup-quote', 'comment'],
+  ['markup-underline-link', 'link_text'],
+  ['markup-inline-raw', 'string'],
+  ['markup-inserted', 'string'],
+  ['markup-deleted', 'boolean'],
+]
+// Read-only blocks: [Zed scope, Linear's light and dark inline colors].
+const LINEAR_INLINE_COLORS = [
+  ['keyword', ['#9532A4', '#E394DC']],
+  ['string', ['#025F8C', '#00C5F0']],
+  ['boolean', ['#BF1420', '#EC3B40']],
+  ['function', ['#00755C', '#25F8CA']],
+  ['type', ['#A74002', '#EB6E3D']],
+  ['property', ['#8A5D00', '#FCE27D']],
+  ['number', ['#00264D', '#2482D8']],
 ]
 // In read-only blocks, comments, meta and tags use classes for Linear's muted label color.
 const LINEAR_CODE_MUTED = ['sx-d5ldbw', 'sx-sy73al']
@@ -389,18 +403,28 @@ const LINEAR_CODE_TOKEN = 'sx-14rh7hd'
 function linearUserCss(variant) {
   const c = VARIANTS[variant]
   const { syntax } = zedTheme(variant).style
-  const scope = ':is(pre, code)'
-  const rules = LINEAR_CODE_COLORS.map(([name, classes, colors]) => {
-    const selectors = [
-      ...classes.map((cls) => `.syntax-${cls}`),
-      ...colors.map((hex) => `${scope} .${LINEAR_CODE_TOKEN}[style*="${hex}" i]`),
-      ...(name === 'comment' ? LINEAR_CODE_MUTED.map((cls) => `${scope} .${cls}`) : []),
-    ]
+  const rule = ({ selectors, name }) => {
     const st = syntax[name]
     const decls = [`color: ${st.color} !important;`]
-    if (st.font_style) decls.push(`font-style: ${st.font_style};`)
+    decls.push(`font-style: ${st.font_style ?? 'normal'} !important;`)
+    if (st.font_weight) decls.push(`font-weight: ${st.font_weight} !important;`)
     return `  ${selectors.join(',\n  ')} {\n    ${decls.join('\n    ')}\n  }`
+  }
+  const scopeRules = LINEAR_SYNTAX_SCOPES.map(([prefix, name]) =>
+    rule({ selectors: [`[class^="syntax-${prefix}"]`, `[class*=" syntax-${prefix}"]`], name }),
+  )
+  const block = ':is(pre, code)'
+  const inlineRules = LINEAR_INLINE_COLORS.map(([name, colors]) =>
+    rule({
+      selectors: colors.map((hex) => `${block} .${LINEAR_CODE_TOKEN}[style*="${hex}" i]`),
+      name,
+    }),
+  )
+  const mutedRule = rule({
+    selectors: LINEAR_CODE_MUTED.map((cls) => `${block} .${cls}`),
+    name: 'comment',
   })
+  const rules = [...scopeRules, mutedRule, ...inlineRules]
   return [
     '/* ==UserStyle==',
     `@name         ${NAMES[variant]} for Linear code blocks`,
