@@ -2,7 +2,7 @@
 
 Linear builds a full theme from a few colors: a background, an accent, and a
 contrast level, plus the same for the sidebar. gh44 sets the background to
-Charcoal, the sidebar to Graphite, and the accent to Terracotta.
+Charcoal, the sidebar to Graphite, and the accent to Lavender.
 
 ## Install
 
@@ -13,12 +13,12 @@ Charcoal, the sidebar to Graphite, and the accent to Terracotta.
 
    **gh44 Dark**
    ```
-   {"base":[11.744,2.222,272.716,1],"accent":[70.918,36.524,45.012,1],"contrast":30,"sidebar":{"base":[15.177,2.834,275.984,1],"accent":[70.918,36.524,45.012,1],"contrast":30}}
+   {"base":[11.744,2.222,272.716,1],"accent":[71.781,26.487,302.487,1],"contrast":30,"sidebar":{"base":[15.177,2.834,275.984,1],"accent":[71.781,26.487,302.487,1],"contrast":30}}
    ```
 
    **gh44 Light**
    ```
-   {"base":[97.382,2.356,77.304,1],"accent":[45.291,51.291,45.938,1],"contrast":30,"sidebar":{"base":[93.727,4.326,73.952,1],"accent":[45.291,51.291,45.938,1],"contrast":30}}
+   {"base":[97.382,2.356,77.304,1],"accent":[42.252,42.335,301.399,1],"contrast":30,"sidebar":{"base":[93.727,4.326,73.952,1],"accent":[42.252,42.335,301.399,1],"contrast":30}}
    ```
 
 Linear doesn't sync the theme between devices, so set it on desktop, web, and
@@ -32,11 +32,18 @@ userstyles in this folder. They work in Linear on the web, not in the desktop
 app.
 
 1. Install [Stylus](https://add0n.com/stylus.html) for your browser.
-2. Open `gh44-dark.user.css` or `gh44-light.user.css` from this folder in its
-   raw view on GitHub. Stylus offers to install it.
+2. Click the link for the theme you imported. Stylus opens its install page.
+   - **[Install gh44 Dark for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-dark.user.css)**
+   - **[Install gh44 Light for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-light.user.css)**
 3. Click **Install style** and reload Linear.
 
-Use the one that matches the theme you imported.
+The links open the raw files. To find them yourself, open `gh44-dark.user.css`
+or `gh44-light.user.css` in this folder on GitHub and click **Raw** at the top
+right of the file.
+
+To update, open the install link again, click **Reinstall style** and reload
+Linear. GitHub caches raw files for a few minutes, so a change just pushed can
+take about 5 minutes to show up.
 
 ## Format
 

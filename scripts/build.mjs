@@ -335,52 +335,42 @@ function linearTheme(variant) {
   const contrast = 30
   return {
     base: lch(c.charcoal),
-    accent: lch(c.terracotta),
+    accent: lch(c.lavender),
     contrast,
-    sidebar: { base: lch(c.graphite), accent: lch(c.terracotta), contrast },
+    sidebar: { base: lch(c.graphite), accent: lch(c.lavender), contrast },
   }
 }
 
 // Linear's theme doesn't reach code blocks, so they get a Stylus userstyle instead.
-// Linear doesn't document its code block markup, so this covers both token class
-// schemes it could use: Prism (.token.keyword) and highlight.js (.hljs-keyword).
-// Each entry is [Zed syntax scope, Prism tokens, highlight.js classes].
-const CODE_TOKENS = [
-  ['comment', ['comment', 'prolog', 'doctype', 'cdata'], ['comment', 'quote']],
-  ['keyword', ['keyword', 'atrule', 'important'], ['keyword', 'doctag']],
-  ['string', ['string', 'char', 'attr-value', 'template-string'], ['string', 'addition']],
-  ['string.regex', ['regex'], ['regexp']],
-  ['number', ['number'], ['number']],
-  ['boolean', ['boolean'], ['literal']],
-  ['constant', ['constant', 'symbol'], ['symbol', 'variable.constant_']],
-  ['function', ['function', 'function-variable'], ['title.function_', 'section']],
-  ['type', ['class-name', 'builtin'], ['type', 'built_in', 'title.class_', 'title']],
-  ['property', ['property'], ['property', 'attr']],
-  ['variable.parameter', ['parameter'], ['params']],
-  ['attribute', ['attr-name'], ['attribute']],
-  ['tag', ['tag', 'selector'], ['tag', 'name', 'selector-tag', 'selector-class', 'selector-id']],
-  ['preproc', ['directive'], ['meta']],
-  ['operator', ['operator'], ['operator']],
-  ['punctuation', ['punctuation'], ['punctuation']],
-  ['variable', ['variable'], ['variable', 'template-variable']],
-  ['emphasis.strong', ['bold'], ['strong']],
-  ['emphasis', ['italic'], ['emphasis']],
+// Linear runs highlight.js but doesn't keep its classes: it maps each token to one of
+// its own colors and renders <span class="sx-14rh7hd" style="--x-color: #E394DC">.
+// So the userstyle matches those inline colors. Each entry is
+// [Zed syntax scope, Linear's light and dark color, the tokens Linear gives that color].
+const LINEAR_CODE_COLORS = [
+  ['keyword', ['#9532A4', '#E394DC'], 'keyword, operator, function, built-in'],
+  ['string', ['#025F8C', '#00C5F0'], 'string, bullet'],
+  ['boolean', ['#BF1420', '#EC3B40'], 'literal, deletion'],
+  ['function', ['#00755C', '#25F8CA'], 'title, section, addition'],
+  ['type', ['#A74002', '#EB6E3D'], 'type, name, selector, regexp, link'],
+  ['property', ['#8A5D00', '#FCE27D'], 'attr, property, variable, params'],
+  ['number', ['#00264D', '#2482D8'], 'number'],
 ]
+// Comments, meta and tags use a class that reads Linear's muted label color.
+const LINEAR_CODE_MUTED = ['sx-d5ldbw', 'sx-sy73al']
+const LINEAR_CODE_TOKEN = 'sx-14rh7hd'
 
 function linearUserCss(variant) {
   const c = VARIANTS[variant]
   const { syntax } = zedTheme(variant).style
-  const rules = CODE_TOKENS.map(([scope, prism, classes]) => {
-    const st = syntax[scope]
-    const selectors = [
-      ...prism.map((t) => `pre .token.${t}`),
-      ...classes.map((t) => `pre .hljs-${t}`),
-    ]
-    const decls = [`color: ${st.color} !important;`]
-    if (st.font_style) decls.push(`font-style: ${st.font_style};`)
-    if (st.font_weight) decls.push(`font-weight: ${st.font_weight};`)
-    return `  ${selectors.join(',\n  ')} {\n    ${decls.join('\n    ')}\n  }`
+  const scope = ':is(pre, code)'
+  const rules = LINEAR_CODE_COLORS.map(([name, colors, tokens]) => {
+    const selectors = colors.map((hex) => `${scope} .${LINEAR_CODE_TOKEN}[style*="${hex}" i]`)
+    return `  /* ${tokens} */\n  ${selectors.join(',\n  ')} {\n    color: ${syntax[name].color} !important;\n  }`
   })
+  const muted = LINEAR_CODE_MUTED.map((cls) => `${scope} .${cls}`)
+  rules.unshift(
+    `  /* comment, meta, tag, quote */\n  ${muted.join(',\n  ')} {\n    color: ${syntax.comment.color} !important;\n  }`,
+  )
   return [
     '/* ==UserStyle==',
     `@name         ${NAMES[variant]} for Linear code blocks`,
@@ -478,35 +468,38 @@ function githubVars(variant) {
   const a = (color, amount) => alpha({ color, amount })
   const shade = (color, amount) => mix({ from: color, to: isDark ? '#FFFFFF' : '#000000', amount })
   const inset = isDark ? mix({ from: c.charcoal, to: '#000000', amount: 0.2 }) : c.graphite
-  const brand = c.terracotta
+  // Solid fills (badges, primary button, toggles) use gh44 Light's deeper colors in
+  // both variants, so they carry light text and read as real color on charcoal.
+  const deep = VARIANTS.light
+  const onEmphasis = deep.charcoal
   const states = {
-    accent: brand,
-    success: c.sage,
-    attention: c.ochre,
-    danger: c.red,
-    done: c.lavender,
-    severe: brand,
-    sponsors: c.rose,
+    accent: 'dusty-blue',
+    success: 'sage',
+    attention: 'ochre',
+    danger: 'red',
+    done: 'lavender',
+    severe: 'terracotta',
+    sponsors: 'rose',
   }
   const contribution = [0.25, 0.5, 0.75, 1].map((amount) =>
-    mix({ from: c.graphite, to: brand, amount }),
+    mix({ from: c.graphite, to: c.sage, amount }),
   )
   return {
     'bgColor-default': c.charcoal,
     'bgColor-muted': c.graphite,
     'bgColor-inset': inset,
-    'bgColor-emphasis': c.cloud,
+    'bgColor-emphasis': isDark ? c.pewter : c.cloud,
     'bgColor-inverse': c.cloud,
     'bgColor-disabled': c.slate,
-    'bgColor-neutral-emphasis': c.comment,
+    'bgColor-neutral-emphasis': isDark ? c['line-number'] : c.comment,
     'bgColor-neutral-muted': a(c.comment, 0.2),
     ...Object.fromEntries(
-      Object.entries(states).flatMap(([state, color]) => [
-        [`bgColor-${state}-emphasis`, color],
-        [`bgColor-${state}-muted`, a(color, 0.15)],
-        [`borderColor-${state}-emphasis`, color],
-        [`borderColor-${state}-muted`, a(color, 0.4)],
-        [`fgColor-${state}`, color],
+      Object.entries(states).flatMap(([state, name]) => [
+        [`bgColor-${state}-emphasis`, deep[name]],
+        [`bgColor-${state}-muted`, a(deep[name], isDark ? 0.3 : 0.15)],
+        [`borderColor-${state}-emphasis`, c[name]],
+        [`borderColor-${state}-muted`, a(c[name], 0.4)],
+        [`fgColor-${state}`, c[name]],
       ]),
     ),
 
@@ -514,8 +507,8 @@ function githubVars(variant) {
     'fgColor-muted': c.silver,
     'fgColor-neutral': c.silver,
     'fgColor-disabled': c.disabled,
-    'fgColor-link': brand,
-    'fgColor-onEmphasis': c.charcoal,
+    'fgColor-link': c['dusty-blue'],
+    'fgColor-onEmphasis': onEmphasis,
     'fgColor-onInverse': c.charcoal,
 
     'borderColor-default': c.pewter,
@@ -528,28 +521,27 @@ function githubVars(variant) {
     'control-bgColor-active': c['slate-active'],
     'control-bgColor-disabled': c.graphite,
     'control-borderColor-selected': c.cloud,
-    'control-checked-bgColor-hover': shade(brand, 0.1),
-    'control-checked-bgColor-active': shade(brand, 0.2),
-    'control-checked-fgColor-disabled': c.charcoal,
+    'control-checked-bgColor-hover': shade(deep['dusty-blue'], 0.1),
+    'control-checked-bgColor-active': shade(deep['dusty-blue'], 0.2),
     'control-danger-fgColor-hover': shade(c.red, 0.15),
     'control-danger-bgColor-active': a(c.red, 0.4),
     'control-transparent-bgColor-hover': a(c.comment, 0.2),
     'control-transparent-bgColor-active': a(c.comment, 0.25),
     'control-transparent-bgColor-selected': a(c.comment, 0.2),
     'controlKnob-bgColor-rest': c['slate-hover'],
-    'controlKnob-bgColor-checked': c.charcoal,
+    'controlKnob-bgColor-checked': onEmphasis,
     'controlTrack-bgColor-rest': inset,
     'controlTrack-bgColor-hover': c['slate-hover'],
     'controlTrack-bgColor-active': c['slate-active'],
 
-    'button-primary-bgColor-rest': c.sage,
-    'button-primary-bgColor-hover': shade(c.sage, 0.1),
-    'button-primary-bgColor-active': shade(c.sage, 0.2),
-    'button-primary-bgColor-disabled': a(c.sage, 0.4),
-    'button-primary-borderColor-disabled': a(c.sage, 0.4),
-    'button-primary-fgColor-rest': c.charcoal,
-    'button-primary-fgColor-disabled': a(c.charcoal, 0.6),
-    'button-primary-iconColor-rest': c.charcoal,
+    'button-primary-bgColor-rest': deep.sage,
+    'button-primary-bgColor-hover': shade(deep.sage, 0.1),
+    'button-primary-bgColor-active': shade(deep.sage, 0.2),
+    'button-primary-bgColor-disabled': a(deep.sage, 0.4),
+    'button-primary-borderColor-disabled': a(deep.sage, 0.4),
+    'button-primary-fgColor-rest': onEmphasis,
+    'button-primary-fgColor-disabled': a(onEmphasis, 0.6),
+    'button-primary-iconColor-rest': onEmphasis,
     'buttonCounter-default-bgColor-rest': c['slate-active'],
     'buttonCounter-primary-bgColor-rest': a(c.charcoal, 0.2),
     'buttonKeybindingHint-default-bgColor-rest': c['slate-active'],
@@ -567,22 +559,22 @@ function githubVars(variant) {
     'menu-bgColor-active': c.slate,
     'sideNav-bgColor-selected': c.slate,
     'timelineBadge-bgColor': c.slate,
-    'selectMenu-bgColor-active': a(brand, 0.2),
-    'selection-bgColor': a(brand, isDark ? 0.3 : 0.25),
-    'underlineNav-borderColor-active': brand,
+    'selectMenu-bgColor-active': a(c['dusty-blue'], 0.2),
+    'selection-bgColor': a(c['dusty-blue'], isDark ? 0.35 : 0.25),
+    'underlineNav-borderColor-active': c.terracotta,
     'highlight-neutral-bgColor': a(c.ochre, 0.4),
     'skeletonLoader-bgColor': a(c.comment, 0.2),
-    'reactionButton-selected-bgColor-rest': a(brand, 0.2),
-    'reactionButton-selected-bgColor-hover': a(brand, 0.35),
-    'reactionButton-selected-fgColor-hover': brand,
+    'reactionButton-selected-bgColor-rest': a(c['dusty-blue'], 0.2),
+    'reactionButton-selected-bgColor-hover': a(c['dusty-blue'], 0.35),
+    'reactionButton-selected-fgColor-hover': c['dusty-blue'],
 
     'contribution-default-bgColor-0': c.graphite,
     ...Object.fromEntries(contribution.map((color, i) => [`contribution-default-bgColor-${i + 1}`, color])),
 
-    'diffBlob-additionNum-bgColor': a(c.sage, 0.3),
-    'diffBlob-additionWord-bgColor': a(c.sage, 0.4),
-    'diffBlob-deletionNum-bgColor': a(c.red, 0.3),
-    'diffBlob-deletionWord-bgColor': a(c.red, 0.4),
+    'diffBlob-additionNum-bgColor': a(deep.sage, isDark ? 0.45 : 0.25),
+    'diffBlob-additionWord-bgColor': a(deep.sage, isDark ? 0.6 : 0.35),
+    'diffBlob-deletionNum-bgColor': a(deep.red, isDark ? 0.45 : 0.25),
+    'diffBlob-deletionWord-bgColor': a(deep.red, isDark ? 0.6 : 0.35),
     'diffBlob-hunkLine-bgColor': a(c['dusty-blue'], 0.15),
     'diffBlob-hunkNum-bgColor-rest': a(c['dusty-blue'], 0.3),
     'diffBlob-hunkNum-bgColor-hover': c['dusty-blue'],
@@ -601,13 +593,13 @@ function githubVars(variant) {
     'prettylights-syntax-bracketHighlighterUnmatched': c.red,
     'prettylights-syntax-sublimeLinterGutterMark': c.pewter,
     'prettylights-syntax-metaDiffRange': c.lavender,
-    'prettylights-syntax-markup-heading': brand,
+    'prettylights-syntax-markup-heading': c['dusty-blue'],
     'prettylights-syntax-markup-list': c.ochre,
     'prettylights-syntax-markup-bold': c.cloud,
     'prettylights-syntax-markup-italic': c.cloud,
-    'prettylights-syntax-markup-inserted-bg': a(c.sage, 0.15),
+    'prettylights-syntax-markup-inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
     'prettylights-syntax-markup-inserted-text': c.sage,
-    'prettylights-syntax-markup-deleted-bg': a(c.red, 0.15),
+    'prettylights-syntax-markup-deleted-bg': a(deep.red, isDark ? 0.3 : 0.15),
     'prettylights-syntax-markup-deleted-text': c.red,
     'prettylights-syntax-markup-changed-bg': a(c.ochre, 0.15),
     'prettylights-syntax-markup-changed-text': c.ochre,

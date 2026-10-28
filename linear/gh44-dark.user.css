@@ -13,127 +13,51 @@
     color: #DFE1E5 !important;
   }
 
-  pre .token.comment,
-  pre .token.prolog,
-  pre .token.doctype,
-  pre .token.cdata,
-  pre .hljs-comment,
-  pre .hljs-quote {
+  /* comment, meta, tag, quote */
+  :is(pre, code) .sx-d5ldbw,
+  :is(pre, code) .sx-sy73al {
     color: #868A92 !important;
-    font-style: italic;
   }
 
-  pre .token.keyword,
-  pre .token.atrule,
-  pre .token.important,
-  pre .hljs-keyword,
-  pre .hljs-doctag {
+  /* keyword, operator, function, built-in */
+  :is(pre, code) .sx-14rh7hd[style*="#9532A4" i],
+  :is(pre, code) .sx-14rh7hd[style*="#E394DC" i] {
     color: #E49B80 !important;
   }
 
-  pre .token.string,
-  pre .token.char,
-  pre .token.attr-value,
-  pre .token.template-string,
-  pre .hljs-string,
-  pre .hljs-addition {
+  /* string, bullet */
+  :is(pre, code) .sx-14rh7hd[style*="#025F8C" i],
+  :is(pre, code) .sx-14rh7hd[style*="#00C5F0" i] {
     color: #B8C5AC !important;
   }
 
-  pre .token.regex,
-  pre .hljs-regexp {
-    color: #D99AA6 !important;
-  }
-
-  pre .token.number,
-  pre .hljs-number {
+  /* literal, deletion */
+  :is(pre, code) .sx-14rh7hd[style*="#BF1420" i],
+  :is(pre, code) .sx-14rh7hd[style*="#EC3B40" i] {
     color: #DDBE8E !important;
   }
 
-  pre .token.boolean,
-  pre .hljs-literal {
-    color: #DDBE8E !important;
-  }
-
-  pre .token.constant,
-  pre .token.symbol,
-  pre .hljs-symbol,
-  pre .hljs-variable.constant_ {
-    color: #DDBE8E !important;
-  }
-
-  pre .token.function,
-  pre .token.function-variable,
-  pre .hljs-title.function_,
-  pre .hljs-section {
+  /* title, section, addition */
+  :is(pre, code) .sx-14rh7hd[style*="#00755C" i],
+  :is(pre, code) .sx-14rh7hd[style*="#25F8CA" i] {
     color: #BBA8D9 !important;
   }
 
-  pre .token.class-name,
-  pre .token.builtin,
-  pre .hljs-type,
-  pre .hljs-built_in,
-  pre .hljs-title.class_,
-  pre .hljs-title {
+  /* type, name, selector, regexp, link */
+  :is(pre, code) .sx-14rh7hd[style*="#A74002" i],
+  :is(pre, code) .sx-14rh7hd[style*="#EB6E3D" i] {
     color: #9FB7CC !important;
   }
 
-  pre .token.property,
-  pre .hljs-property,
-  pre .hljs-attr {
+  /* attr, property, variable, params */
+  :is(pre, code) .sx-14rh7hd[style*="#8A5D00" i],
+  :is(pre, code) .sx-14rh7hd[style*="#FCE27D" i] {
     color: #D99AA6 !important;
   }
 
-  pre .token.parameter,
-  pre .hljs-params {
-    color: #D99AA6 !important;
-  }
-
-  pre .token.attr-name,
-  pre .hljs-attribute {
+  /* number */
+  :is(pre, code) .sx-14rh7hd[style*="#00264D" i],
+  :is(pre, code) .sx-14rh7hd[style*="#2482D8" i] {
     color: #DDBE8E !important;
-  }
-
-  pre .token.tag,
-  pre .token.selector,
-  pre .hljs-tag,
-  pre .hljs-name,
-  pre .hljs-selector-tag,
-  pre .hljs-selector-class,
-  pre .hljs-selector-id {
-    color: #E49B80 !important;
-  }
-
-  pre .token.directive,
-  pre .hljs-meta {
-    color: #E49B80 !important;
-  }
-
-  pre .token.operator,
-  pre .hljs-operator {
-    color: #A8ABB2 !important;
-  }
-
-  pre .token.punctuation,
-  pre .hljs-punctuation {
-    color: #A8ABB2 !important;
-  }
-
-  pre .token.variable,
-  pre .hljs-variable,
-  pre .hljs-template-variable {
-    color: #DFE1E5 !important;
-  }
-
-  pre .token.bold,
-  pre .hljs-strong {
-    color: #E49B80 !important;
-    font-weight: 700;
-  }
-
-  pre .token.italic,
-  pre .hljs-emphasis {
-    color: #D99AA6 !important;
-    font-style: italic;
   }
 }

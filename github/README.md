@@ -9,9 +9,18 @@ system**.
 ## Install
 
 1. Install [Stylus](https://add0n.com/stylus.html) for your browser.
-2. Open `gh44.user.css` from this folder in its raw view on GitHub. Stylus
-   offers to install it.
+2. Click **[Install gh44 for GitHub](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/github/gh44.user.css)**.
+   Stylus opens its install page.
 3. Click **Install style** and reload GitHub.
+
+The link opens the raw file. To find it yourself, open `gh44.user.css` in this
+folder on GitHub and click **Raw** at the top right of the file.
+
+## Update
+
+Open the install link again, click **Reinstall style** and reload GitHub.
+GitHub caches raw files for a few minutes, so a change just pushed can take
+about 5 minutes to show up.
 
 To install from a local clone instead, open the file in the browser with a
 `file://` URL. In Chrome, turn on **Allow access to file URLs** for Stylus in
@@ -21,9 +30,10 @@ To install from a local clone instead, open the file in the browser with a
 
 GitHub colors everything through Primer CSS variables (`--bgColor-default`,
 `--fgColor-accent`, `--prettylights-syntax-keyword`, ...). The userstyle only
-overrides those variables, so it survives most GitHub redesigns. Terracotta
-replaces GitHub's blue as the accent, and sage replaces green on primary
-buttons.
+overrides those variables, so it survives most GitHub redesigns. Dusty blue
+replaces GitHub's blue for links and selection, and sage replaces its green.
+Solid badges and buttons use gh44 Light's deeper colors in both modes, so they
+carry light text. Terracotta is kept for the active tab underline.
 
 ## Editing
 
