@@ -159,7 +159,7 @@
 
   [class^="syntax-support-class-component"],
   [class*=" syntax-support-class-component"] {
-    color: #9FB7CC !important;
+    color: #E49B80 !important;
     font-style: normal !important;
   }
 
@@ -290,5 +290,17 @@
     --diff-view-removed-bg: #C23B324D !important;
     --diff-view-removed-full-line-bg: #C23B324D !important;
     --diff-view-removed-inline-bg: #C23B3299 !important;
+  }
+
+  [data-diff-sticky-window] {
+    background-color: #1E1F22 !important;
+  }
+
+  [data-line-text] .sx-p9b3b8 {
+    border-bottom-color: transparent !important;
+  }
+
+  [data-line-text] .sx-p9b3b8:hover {
+    border-bottom-color: #868A92 !important;
   }
 }

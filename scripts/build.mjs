@@ -374,7 +374,7 @@ const LINEAR_SYNTAX_SCOPES = [
   ['support-type', 'type'],
   ['support-class', 'type'],
   ['entity-name-tag', 'tag'],
-  ['support-class-component', 'type'],
+  ['support-class-component', 'tag'],
   ['entity-other-attribute-name', 'attribute'],
   ['punctuation', 'punctuation'],
   ['markup-heading', 'title'],
@@ -399,6 +399,8 @@ const LINEAR_INLINE_COLORS = [
 // In read-only blocks, comments, meta and tags use classes for Linear's muted label color.
 const LINEAR_CODE_MUTED = ['sx-d5ldbw', 'sx-sy73al']
 const LINEAR_CODE_TOKEN = 'sx-14rh7hd'
+// Diff viewer: the dotted underline on symbols Linear can link to.
+const LINEAR_SYMBOL_LINK = 'sx-p9b3b8'
 
 function linearUserCss(variant) {
   const c = VARIANTS[variant]
@@ -451,6 +453,19 @@ function linearUserCss(variant) {
     '  /* Diff viewer */',
     '  * {',
     ...Object.entries(diffVars).map(([name, value]) => `    --diff-view-${name}: ${value} !important;`),
+    '  }',
+    '',
+    '  [data-diff-sticky-window] {',
+    `    background-color: ${c.charcoal} !important;`,
+    '  }',
+    '',
+    // Linear underlines every symbol it can link to with a dotted border; Zed doesn't.
+    `  [data-line-text] .${LINEAR_SYMBOL_LINK} {`,
+    '    border-bottom-color: transparent !important;',
+    '  }',
+    '',
+    `  [data-line-text] .${LINEAR_SYMBOL_LINK}:hover {`,
+    `    border-bottom-color: ${c.comment} !important;`,
     '  }',
   ].join('\n')
   return [
