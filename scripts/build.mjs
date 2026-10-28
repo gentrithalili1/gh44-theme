@@ -8,7 +8,11 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const TOKENS = JSON.parse(readFileSync(join(ROOT, 'palette', 'tokens.json'), 'utf8'))
-const VARIANTS = TOKENS.variants
+// Each variant has neutral colors named by job (bg, fg, border) and hues named by color.
+// Themes read one flat map per variant: VARIANTS.dark.bg, VARIANTS.dark.lavender.
+const VARIANTS = Object.fromEntries(
+  Object.entries(TOKENS.variants).map(([variant, { neutral, hue }]) => [variant, { ...neutral, ...hue }]),
+)
 const ROLES = TOKENS.roles
 const NAMES = { dark: 'gh44 Dark', light: 'gh44 Light' }
 const VARIANT_ORDER = ['dark', 'light']
@@ -39,14 +43,14 @@ function ansi(variant) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   const normal = {
-    black: isDark ? '#3A3C41' : c.cloud,
+    black: isDark ? '#3A3C41' : c.fg,
     red: c.red,
     green: c.sage,
     yellow: c.ochre,
-    blue: c['dusty-blue'],
+    blue: c['blue'],
     magenta: c.lavender,
     cyan: c.seafoam,
-    white: isDark ? c.cloud : c.pewter,
+    white: isDark ? c.fg : c.border,
   }
   const bright = {}
   for (const [key, color] of Object.entries(normal)) {
@@ -54,7 +58,7 @@ function ansi(variant) {
       ? mix({ from: color, to: '#FFFFFF', amount: 0.25 })
       : mix({ from: color, to: '#000000', amount: 0.18 })
   }
-  bright.black = isDark ? '#6F737A' : c.comment
+  bright.black = isDark ? '#6F737A' : c['fg-subtle']
   bright.white = isDark ? '#F2F3F5' : '#FFFFFF'
   return { normal, bright }
 }
@@ -73,116 +77,116 @@ function zedTheme(variant) {
 
   const s = {
     'background.appearance': 'opaque',
-    accents: [c.terracotta, c.sage, c.lavender, c['dusty-blue'], c.ochre, c.rose],
+    accents: [c.terracotta, c.sage, c.lavender, c['blue'], c.ochre, c.rose],
 
-    border: c.pewter,
-    'border.variant': c['pewter-soft'],
+    border: c.border,
+    'border.variant': c['border-subtle'],
     'border.focused': c.terracotta,
     'border.selected': a(c.terracotta, 0.6),
     'border.transparent': TRANSPARENT,
-    'border.disabled': c['pewter-soft'],
+    'border.disabled': c['border-subtle'],
 
-    background: c.graphite,
-    'surface.background': c.graphite,
-    'elevated_surface.background': c.slate,
-    'element.background': c.slate,
-    'element.hover': c['slate-hover'],
-    'element.active': c['slate-active'],
-    'element.selected': c['slate-active'],
-    'element.disabled': c.slate,
+    background: c['bg-subtle'],
+    'surface.background': c['bg-subtle'],
+    'elevated_surface.background': c.surface,
+    'element.background': c.surface,
+    'element.hover': c['surface-hover'],
+    'element.active': c['surface-active'],
+    'element.selected': c['surface-active'],
+    'element.disabled': c.surface,
     'drop_target.background': a(c.terracotta, 0.14),
     'ghost_element.background': TRANSPARENT,
-    'ghost_element.hover': c.slate,
-    'ghost_element.active': c['slate-hover'],
-    'ghost_element.selected': c['slate-hover'],
+    'ghost_element.hover': c.surface,
+    'ghost_element.active': c['surface-hover'],
+    'ghost_element.selected': c['surface-hover'],
     'ghost_element.disabled': TRANSPARENT,
 
-    text: c.cloud,
-    'text.muted': c.silver,
-    'text.placeholder': c.comment,
-    'text.disabled': c.disabled,
+    text: c.fg,
+    'text.muted': c['fg-muted'],
+    'text.placeholder': c['fg-subtle'],
+    'text.disabled': c['fg-disabled'],
     'text.accent': c.terracotta,
-    icon: c.cloud,
-    'icon.muted': c.silver,
-    'icon.disabled': c.disabled,
-    'icon.placeholder': c.comment,
+    icon: c.fg,
+    'icon.muted': c['fg-muted'],
+    'icon.disabled': c['fg-disabled'],
+    'icon.placeholder': c['fg-subtle'],
     'icon.accent': c.terracotta,
     'link_text.hover': c.terracotta,
 
-    'title_bar.background': c.graphite,
-    'title_bar.inactive_background': c.graphite,
-    'status_bar.background': c.graphite,
-    'toolbar.background': c.charcoal,
-    'tab_bar.background': c.graphite,
-    'tab.inactive_background': c.graphite,
-    'tab.active_background': c.charcoal,
+    'title_bar.background': c['bg-subtle'],
+    'title_bar.inactive_background': c['bg-subtle'],
+    'status_bar.background': c['bg-subtle'],
+    'toolbar.background': c.bg,
+    'tab_bar.background': c['bg-subtle'],
+    'tab.inactive_background': c['bg-subtle'],
+    'tab.active_background': c.bg,
     'search.match_background': a(c.ochre, isDark ? 0.28 : 0.3),
-    'panel.background': c.graphite,
+    'panel.background': c['bg-subtle'],
     'panel.focused_border': a(c.terracotta, 0.7),
-    'panel.indent_guide': c['pewter-soft'],
-    'panel.indent_guide_active': c.pewter,
-    'panel.indent_guide_hover': c['line-number'],
-    'panel.overlay_background': c.slate,
-    'panel.overlay_hover': c['slate-hover'],
+    'panel.indent_guide': c['border-subtle'],
+    'panel.indent_guide_active': c.border,
+    'panel.indent_guide_hover': c['fg-faint'],
+    'panel.overlay_background': c.surface,
+    'panel.overlay_hover': c['surface-hover'],
     'pane.focused_border': a(c.terracotta, 0.7),
-    'pane_group.border': c['pewter-soft'],
+    'pane_group.border': c['border-subtle'],
 
-    'scrollbar.thumb.background': a(c.silver, 0.18),
-    'scrollbar.thumb.hover_background': a(c.silver, 0.32),
+    'scrollbar.thumb.background': a(c['fg-muted'], 0.18),
+    'scrollbar.thumb.hover_background': a(c['fg-muted'], 0.32),
     'scrollbar.thumb.active_background': a(c.terracotta, 0.45),
     'scrollbar.thumb.border': TRANSPARENT,
     'scrollbar.track.background': TRANSPARENT,
     'scrollbar.track.border': TRANSPARENT,
-    'minimap.thumb.background': a(c.silver, 0.14),
-    'minimap.thumb.hover_background': a(c.silver, 0.24),
+    'minimap.thumb.background': a(c['fg-muted'], 0.14),
+    'minimap.thumb.hover_background': a(c['fg-muted'], 0.24),
     'minimap.thumb.active_background': a(c.terracotta, 0.3),
     'minimap.thumb.border': TRANSPARENT,
 
-    'editor.foreground': c.cloud,
-    'editor.background': c.charcoal,
-    'editor.gutter.background': c.charcoal,
-    'editor.subheader.background': c.graphite,
-    'editor.active_line.background': a(c.slate, isDark ? 0.75 : 0.6),
-    'editor.highlighted_line.background': c.slate,
+    'editor.foreground': c.fg,
+    'editor.background': c.bg,
+    'editor.gutter.background': c.bg,
+    'editor.subheader.background': c['bg-subtle'],
+    'editor.active_line.background': a(c.surface, isDark ? 0.75 : 0.6),
+    'editor.highlighted_line.background': c.surface,
     'editor.debugger_active_line.background': a(c.ochre, 0.14),
-    'editor.line_number': c['line-number'],
-    'editor.active_line_number': c.cloud,
-    'editor.hover_line_number': c.silver,
-    'editor.invisible': c.disabled,
-    'editor.wrap_guide': c['pewter-soft'],
-    'editor.active_wrap_guide': c.pewter,
-    'editor.indent_guide': c['pewter-soft'],
-    'editor.indent_guide_active': c.pewter,
-    'editor.document_highlight.read_background': a(c['dusty-blue'], 0.14),
+    'editor.line_number': c['fg-faint'],
+    'editor.active_line_number': c.fg,
+    'editor.hover_line_number': c['fg-muted'],
+    'editor.invisible': c['fg-disabled'],
+    'editor.wrap_guide': c['border-subtle'],
+    'editor.active_wrap_guide': c.border,
+    'editor.indent_guide': c['border-subtle'],
+    'editor.indent_guide_active': c.border,
+    'editor.document_highlight.read_background': a(c['blue'], 0.14),
     'editor.document_highlight.write_background': a(c.terracotta, 0.16),
     'editor.document_highlight.bracket_background': a(c.terracotta, 0.18),
 
-    'terminal.background': c.charcoal,
-    'terminal.foreground': c.cloud,
+    'terminal.background': c.bg,
+    'terminal.foreground': c.fg,
     'terminal.bright_foreground': isDark ? '#F2F3F5' : '#1E1F22',
-    'terminal.dim_foreground': c.comment,
-    'terminal.ansi.background': c.charcoal,
+    'terminal.dim_foreground': c['fg-subtle'],
+    'terminal.ansi.background': c.bg,
 
     'version_control.added': c.sage,
-    'version_control.modified': c['dusty-blue'],
+    'version_control.modified': c['blue'],
     'version_control.deleted': c.red,
     'version_control.word_added': a(c.sage, 0.25),
     'version_control.word_deleted': a(c.red, 0.25),
     'version_control.conflict_marker.ours': a(c.sage, 0.18),
-    'version_control.conflict_marker.theirs': a(c['dusty-blue'], 0.18),
+    'version_control.conflict_marker.theirs': a(c['blue'], 0.18),
   }
   for (const key of Object.keys(normal)) {
     s[`terminal.ansi.${key}`] = normal[key]
     s[`terminal.ansi.bright_${key}`] = bright[key]
-    s[`terminal.ansi.dim_${key}`] = mix({ from: normal[key], to: c.charcoal, amount: 0.4 })
+    s[`terminal.ansi.dim_${key}`] = mix({ from: normal[key], to: c.bg, amount: 0.4 })
   }
 
   const statuses = [
     ['conflict', c.lavender], ['created', c.sage], ['deleted', c.red],
-    ['error', c.red], ['hidden', c.comment], ['hint', c.comment],
-    ['ignored', c['line-number']], ['info', c['dusty-blue']], ['modified', c['dusty-blue']],
-    ['predictive', c.comment], ['renamed', c.lavender], ['success', c.sage],
-    ['unreachable', c.comment], ['warning', c.ochre],
+    ['error', c.red], ['hidden', c['fg-subtle']], ['hint', c['fg-subtle']],
+    ['ignored', c['fg-faint']], ['info', c['blue']], ['modified', c['blue']],
+    ['predictive', c['fg-subtle']], ['renamed', c.lavender], ['success', c.sage],
+    ['unreachable', c['fg-subtle']], ['warning', c.ochre],
   ]
   for (const [key, color] of statuses) {
     s[key] = color
@@ -190,7 +194,7 @@ function zedTheme(variant) {
     s[`${key}.border`] = a(color, 0.45)
   }
 
-  const players = [c.terracotta, c.sage, c.lavender, c['dusty-blue'], c.ochre, c.rose, c.seafoam, c.sand]
+  const players = [c.terracotta, c.sage, c.lavender, c['blue'], c.ochre, c.rose, c.seafoam, c.sand]
   s.players = players.map((p, i) => ({
     cursor: p,
     background: p,
@@ -201,30 +205,30 @@ function zedTheme(variant) {
   s.syntax = {
     attribute: style(c.ochre),
     boolean: style(c.ochre),
-    comment: style(c.comment, italic),
-    'comment.doc': style(mix({ from: c.comment, to: c.cloud, amount: 0.25 }), italic),
+    comment: style(c['fg-subtle'], italic),
+    'comment.doc': style(mix({ from: c['fg-subtle'], to: c.fg, amount: 0.25 }), italic),
     constant: style(c.ochre),
     constructor: style(c.lavender),
-    embedded: style(c.cloud),
+    embedded: style(c.fg),
     emphasis: style(c.rose, italic),
     'emphasis.strong': style(c.terracotta, { isBold: true }),
     enum: style(c.lavender),
     function: style(c.lavender),
-    hint: style(c.comment),
+    hint: style(c['fg-subtle']),
     keyword: style(c.terracotta),
     label: style(c.lavender),
-    link_text: style(c['dusty-blue']),
+    link_text: style(c['blue']),
     link_uri: style(c.sage, italic),
-    namespace: style(c.cloud),
+    namespace: style(c.fg),
     number: style(c.ochre),
-    operator: style(c.silver),
-    predictive: style(c.comment, italic),
+    operator: style(c['fg-muted']),
+    predictive: style(c['fg-subtle'], italic),
     preproc: style(c.terracotta),
-    primary: style(c.cloud),
+    primary: style(c.fg),
     property: style(c.rose),
-    punctuation: style(c.silver),
-    'punctuation.bracket': style(c.silver),
-    'punctuation.delimiter': style(c.silver),
+    punctuation: style(c['fg-muted']),
+    'punctuation.bracket': style(c['fg-muted']),
+    'punctuation.delimiter': style(c['fg-muted']),
     'punctuation.list_marker': style(c.terracotta),
     'punctuation.markup': style(c.terracotta),
     'punctuation.special': style(c.rose),
@@ -238,9 +242,9 @@ function zedTheme(variant) {
     tag: style(c.terracotta),
     'text.literal': style(c.sage),
     title: style(c.terracotta, { isBold: true }),
-    type: style(c['dusty-blue']),
-    'type.builtin': style(c['dusty-blue']),
-    variable: style(c.cloud),
+    type: style(c['blue']),
+    'type.builtin': style(c['blue']),
+    variable: style(c.fg),
     'variable.special': style(c.terracotta, italic),
     'variable.parameter': style(c.rose),
     variant: style(c.lavender),
@@ -269,8 +273,8 @@ function buildWarp() {
       `name: ${NAMES[variant]}`,
       `accent: '${c.terracotta}'`,
       `cursor: '${c.terracotta}'`,
-      `background: '${c.charcoal}'`,
-      `foreground: '${c.cloud}'`,
+      `background: '${c.bg}'`,
+      `foreground: '${c.fg}'`,
       `details: ${variant === 'dark' ? 'darker' : 'lighter'}`,
       'terminal_colors:',
       '  normal:',
@@ -290,8 +294,8 @@ function buildWarp() {
 function slackString(variant) {
   const c = VARIANTS[variant]
   return [
-    c.graphite, c.slate, c['slate-active'], c.cloud, c.slate,
-    c.cloud, c.sage, c.terracotta, c.terracotta, c.charcoal,
+    c['bg-subtle'], c.surface, c['surface-active'], c.fg, c.surface,
+    c.fg, c.sage, c.terracotta, c.terracotta, c.bg,
   ].join(',')
 }
 
@@ -334,10 +338,10 @@ function linearTheme(variant) {
   const c = VARIANTS[variant]
   const contrast = 30
   return {
-    base: lch(c.charcoal),
+    base: lch(c.bg),
     accent: lch(c.lavender),
     contrast,
-    sidebar: { base: lch(c.graphite), accent: lch(c.lavender), contrast },
+    sidebar: { base: lch(c['bg-subtle']), accent: lch(c.lavender), contrast },
   }
 }
 
@@ -457,15 +461,15 @@ function linearUserCss(variant) {
   const deep = VARIANTS.light
   const a = (color, amount) => alpha({ color, amount })
   const diffVars = {
-    'editor-background': c.charcoal,
-    'editor-background-opaque': c.charcoal,
-    'editor-foreground': c.cloud,
-    'line-number-fg': c['line-number'],
-    'blank-bg': c.graphite,
-    'focus-bg': c['slate-hover'],
+    'editor-background': c.bg,
+    'editor-background-opaque': c.bg,
+    'editor-foreground': c.fg,
+    'line-number-fg': c['fg-faint'],
+    'blank-bg': c['bg-subtle'],
+    'focus-bg': c['surface-hover'],
     'git-added-fg': c.sage,
     'git-deleted-fg': c.red,
-    'git-modified-fg': c['dusty-blue'],
+    'git-modified-fg': c['blue'],
     'inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
     'inserted-full-line-bg': a(deep.sage, isDark ? 0.3 : 0.15),
     'inserted-inline-bg': a(deep.sage, isDark ? 0.6 : 0.35),
@@ -480,7 +484,7 @@ function linearUserCss(variant) {
     '  }',
     '',
     '  [data-diff-sticky-window] {',
-    `    background-color: ${c.charcoal} !important;`,
+    `    background-color: ${c.bg} !important;`,
     '  }',
     '',
     // Linear underlines every symbol it can link to with a dotted border; Zed doesn't.
@@ -489,7 +493,7 @@ function linearUserCss(variant) {
     '  }',
     '',
     `  [data-line-text] .${LINEAR_SYMBOL_LINK}:hover {`,
-    `    border-bottom-color: ${c.comment} !important;`,
+    `    border-bottom-color: ${c['fg-subtle']} !important;`,
     '  }',
   ].join('\n')
   return [
@@ -504,8 +508,8 @@ function linearUserCss(variant) {
     '@-moz-document domain("linear.app") {',
     '  pre,',
     '  pre code {',
-    `    background-color: ${c.graphite} !important;`,
-    `    color: ${c.cloud} !important;`,
+    `    background-color: ${c['bg-subtle']} !important;`,
+    `    color: ${c.fg} !important;`,
     '  }',
     '',
     rules.join('\n\n'),
@@ -538,9 +542,9 @@ function chromeManifest(variant) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   // The tab strip sits behind the active tab, which shares the toolbar color.
-  const frame = isDark ? c.charcoal : c.slate
-  const toolbar = isDark ? c.slate : c.charcoal
-  const omnibox = isDark ? c.charcoal : c.graphite
+  const frame = isDark ? c.bg : c.surface
+  const toolbar = isDark ? c.surface : c.bg
+  const omnibox = isDark ? c.bg : c['bg-subtle']
   return {
     manifest_version: 3,
     name: NAMES[variant],
@@ -553,18 +557,18 @@ function chromeManifest(variant) {
         frame_incognito: rgb(frame),
         frame_incognito_inactive: rgb(frame),
         toolbar: rgb(toolbar),
-        toolbar_text: rgb(c.cloud),
-        toolbar_button_icon: rgb(c.silver),
-        tab_text: rgb(c.cloud),
-        tab_background_text: rgb(c.silver),
-        tab_background_text_inactive: rgb(c.comment),
-        tab_background_text_incognito: rgb(c.silver),
-        tab_background_text_incognito_inactive: rgb(c.comment),
-        bookmark_text: rgb(c.cloud),
+        toolbar_text: rgb(c.fg),
+        toolbar_button_icon: rgb(c['fg-muted']),
+        tab_text: rgb(c.fg),
+        tab_background_text: rgb(c['fg-muted']),
+        tab_background_text_inactive: rgb(c['fg-subtle']),
+        tab_background_text_incognito: rgb(c['fg-muted']),
+        tab_background_text_incognito_inactive: rgb(c['fg-subtle']),
+        bookmark_text: rgb(c.fg),
         omnibox_background: rgb(omnibox),
-        omnibox_text: rgb(c.cloud),
-        ntp_background: rgb(c.charcoal),
-        ntp_text: rgb(c.cloud),
+        omnibox_text: rgb(c.fg),
+        ntp_background: rgb(c.bg),
+        ntp_text: rgb(c.fg),
         ntp_link: rgb(c.terracotta),
       },
     },
@@ -590,13 +594,13 @@ function githubVars(variant) {
   const { syntax } = zedTheme(variant).style
   const a = (color, amount) => alpha({ color, amount })
   const shade = (color, amount) => mix({ from: color, to: isDark ? '#FFFFFF' : '#000000', amount })
-  const inset = isDark ? mix({ from: c.charcoal, to: '#000000', amount: 0.2 }) : c.graphite
+  const inset = isDark ? mix({ from: c.bg, to: '#000000', amount: 0.2 }) : c['bg-subtle']
   // Solid fills (badges, primary button, toggles) use gh44 Light's deeper colors in
   // both variants, so they carry light text and read as real color on charcoal.
   const deep = VARIANTS.light
-  const onEmphasis = deep.charcoal
+  const onEmphasis = deep.bg
   const states = {
-    accent: 'dusty-blue',
+    accent: 'blue',
     success: 'sage',
     attention: 'ochre',
     danger: 'red',
@@ -605,17 +609,17 @@ function githubVars(variant) {
     sponsors: 'rose',
   }
   const contribution = [0.25, 0.5, 0.75, 1].map((amount) =>
-    mix({ from: c.graphite, to: c.sage, amount }),
+    mix({ from: c['bg-subtle'], to: c.sage, amount }),
   )
   return {
-    'bgColor-default': c.charcoal,
-    'bgColor-muted': c.graphite,
+    'bgColor-default': c.bg,
+    'bgColor-muted': c['bg-subtle'],
     'bgColor-inset': inset,
-    'bgColor-emphasis': isDark ? c.pewter : c.cloud,
-    'bgColor-inverse': c.cloud,
-    'bgColor-disabled': c.slate,
-    'bgColor-neutral-emphasis': isDark ? c['line-number'] : c.comment,
-    'bgColor-neutral-muted': a(c.comment, 0.2),
+    'bgColor-emphasis': isDark ? c.border : c.fg,
+    'bgColor-inverse': c.fg,
+    'bgColor-disabled': c.surface,
+    'bgColor-neutral-emphasis': isDark ? c['fg-faint'] : c['fg-subtle'],
+    'bgColor-neutral-muted': a(c['fg-subtle'], 0.2),
     ...Object.fromEntries(
       Object.entries(states).flatMap(([state, name]) => [
         [`bgColor-${state}-emphasis`, deep[name]],
@@ -626,36 +630,36 @@ function githubVars(variant) {
       ]),
     ),
 
-    'fgColor-default': c.cloud,
-    'fgColor-muted': c.silver,
-    'fgColor-neutral': c.silver,
-    'fgColor-disabled': c.disabled,
-    'fgColor-link': c['dusty-blue'],
+    'fgColor-default': c.fg,
+    'fgColor-muted': c['fg-muted'],
+    'fgColor-neutral': c['fg-muted'],
+    'fgColor-disabled': c['fg-disabled'],
+    'fgColor-link': c['blue'],
     'fgColor-onEmphasis': onEmphasis,
-    'fgColor-onInverse': c.charcoal,
+    'fgColor-onInverse': c.bg,
 
-    'borderColor-default': c.pewter,
-    'borderColor-muted': c['pewter-soft'],
-    'borderColor-emphasis': c['line-number'],
-    'borderColor-disabled': a(c.disabled, 0.2),
+    'borderColor-default': c.border,
+    'borderColor-muted': c['border-subtle'],
+    'borderColor-emphasis': c['fg-faint'],
+    'borderColor-disabled': a(c['fg-disabled'], 0.2),
 
-    'control-bgColor-rest': c.slate,
-    'control-bgColor-hover': c['slate-hover'],
-    'control-bgColor-active': c['slate-active'],
-    'control-bgColor-disabled': c.graphite,
-    'control-borderColor-selected': c.cloud,
-    'control-checked-bgColor-hover': shade(deep['dusty-blue'], 0.1),
-    'control-checked-bgColor-active': shade(deep['dusty-blue'], 0.2),
+    'control-bgColor-rest': c.surface,
+    'control-bgColor-hover': c['surface-hover'],
+    'control-bgColor-active': c['surface-active'],
+    'control-bgColor-disabled': c['bg-subtle'],
+    'control-borderColor-selected': c.fg,
+    'control-checked-bgColor-hover': shade(deep['blue'], 0.1),
+    'control-checked-bgColor-active': shade(deep['blue'], 0.2),
     'control-danger-fgColor-hover': shade(c.red, 0.15),
     'control-danger-bgColor-active': a(c.red, 0.4),
-    'control-transparent-bgColor-hover': a(c.comment, 0.2),
-    'control-transparent-bgColor-active': a(c.comment, 0.25),
-    'control-transparent-bgColor-selected': a(c.comment, 0.2),
-    'controlKnob-bgColor-rest': c['slate-hover'],
+    'control-transparent-bgColor-hover': a(c['fg-subtle'], 0.2),
+    'control-transparent-bgColor-active': a(c['fg-subtle'], 0.25),
+    'control-transparent-bgColor-selected': a(c['fg-subtle'], 0.2),
+    'controlKnob-bgColor-rest': c['surface-hover'],
     'controlKnob-bgColor-checked': onEmphasis,
     'controlTrack-bgColor-rest': inset,
-    'controlTrack-bgColor-hover': c['slate-hover'],
-    'controlTrack-bgColor-active': c['slate-active'],
+    'controlTrack-bgColor-hover': c['surface-hover'],
+    'controlTrack-bgColor-active': c['surface-active'],
 
     'button-primary-bgColor-rest': deep.sage,
     'button-primary-bgColor-hover': shade(deep.sage, 0.1),
@@ -665,42 +669,42 @@ function githubVars(variant) {
     'button-primary-fgColor-rest': onEmphasis,
     'button-primary-fgColor-disabled': a(onEmphasis, 0.6),
     'button-primary-iconColor-rest': onEmphasis,
-    'buttonCounter-default-bgColor-rest': c['slate-active'],
-    'buttonCounter-primary-bgColor-rest': a(c.charcoal, 0.2),
-    'buttonKeybindingHint-default-bgColor-rest': c['slate-active'],
-    'buttonKeybindingHint-inactive-bgColor': c['slate-active'],
+    'buttonCounter-default-bgColor-rest': c['surface-active'],
+    'buttonCounter-primary-bgColor-rest': a(c.bg, 0.2),
+    'buttonKeybindingHint-default-bgColor-rest': c['surface-active'],
+    'buttonKeybindingHint-inactive-bgColor': c['surface-active'],
 
-    'header-bgColor': a(c.graphite, 0.95),
-    'header-borderColor-divider': c['line-number'],
-    'header-fgColor-default': c.silver,
-    'header-fgColor-logo': c.cloud,
-    'headerSearch-bgColor': c.charcoal,
-    'headerSearch-borderColor': c['slate-active'],
+    'header-bgColor': a(c['bg-subtle'], 0.95),
+    'header-borderColor-divider': c['fg-faint'],
+    'header-fgColor-default': c['fg-muted'],
+    'header-fgColor-logo': c.fg,
+    'headerSearch-bgColor': c.bg,
+    'headerSearch-borderColor': c['surface-active'],
 
-    'overlay-bgColor': c.graphite,
-    'overlay-backdrop-bgColor': a(c.charcoal, 0.6),
-    'menu-bgColor-active': c.slate,
-    'sideNav-bgColor-selected': c.slate,
-    'timelineBadge-bgColor': c.slate,
-    'selectMenu-bgColor-active': a(c['dusty-blue'], 0.2),
-    'selection-bgColor': a(c['dusty-blue'], isDark ? 0.35 : 0.25),
+    'overlay-bgColor': c['bg-subtle'],
+    'overlay-backdrop-bgColor': a(c.bg, 0.6),
+    'menu-bgColor-active': c.surface,
+    'sideNav-bgColor-selected': c.surface,
+    'timelineBadge-bgColor': c.surface,
+    'selectMenu-bgColor-active': a(c['blue'], 0.2),
+    'selection-bgColor': a(c['blue'], isDark ? 0.35 : 0.25),
     'underlineNav-borderColor-active': c.terracotta,
     'highlight-neutral-bgColor': a(c.ochre, 0.4),
-    'skeletonLoader-bgColor': a(c.comment, 0.2),
-    'reactionButton-selected-bgColor-rest': a(c['dusty-blue'], 0.2),
-    'reactionButton-selected-bgColor-hover': a(c['dusty-blue'], 0.35),
-    'reactionButton-selected-fgColor-hover': c['dusty-blue'],
+    'skeletonLoader-bgColor': a(c['fg-subtle'], 0.2),
+    'reactionButton-selected-bgColor-rest': a(c['blue'], 0.2),
+    'reactionButton-selected-bgColor-hover': a(c['blue'], 0.35),
+    'reactionButton-selected-fgColor-hover': c['blue'],
 
-    'contribution-default-bgColor-0': c.graphite,
+    'contribution-default-bgColor-0': c['bg-subtle'],
     ...Object.fromEntries(contribution.map((color, i) => [`contribution-default-bgColor-${i + 1}`, color])),
 
     'diffBlob-additionNum-bgColor': a(deep.sage, isDark ? 0.45 : 0.25),
     'diffBlob-additionWord-bgColor': a(deep.sage, isDark ? 0.6 : 0.35),
     'diffBlob-deletionNum-bgColor': a(deep.red, isDark ? 0.45 : 0.25),
     'diffBlob-deletionWord-bgColor': a(deep.red, isDark ? 0.6 : 0.35),
-    'diffBlob-hunkLine-bgColor': a(c['dusty-blue'], 0.15),
-    'diffBlob-hunkNum-bgColor-rest': a(c['dusty-blue'], 0.3),
-    'diffBlob-hunkNum-bgColor-hover': c['dusty-blue'],
+    'diffBlob-hunkLine-bgColor': a(c['blue'], 0.15),
+    'diffBlob-hunkNum-bgColor-rest': a(c['blue'], 0.3),
+    'diffBlob-hunkNum-bgColor-hover': c['blue'],
 
     'prettylights-syntax-comment': syntax.comment.color,
     'prettylights-syntax-constant': syntax.constant.color,
@@ -711,23 +715,23 @@ function githubVars(variant) {
     'prettylights-syntax-string': syntax.string.color,
     'prettylights-syntax-stringRegexp': syntax['string.regex'].color,
     'prettylights-syntax-variable': syntax['variable.parameter'].color,
-    'prettylights-syntax-storageModifierImport': c.cloud,
-    'prettylights-syntax-bracketHighlighterAngle': c.silver,
+    'prettylights-syntax-storageModifierImport': c.fg,
+    'prettylights-syntax-bracketHighlighterAngle': c['fg-muted'],
     'prettylights-syntax-bracketHighlighterUnmatched': c.red,
-    'prettylights-syntax-sublimeLinterGutterMark': c.pewter,
+    'prettylights-syntax-sublimeLinterGutterMark': c.border,
     'prettylights-syntax-metaDiffRange': c.lavender,
-    'prettylights-syntax-markup-heading': c['dusty-blue'],
+    'prettylights-syntax-markup-heading': c['blue'],
     'prettylights-syntax-markup-list': c.ochre,
-    'prettylights-syntax-markup-bold': c.cloud,
-    'prettylights-syntax-markup-italic': c.cloud,
+    'prettylights-syntax-markup-bold': c.fg,
+    'prettylights-syntax-markup-italic': c.fg,
     'prettylights-syntax-markup-inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
     'prettylights-syntax-markup-inserted-text': c.sage,
     'prettylights-syntax-markup-deleted-bg': a(deep.red, isDark ? 0.3 : 0.15),
     'prettylights-syntax-markup-deleted-text': c.red,
     'prettylights-syntax-markup-changed-bg': a(c.ochre, 0.15),
     'prettylights-syntax-markup-changed-text': c.ochre,
-    'prettylights-syntax-markup-ignored-bg': a(c['dusty-blue'], 0.15),
-    'prettylights-syntax-markup-ignored-text': c['dusty-blue'],
+    'prettylights-syntax-markup-ignored-bg': a(c['blue'], 0.15),
+    'prettylights-syntax-markup-ignored-text': c['blue'],
 
     'codeMirror-syntax-fgColor-comment': syntax.comment.color,
     'codeMirror-syntax-fgColor-constant': syntax.constant.color,
@@ -868,7 +872,7 @@ function windowSvg({ variant, title, lines, hasLineNumbers, extraHeight = 0, ext
       .map((p) => `<tspan fill="${p.color}"${p.isItalic ? ITALIC : ''}>${esc(p.text)}</tspan>`)
       .join('')
     const lineNumber = hasLineNumbers
-      ? [`<text x="64" y="${y}" fill="${c['line-number']}" text-anchor="end">${i + 1}</text>`]
+      ? [`<text x="64" y="${y}" fill="${c['fg-faint']}" text-anchor="end">${i + 1}</text>`]
       : []
     return [...lineNumber, `<text x="${left}" y="${y}" xml:space="preserve">${spans}</text>`]
   })
@@ -879,9 +883,9 @@ function windowSvg({ variant, title, lines, hasLineNumbers, extraHeight = 0, ext
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" ` +
     `viewBox="0 0 ${width} ${height}" font-family="${MONO}" font-size="14">` +
     `<rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="12" ` +
-    `fill="${c.charcoal}" stroke="${c.pewter}"/>` +
-    `<path d="M1 48 H${width - 1}" stroke="${c['pewter-soft']}"/>${dots}` +
-    `<text x="${width / 2}" y="29" fill="${c.silver}" text-anchor="middle" ` +
+    `fill="${c.bg}" stroke="${c.border}"/>` +
+    `<path d="M1 48 H${width - 1}" stroke="${c['border-subtle']}"/>${dots}` +
+    `<text x="${width / 2}" y="29" fill="${c['fg-muted']}" text-anchor="middle" ` +
     `font-family="${SANS}" font-size="13">${esc(title)}</text>` +
     `${rows.join('')}${extra}</svg>\n`
   )
@@ -893,7 +897,7 @@ function zedPreviewSvg(variant) {
   const lines = ZED_SAMPLE.map((line) =>
     line.map(([text, scope]) => {
       const st = (scope && syntax[scope]) || {}
-      return { text, color: st.color ?? c.cloud, isItalic: st.font_style === 'italic' }
+      return { text, color: st.color ?? c.fg, isItalic: st.font_style === 'italic' }
     }),
   )
   return windowSvg({ variant, title: `forecast.ts · ${NAMES[variant]}`, lines, hasLineNumbers: true })
@@ -902,9 +906,9 @@ function zedPreviewSvg(variant) {
 function warpPreviewSvg(variant) {
   const c = VARIANTS[variant]
   const { normal, bright } = ansi(variant)
-  const colors = { ...normal, black: c.comment, prompt: c.terracotta }
+  const colors = { ...normal, black: c['fg-subtle'], prompt: c.terracotta }
   const lines = WARP_SAMPLE.map((line) =>
-    line.map(([text, name]) => ({ text, color: name ? colors[name] : c.cloud, isItalic: false })),
+    line.map(([text, name]) => ({ text, color: name ? colors[name] : c.fg, isItalic: false })),
   )
   // The 16 ANSI colors as two rows of squares under the session.
   const y = TOP + lines.length * LINE_HEIGHT + 4
