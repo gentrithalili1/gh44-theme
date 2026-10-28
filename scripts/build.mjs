@@ -425,6 +425,34 @@ function linearUserCss(variant) {
     name: 'comment',
   })
   const rules = [...scopeRules, mutedRule, ...inlineRules]
+  // The diff viewer reads --diff-view-* variables that Linear sets at runtime. Set them
+  // on every element so they win over whichever ancestor Linear puts them on.
+  const isDark = variant === 'dark'
+  const deep = VARIANTS.light
+  const a = (color, amount) => alpha({ color, amount })
+  const diffVars = {
+    'editor-background': c.charcoal,
+    'editor-background-opaque': c.charcoal,
+    'editor-foreground': c.cloud,
+    'line-number-fg': c['line-number'],
+    'blank-bg': c.graphite,
+    'focus-bg': c['slate-hover'],
+    'git-added-fg': c.sage,
+    'git-deleted-fg': c.red,
+    'git-modified-fg': c['dusty-blue'],
+    'inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
+    'inserted-full-line-bg': a(deep.sage, isDark ? 0.3 : 0.15),
+    'inserted-inline-bg': a(deep.sage, isDark ? 0.6 : 0.35),
+    'removed-bg': a(deep.red, isDark ? 0.3 : 0.15),
+    'removed-full-line-bg': a(deep.red, isDark ? 0.3 : 0.15),
+    'removed-inline-bg': a(deep.red, isDark ? 0.6 : 0.35),
+  }
+  const diffRule = [
+    '  /* Diff viewer */',
+    '  * {',
+    ...Object.entries(diffVars).map(([name, value]) => `    --diff-view-${name}: ${value} !important;`),
+    '  }',
+  ].join('\n')
   return [
     '/* ==UserStyle==',
     `@name         ${NAMES[variant]} for Linear code blocks`,
@@ -442,6 +470,8 @@ function linearUserCss(variant) {
     '  }',
     '',
     rules.join('\n\n'),
+    '',
+    diffRule,
     '}',
     '',
   ].join('\n')

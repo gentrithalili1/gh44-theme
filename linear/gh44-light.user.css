@@ -272,4 +272,23 @@
     color: #8C6A2E !important;
     font-style: normal !important;
   }
+
+  /* Diff viewer */
+  * {
+    --diff-view-editor-background: #FAF7F3 !important;
+    --diff-view-editor-background-opaque: #FAF7F3 !important;
+    --diff-view-editor-foreground: #2B2D30 !important;
+    --diff-view-line-number-fg: #A39C94 !important;
+    --diff-view-blank-bg: #F2ECE5 !important;
+    --diff-view-focus-bg: #E2D8CD !important;
+    --diff-view-git-added-fg: #5E7350 !important;
+    --diff-view-git-deleted-fg: #C23B32 !important;
+    --diff-view-git-modified-fg: #3F6A8C !important;
+    --diff-view-inserted-bg: #5E735026 !important;
+    --diff-view-inserted-full-line-bg: #5E735026 !important;
+    --diff-view-inserted-inline-bg: #5E735059 !important;
+    --diff-view-removed-bg: #C23B3226 !important;
+    --diff-view-removed-full-line-bg: #C23B3226 !important;
+    --diff-view-removed-inline-bg: #C23B3259 !important;
+  }
 }
