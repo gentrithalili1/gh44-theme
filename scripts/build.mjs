@@ -363,7 +363,8 @@ const LINEAR_SYNTAX_SCOPES = [
   ['variable-parameter', 'variable.parameter'],
   ['variable-other-property', 'property'],
   ['variable-other-object-property', 'property'],
-  ['variable-other-constant', 'constant'],
+  // Linear tags every const local this way; Zed only colors real constants.
+  ['variable-other-constant', 'variable'],
   ['support-variable-property', 'property'],
   ['meta-object-literal-key', 'property'],
   ['entity-name-function', 'function'],
@@ -386,6 +387,30 @@ const LINEAR_SYNTAX_SCOPES = [
   ['markup-inserted', 'string'],
   ['markup-deleted', 'boolean'],
 ]
+// Diff viewer: the wrapper span (dotted underline) around symbols Linear can link to.
+const LINEAR_SYMBOL_LINK = 'sx-p9b3b8'
+// Linear gives some Zed categories one class, so these tell them apart by the
+// neighboring token. Each entry is [selector, Zed scope].
+// Symbols Linear can link to sit inside a wrapper span, so each rule has both forms.
+const LINEAR_OPERATOR = '[class^="syntax-keyword-operator"]'
+const LINEAR_SYNTAX_CONTEXT = [
+  // <Stack: a type right after the < operator is a JSX tag.
+  [
+    [
+      `${LINEAR_OPERATOR} + [class^="syntax-entity-name-type"]`,
+      `${LINEAR_OPERATOR} + .${LINEAR_SYMBOL_LINK} > [class^="syntax-entity-name-type"]`,
+    ],
+    'tag',
+  ],
+  // gap="4": a property right before = is a JSX attribute.
+  [
+    [
+      `[class^="syntax-variable-other-property"]:has(+ ${LINEAR_OPERATOR})`,
+      `.${LINEAR_SYMBOL_LINK}:has(+ ${LINEAR_OPERATOR}) > [class^="syntax-variable-other-property"]`,
+    ],
+    'attribute',
+  ],
+]
 // Read-only blocks: [Zed scope, Linear's light and dark inline colors].
 const LINEAR_INLINE_COLORS = [
   ['keyword', ['#9532A4', '#E394DC']],
@@ -399,8 +424,6 @@ const LINEAR_INLINE_COLORS = [
 // In read-only blocks, comments, meta and tags use classes for Linear's muted label color.
 const LINEAR_CODE_MUTED = ['sx-d5ldbw', 'sx-sy73al']
 const LINEAR_CODE_TOKEN = 'sx-14rh7hd'
-// Diff viewer: the dotted underline on symbols Linear can link to.
-const LINEAR_SYMBOL_LINK = 'sx-p9b3b8'
 
 function linearUserCss(variant) {
   const c = VARIANTS[variant]
@@ -426,7 +449,8 @@ function linearUserCss(variant) {
     selectors: LINEAR_CODE_MUTED.map((cls) => `${block} .${cls}`),
     name: 'comment',
   })
-  const rules = [...scopeRules, mutedRule, ...inlineRules]
+  const contextRules = LINEAR_SYNTAX_CONTEXT.map(([selectors, name]) => rule({ selectors, name }))
+  const rules = [...scopeRules, ...contextRules, mutedRule, ...inlineRules]
   // The diff viewer reads --diff-view-* variables that Linear sets at runtime. Set them
   // on every element so they win over whichever ancestor Linear puts them on.
   const isDark = variant === 'dark'

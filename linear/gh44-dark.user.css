@@ -93,7 +93,7 @@
 
   [class^="syntax-variable-other-constant"],
   [class*=" syntax-variable-other-constant"] {
-    color: #DDBE8E !important;
+    color: #DFE1E5 !important;
     font-style: normal !important;
   }
 
@@ -221,6 +221,18 @@
 
   [class^="syntax-markup-deleted"],
   [class*=" syntax-markup-deleted"] {
+    color: #DDBE8E !important;
+    font-style: normal !important;
+  }
+
+  [class^="syntax-keyword-operator"] + [class^="syntax-entity-name-type"],
+  [class^="syntax-keyword-operator"] + .sx-p9b3b8 > [class^="syntax-entity-name-type"] {
+    color: #E49B80 !important;
+    font-style: normal !important;
+  }
+
+  [class^="syntax-variable-other-property"]:has(+ [class^="syntax-keyword-operator"]),
+  .sx-p9b3b8:has(+ [class^="syntax-keyword-operator"]) > [class^="syntax-variable-other-property"] {
     color: #DDBE8E !important;
     font-style: normal !important;
   }
