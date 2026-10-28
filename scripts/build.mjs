@@ -1029,9 +1029,10 @@ function buildCss() {
 // ---------------------------------------------------------------- shadcn
 
 // Fills the variables every shadcn component reads, plus success, warning and info.
-// Primary and the status colors use the plain hue with bg as text, so they're a light
-// pastel with dark text in dark mode and a deep color with light text in light mode.
-// Destructive stays solid red, because shadcn puts white text on it.
+// Primary, destructive and the status colors use the plain hue with bg as text, so
+// they're a soft color with dark text in dark mode and a deep color with light text in
+// light mode. shadcn also uses them as text on a tint of themselves (bg-destructive/10
+// text-destructive), which the plain hue reads well in.
 function shadcnVars(variant) {
   const t = scale(variant)
   const role = (name) => t[ROLES[name]]
@@ -1051,8 +1052,8 @@ function shadcnVars(variant) {
     'muted-foreground': t['fg-muted'],
     accent: t['surface-hover'],
     'accent-foreground': t.fg,
-    destructive: t[`${ROLES.danger}-solid`],
-    'destructive-foreground': t['on-solid'],
+    destructive: role('danger'),
+    'destructive-foreground': t.bg,
     success: role('success'),
     'success-foreground': t.bg,
     warning: role('warning'),

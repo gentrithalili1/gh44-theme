@@ -71,15 +71,14 @@ Every shadcn variable, plus three status colors shadcn doesn't have:
 | `success` | sage `#5E7350` | sage `#B8C5AC` | `bg-success text-success-foreground` |
 | `warning` | ochre `#8C6A2E` | ochre `#DDBE8E` | `bg-warning text-warning-foreground` |
 | `info` | blue `#3F6A8C` | blue `#9FB7CC` | `bg-info text-info-foreground` |
-| `destructive` | red `#C23B32` | red `#C23B32` | `bg-destructive text-destructive-foreground` |
+| `destructive` | red `#C23B32` | red `#EB6F6F` | `text-destructive`, `bg-destructive/10` |
 | `background` / `card` | `#FAF7F3` / `#F2ECE5` | `#1E1F22` / `#25262A` | `bg-background`, `bg-card` |
 | `muted-foreground` | `#5F6269` | `#A8ABB2` | `text-muted-foreground` |
 | `chart-1` to `chart-5` | lavender, sage, blue, ochre, rose | same | `fill-chart-1` |
 
-Primary and the status colors are a deep shade with light text in light mode
-and a soft shade with dark text in dark mode. Every text and background pair
-passes WCAG AA (4.5:1). Destructive stays deep red in both modes, because shadcn
-puts white text on it.
+Primary, destructive and the status colors are a deep shade with light text in
+light mode and a soft shade with dark text in dark mode. Every text and
+background pair passes WCAG AA (4.5:1).
 
 ## Editing
 
