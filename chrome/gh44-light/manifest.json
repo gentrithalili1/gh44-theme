@@ -1,0 +1,100 @@
+{
+  "manifest_version": 3,
+  "name": "gh44 Light",
+  "version": "1.0.0",
+  "description": "Light terracotta on charcoal. gh44 Light for Chrome.",
+  "theme": {
+    "colors": {
+      "frame": [
+        234,
+        226,
+        217
+      ],
+      "frame_inactive": [
+        234,
+        226,
+        217
+      ],
+      "frame_incognito": [
+        234,
+        226,
+        217
+      ],
+      "frame_incognito_inactive": [
+        234,
+        226,
+        217
+      ],
+      "toolbar": [
+        250,
+        247,
+        243
+      ],
+      "toolbar_text": [
+        43,
+        45,
+        48
+      ],
+      "toolbar_button_icon": [
+        95,
+        98,
+        105
+      ],
+      "tab_text": [
+        43,
+        45,
+        48
+      ],
+      "tab_background_text": [
+        95,
+        98,
+        105
+      ],
+      "tab_background_text_inactive": [
+        110,
+        106,
+        102
+      ],
+      "tab_background_text_incognito": [
+        95,
+        98,
+        105
+      ],
+      "tab_background_text_incognito_inactive": [
+        110,
+        106,
+        102
+      ],
+      "bookmark_text": [
+        43,
+        45,
+        48
+      ],
+      "omnibox_background": [
+        242,
+        236,
+        229
+      ],
+      "omnibox_text": [
+        43,
+        45,
+        48
+      ],
+      "ntp_background": [
+        250,
+        247,
+        243
+      ],
+      "ntp_text": [
+        43,
+        45,
+        48
+      ],
+      "ntp_link": [
+        169,
+        80,
+        47
+      ]
+    }
+  }
+}

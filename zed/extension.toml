@@ -1,0 +1,7 @@
+id = "gh44"
+name = "gh44"
+version = "1.0.0"
+schema_version = 1
+authors = ["Gentrit Halili"]
+description = "gh44 theme for Zed"
+repository = "https://github.com/gentrithalili1/gh44-theme"

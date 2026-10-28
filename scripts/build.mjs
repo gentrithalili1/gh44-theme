@@ -1,0 +1,658 @@
+#!/usr/bin/env node
+// Build every gh44 theme from palette/tokens.json.
+//
+// Run from the repository root:  node scripts/build.mjs
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
+const TOKENS = JSON.parse(readFileSync(join(ROOT, 'palette', 'tokens.json'), 'utf8'))
+const VARIANTS = TOKENS.variants
+const ROLES = TOKENS.roles
+const NAMES = { dark: 'gh44 Dark', light: 'gh44 Light' }
+const VARIANT_ORDER = ['dark', 'light']
+const ANSI_ORDER = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
+const TRANSPARENT = '#00000000'
+
+const hex2 = (n) => Math.round(n).toString(16).toUpperCase().padStart(2, '0')
+const channels = (color) => [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16))
+
+function mix({ from, to, amount }) {
+  const a = channels(from)
+  const b = channels(to)
+  return '#' + a.map((x, i) => hex2(x + (b[i] - x) * amount)).join('')
+}
+
+function alpha({ color, amount }) {
+  return color + hex2(amount * 255)
+}
+
+function write({ path, content }) {
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, content)
+  return path
+}
+
+// 16 ANSI colors shared by Zed's terminal and Warp.
+function ansi(variant) {
+  const c = VARIANTS[variant]
+  const isDark = variant === 'dark'
+  const normal = {
+    black: isDark ? '#3A3C41' : c.cloud,
+    red: c.red,
+    green: c.sage,
+    yellow: c.ochre,
+    blue: c['dusty-blue'],
+    magenta: c.lavender,
+    cyan: c.seafoam,
+    white: isDark ? c.cloud : c.pewter,
+  }
+  const bright = {}
+  for (const [key, color] of Object.entries(normal)) {
+    bright[key] = isDark
+      ? mix({ from: color, to: '#FFFFFF', amount: 0.25 })
+      : mix({ from: color, to: '#000000', amount: 0.18 })
+  }
+  bright.black = isDark ? '#6F737A' : c.comment
+  bright.white = isDark ? '#F2F3F5' : '#FFFFFF'
+  return { normal, bright }
+}
+
+// ---------------------------------------------------------------- Zed
+
+function style(color, { isItalic = false, isBold = false } = {}) {
+  return { color, font_style: isItalic ? 'italic' : null, font_weight: isBold ? 700 : null }
+}
+
+function zedTheme(variant) {
+  const c = VARIANTS[variant]
+  const isDark = variant === 'dark'
+  const { normal, bright } = ansi(variant)
+  const a = (color, amount) => alpha({ color, amount })
+
+  const s = {
+    'background.appearance': 'opaque',
+    accents: [c.terracotta, c.sage, c.lavender, c['dusty-blue'], c.ochre, c.rose],
+
+    border: c.pewter,
+    'border.variant': c['pewter-soft'],
+    'border.focused': c.terracotta,
+    'border.selected': a(c.terracotta, 0.6),
+    'border.transparent': TRANSPARENT,
+    'border.disabled': c['pewter-soft'],
+
+    background: c.graphite,
+    'surface.background': c.graphite,
+    'elevated_surface.background': c.slate,
+    'element.background': c.slate,
+    'element.hover': c['slate-hover'],
+    'element.active': c['slate-active'],
+    'element.selected': c['slate-active'],
+    'element.disabled': c.slate,
+    'drop_target.background': a(c.terracotta, 0.14),
+    'ghost_element.background': TRANSPARENT,
+    'ghost_element.hover': c.slate,
+    'ghost_element.active': c['slate-hover'],
+    'ghost_element.selected': c['slate-hover'],
+    'ghost_element.disabled': TRANSPARENT,
+
+    text: c.cloud,
+    'text.muted': c.silver,
+    'text.placeholder': c.comment,
+    'text.disabled': c.disabled,
+    'text.accent': c.terracotta,
+    icon: c.cloud,
+    'icon.muted': c.silver,
+    'icon.disabled': c.disabled,
+    'icon.placeholder': c.comment,
+    'icon.accent': c.terracotta,
+    'link_text.hover': c.terracotta,
+
+    'title_bar.background': c.graphite,
+    'title_bar.inactive_background': c.graphite,
+    'status_bar.background': c.graphite,
+    'toolbar.background': c.charcoal,
+    'tab_bar.background': c.graphite,
+    'tab.inactive_background': c.graphite,
+    'tab.active_background': c.charcoal,
+    'search.match_background': a(c.ochre, isDark ? 0.28 : 0.3),
+    'panel.background': c.graphite,
+    'panel.focused_border': a(c.terracotta, 0.7),
+    'panel.indent_guide': c['pewter-soft'],
+    'panel.indent_guide_active': c.pewter,
+    'panel.indent_guide_hover': c['line-number'],
+    'panel.overlay_background': c.slate,
+    'panel.overlay_hover': c['slate-hover'],
+    'pane.focused_border': a(c.terracotta, 0.7),
+    'pane_group.border': c['pewter-soft'],
+
+    'scrollbar.thumb.background': a(c.silver, 0.18),
+    'scrollbar.thumb.hover_background': a(c.silver, 0.32),
+    'scrollbar.thumb.active_background': a(c.terracotta, 0.45),
+    'scrollbar.thumb.border': TRANSPARENT,
+    'scrollbar.track.background': TRANSPARENT,
+    'scrollbar.track.border': TRANSPARENT,
+    'minimap.thumb.background': a(c.silver, 0.14),
+    'minimap.thumb.hover_background': a(c.silver, 0.24),
+    'minimap.thumb.active_background': a(c.terracotta, 0.3),
+    'minimap.thumb.border': TRANSPARENT,
+
+    'editor.foreground': c.cloud,
+    'editor.background': c.charcoal,
+    'editor.gutter.background': c.charcoal,
+    'editor.subheader.background': c.graphite,
+    'editor.active_line.background': a(c.slate, isDark ? 0.75 : 0.6),
+    'editor.highlighted_line.background': c.slate,
+    'editor.debugger_active_line.background': a(c.ochre, 0.14),
+    'editor.line_number': c['line-number'],
+    'editor.active_line_number': c.cloud,
+    'editor.hover_line_number': c.silver,
+    'editor.invisible': c.disabled,
+    'editor.wrap_guide': c['pewter-soft'],
+    'editor.active_wrap_guide': c.pewter,
+    'editor.indent_guide': c['pewter-soft'],
+    'editor.indent_guide_active': c.pewter,
+    'editor.document_highlight.read_background': a(c['dusty-blue'], 0.14),
+    'editor.document_highlight.write_background': a(c.terracotta, 0.16),
+    'editor.document_highlight.bracket_background': a(c.terracotta, 0.18),
+
+    'terminal.background': c.charcoal,
+    'terminal.foreground': c.cloud,
+    'terminal.bright_foreground': isDark ? '#F2F3F5' : '#1E1F22',
+    'terminal.dim_foreground': c.comment,
+    'terminal.ansi.background': c.charcoal,
+
+    'version_control.added': c.sage,
+    'version_control.modified': c['dusty-blue'],
+    'version_control.deleted': c.red,
+    'version_control.word_added': a(c.sage, 0.25),
+    'version_control.word_deleted': a(c.red, 0.25),
+    'version_control.conflict_marker.ours': a(c.sage, 0.18),
+    'version_control.conflict_marker.theirs': a(c['dusty-blue'], 0.18),
+  }
+  for (const key of Object.keys(normal)) {
+    s[`terminal.ansi.${key}`] = normal[key]
+    s[`terminal.ansi.bright_${key}`] = bright[key]
+    s[`terminal.ansi.dim_${key}`] = mix({ from: normal[key], to: c.charcoal, amount: 0.4 })
+  }
+
+  const statuses = [
+    ['conflict', c.lavender], ['created', c.sage], ['deleted', c.red],
+    ['error', c.red], ['hidden', c.comment], ['hint', c.comment],
+    ['ignored', c['line-number']], ['info', c['dusty-blue']], ['modified', c['dusty-blue']],
+    ['predictive', c.comment], ['renamed', c.lavender], ['success', c.sage],
+    ['unreachable', c.comment], ['warning', c.ochre],
+  ]
+  for (const [key, color] of statuses) {
+    s[key] = color
+    s[`${key}.background`] = a(color, 0.12)
+    s[`${key}.border`] = a(color, 0.45)
+  }
+
+  const players = [c.terracotta, c.sage, c.lavender, c['dusty-blue'], c.ochre, c.rose, c.seafoam, c.sand]
+  s.players = players.map((p, i) => ({
+    cursor: p,
+    background: p,
+    selection: i === 0 ? a(p, isDark ? 0.24 : 0.2) : a(p, 0.22),
+  }))
+
+  const italic = { isItalic: true }
+  s.syntax = {
+    attribute: style(c.ochre),
+    boolean: style(c.ochre),
+    comment: style(c.comment, italic),
+    'comment.doc': style(mix({ from: c.comment, to: c.cloud, amount: 0.25 }), italic),
+    constant: style(c.ochre),
+    constructor: style(c.lavender),
+    embedded: style(c.cloud),
+    emphasis: style(c.rose, italic),
+    'emphasis.strong': style(c.terracotta, { isBold: true }),
+    enum: style(c.lavender),
+    function: style(c.lavender),
+    hint: style(c.comment),
+    keyword: style(c.terracotta),
+    label: style(c.lavender),
+    link_text: style(c['dusty-blue']),
+    link_uri: style(c.sage, italic),
+    namespace: style(c.cloud),
+    number: style(c.ochre),
+    operator: style(c.silver),
+    predictive: style(c.comment, italic),
+    preproc: style(c.terracotta),
+    primary: style(c.cloud),
+    property: style(c.rose),
+    punctuation: style(c.silver),
+    'punctuation.bracket': style(c.silver),
+    'punctuation.delimiter': style(c.silver),
+    'punctuation.list_marker': style(c.terracotta),
+    'punctuation.markup': style(c.terracotta),
+    'punctuation.special': style(c.rose),
+    selector: style(c.terracotta),
+    'selector.pseudo': style(c.lavender),
+    string: style(c.sage),
+    'string.escape': style(c.rose),
+    'string.regex': style(c.rose),
+    'string.special': style(c.rose),
+    'string.special.symbol': style(c.seafoam),
+    tag: style(c.terracotta),
+    'text.literal': style(c.sage),
+    title: style(c.terracotta, { isBold: true }),
+    type: style(c['dusty-blue']),
+    'type.builtin': style(c['dusty-blue']),
+    variable: style(c.cloud),
+    'variable.special': style(c.terracotta, italic),
+    'variable.parameter': style(c.rose),
+    variant: style(c.lavender),
+  }
+  return { name: NAMES[variant], appearance: variant, style: s }
+}
+
+function buildZed() {
+  const family = {
+    $schema: 'https://zed.dev/schema/themes/v0.2.0.json',
+    name: 'gh44',
+    author: TOKENS.author,
+    themes: VARIANT_ORDER.map(zedTheme),
+  }
+  return write({ path: join(ROOT, 'zed', 'themes', 'gh44.json'), content: JSON.stringify(family, null, 2) + '\n' })
+}
+
+// ---------------------------------------------------------------- Warp
+
+function buildWarp() {
+  return VARIANT_ORDER.map((variant) => {
+    const c = VARIANTS[variant]
+    const { normal, bright } = ansi(variant)
+    const lines = [
+      `# ${NAMES[variant]} for Warp. Generated by scripts/build.mjs; edit palette/tokens.json instead.`,
+      `name: ${NAMES[variant]}`,
+      `accent: '${c.terracotta}'`,
+      `cursor: '${c.terracotta}'`,
+      `background: '${c.charcoal}'`,
+      `foreground: '${c.cloud}'`,
+      `details: ${variant === 'dark' ? 'darker' : 'lighter'}`,
+      'terminal_colors:',
+      '  normal:',
+      ...ANSI_ORDER.map((k) => `    ${k}: '${normal[k]}'`),
+      '  bright:',
+      ...ANSI_ORDER.map((k) => `    ${k}: '${bright[k]}'`),
+    ]
+    return write({ path: join(ROOT, 'warp', `gh44-${variant}.yaml`), content: lines.join('\n') + '\n' })
+  })
+}
+
+// ---------------------------------------------------------------- Slack
+
+// Slack's legacy theme format: 10 comma-separated colors.
+// Order: column background, menu hover, active item, active item text, hover item,
+// text, active presence, mention badge, top nav background, top nav text.
+function slackString(variant) {
+  const c = VARIANTS[variant]
+  return [
+    c.graphite, c.slate, c['slate-active'], c.cloud, c.slate,
+    c.cloud, c.sage, c.terracotta, c.terracotta, c.charcoal,
+  ].join(',')
+}
+
+function buildSlack() {
+  return VARIANT_ORDER.map((variant) =>
+    write({ path: join(ROOT, 'slack', `gh44-${variant}.txt`), content: slackString(variant) + '\n' }),
+  )
+}
+
+// ---------------------------------------------------------------- Linear
+
+// sRGB hex to CSS lch() (CIE LCH, D50), the color space Linear's theme generator uses.
+function lch(color) {
+  const [r, g, b] = channels(color).map((v) => {
+    const x = v / 255
+    return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4
+  })
+  // Linear sRGB to XYZ D50 (Bradford-adapted from D65).
+  const xyz = [
+    0.4360747 * r + 0.3850649 * g + 0.1430804 * b,
+    0.2225045 * r + 0.7168786 * g + 0.0606169 * b,
+    0.0139322 * r + 0.0971045 * g + 0.7141733 * b,
+  ]
+  const white = [0.96422, 1, 0.82521]
+  const [fx, fy, fz] = xyz.map((v, i) => {
+    const t = v / white[i]
+    return t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116
+  })
+  const l = 116 * fy - 16
+  const a = 500 * (fx - fy)
+  const bb = 200 * (fy - fz)
+  const hue = (Math.atan2(bb, a) * 180) / Math.PI
+  const round = (n) => Math.round(n * 1000) / 1000
+  return [round(l), round(Math.hypot(a, bb)), round((hue + 360) % 360), 1]
+}
+
+// Linear's custom theme import: base, accent, and contrast, with the same for the sidebar.
+// Linear derives every other color from these.
+function linearTheme(variant) {
+  const c = VARIANTS[variant]
+  const contrast = 30
+  return {
+    base: lch(c.charcoal),
+    accent: lch(c.terracotta),
+    contrast,
+    sidebar: { base: lch(c.graphite), accent: lch(c.terracotta), contrast },
+  }
+}
+
+// Linear's theme doesn't reach code blocks, so they get a Stylus userstyle instead.
+// Linear doesn't document its code block markup, so this covers both token class
+// schemes it could use: Prism (.token.keyword) and highlight.js (.hljs-keyword).
+// Each entry is [Zed syntax scope, Prism tokens, highlight.js classes].
+const CODE_TOKENS = [
+  ['comment', ['comment', 'prolog', 'doctype', 'cdata'], ['comment', 'quote']],
+  ['keyword', ['keyword', 'atrule', 'important'], ['keyword', 'doctag']],
+  ['string', ['string', 'char', 'attr-value', 'template-string'], ['string', 'addition']],
+  ['string.regex', ['regex'], ['regexp']],
+  ['number', ['number'], ['number']],
+  ['boolean', ['boolean'], ['literal']],
+  ['constant', ['constant', 'symbol'], ['symbol', 'variable.constant_']],
+  ['function', ['function', 'function-variable'], ['title.function_', 'section']],
+  ['type', ['class-name', 'builtin'], ['type', 'built_in', 'title.class_', 'title']],
+  ['property', ['property'], ['property', 'attr']],
+  ['variable.parameter', ['parameter'], ['params']],
+  ['attribute', ['attr-name'], ['attribute']],
+  ['tag', ['tag', 'selector'], ['tag', 'name', 'selector-tag', 'selector-class', 'selector-id']],
+  ['preproc', ['directive'], ['meta']],
+  ['operator', ['operator'], ['operator']],
+  ['punctuation', ['punctuation'], ['punctuation']],
+  ['variable', ['variable'], ['variable', 'template-variable']],
+  ['emphasis.strong', ['bold'], ['strong']],
+  ['emphasis', ['italic'], ['emphasis']],
+]
+
+function linearUserCss(variant) {
+  const c = VARIANTS[variant]
+  const { syntax } = zedTheme(variant).style
+  const rules = CODE_TOKENS.map(([scope, prism, classes]) => {
+    const st = syntax[scope]
+    const selectors = [
+      ...prism.map((t) => `pre .token.${t}`),
+      ...classes.map((t) => `pre .hljs-${t}`),
+    ]
+    const decls = [`color: ${st.color} !important;`]
+    if (st.font_style) decls.push(`font-style: ${st.font_style};`)
+    if (st.font_weight) decls.push(`font-weight: ${st.font_weight};`)
+    return `  ${selectors.join(',\n  ')} {\n    ${decls.join('\n    ')}\n  }`
+  })
+  return [
+    '/* ==UserStyle==',
+    `@name         ${NAMES[variant]} for Linear code blocks`,
+    '@namespace    gh44',
+    `@version      ${TOKENS.version}`,
+    `@description  gh44 syntax colors in Linear code blocks. Generated by scripts/build.mjs.`,
+    `@author       ${TOKENS.author}`,
+    '==/UserStyle== */',
+    '',
+    '@-moz-document domain("linear.app") {',
+    '  pre,',
+    '  pre code {',
+    `    background-color: ${c.graphite} !important;`,
+    `    color: ${c.cloud} !important;`,
+    '  }',
+    '',
+    rules.join('\n\n'),
+    '}',
+    '',
+  ].join('\n')
+}
+
+function buildLinear() {
+  return VARIANT_ORDER.flatMap((variant) => [
+    write({
+      path: join(ROOT, 'linear', `gh44-${variant}.json`),
+      content: JSON.stringify(linearTheme(variant)) + '\n',
+    }),
+    write({
+      path: join(ROOT, 'linear', `gh44-${variant}.user.css`),
+      content: linearUserCss(variant),
+    }),
+  ])
+}
+
+// ---------------------------------------------------------------- Chrome
+
+const rgb = (color) => channels(color)
+
+// Chrome themes don't follow the system mode, so each variant is its own extension.
+function chromeManifest(variant) {
+  const c = VARIANTS[variant]
+  const isDark = variant === 'dark'
+  // The tab strip sits behind the active tab, which shares the toolbar color.
+  const frame = isDark ? c.charcoal : c.slate
+  const toolbar = isDark ? c.slate : c.charcoal
+  const omnibox = isDark ? c.charcoal : c.graphite
+  return {
+    manifest_version: 3,
+    name: NAMES[variant],
+    version: TOKENS.version,
+    description: `Light terracotta on charcoal. ${NAMES[variant]} for Chrome.`,
+    theme: {
+      colors: {
+        frame: rgb(frame),
+        frame_inactive: rgb(frame),
+        frame_incognito: rgb(frame),
+        frame_incognito_inactive: rgb(frame),
+        toolbar: rgb(toolbar),
+        toolbar_text: rgb(c.cloud),
+        toolbar_button_icon: rgb(c.silver),
+        tab_text: rgb(c.cloud),
+        tab_background_text: rgb(c.silver),
+        tab_background_text_inactive: rgb(c.comment),
+        tab_background_text_incognito: rgb(c.silver),
+        tab_background_text_incognito_inactive: rgb(c.comment),
+        bookmark_text: rgb(c.cloud),
+        omnibox_background: rgb(omnibox),
+        omnibox_text: rgb(c.cloud),
+        ntp_background: rgb(c.charcoal),
+        ntp_text: rgb(c.cloud),
+        ntp_link: rgb(c.terracotta),
+      },
+    },
+  }
+}
+
+function buildChrome() {
+  return VARIANT_ORDER.map((variant) =>
+    write({
+      path: join(ROOT, 'chrome', `gh44-${variant}`, 'manifest.json'),
+      content: JSON.stringify(chromeManifest(variant), null, 2) + '\n',
+    }),
+  )
+}
+
+// ---------------------------------------------------------------- README images
+
+const MONO = 'JetBrains Mono, SFMono-Regular, Menlo, Consolas, monospace'
+const SANS = 'Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif'
+const CHAR_WIDTH = 8.4 // JetBrains Mono at 14px
+const LINE_HEIGHT = 24
+const TOP = 76
+const GUTTER = 84
+const ITALIC = ' font-style="italic"'
+
+// Made-up TypeScript for the Zed preview. Each piece is [text, Zed syntax scope or null].
+const ZED_SAMPLE = [
+  [['import', 'keyword'], [' { ', 'punctuation'], ['formatTemperature', 'variable'],
+    [' } ', 'punctuation'], ['from', 'keyword'], [' ', null], ["'./units'", 'string']],
+  [],
+  [['type', 'keyword'], [' ', null], ['Forecast', 'type'], [' ', null], ['=', 'operator'],
+    [' {', 'punctuation']],
+  [['  ', null], ['city', 'property'], [': ', 'punctuation'], ['string', 'type.builtin']],
+  [['  ', null], ['highs', 'property'], [': ', 'punctuation'], ['number', 'type.builtin'],
+    ['[]', 'punctuation']],
+  [['  ', null], ['isRaining', 'property'], [': ', 'punctuation'], ['boolean', 'type.builtin']],
+  [['}', 'punctuation']],
+  [],
+  [['const', 'keyword'], [' ', null], ['MAX_DAYS', 'constant'], [' ', null], ['=', 'operator'],
+    [' ', null], ['7', 'number']],
+  [],
+  [["// Average of the week's highs, rounded", 'comment']],
+  [['export', 'keyword'], [' ', null], ['function', 'keyword'], [' ', null],
+    ['getWeeklyHigh', 'function'], ['({ ', 'punctuation'], ['city', 'variable.parameter'],
+    [', ', 'punctuation'], ['highs', 'variable.parameter'], [' }: ', 'punctuation'],
+    ['Forecast', 'type'], ['): ', 'punctuation'], ['string', 'type.builtin'], [' {', 'punctuation']],
+  [['  ', null], ['const', 'keyword'], [' ', null], ['week', 'variable'], [' ', null],
+    ['=', 'operator'], [' ', null], ['highs', 'variable'], ['.', 'punctuation'],
+    ['slice', 'function'], ['(', 'punctuation'], ['0', 'number'], [', ', 'punctuation'],
+    ['MAX_DAYS', 'constant'], [')', 'punctuation']],
+  [['  ', null], ['const', 'keyword'], [' ', null], ['total', 'variable'], [' ', null],
+    ['=', 'operator'], [' ', null], ['week', 'variable'], ['.', 'punctuation'],
+    ['reduce', 'function'], ['((', 'punctuation'], ['sum', 'variable.parameter'],
+    [', ', 'punctuation'], ['high', 'variable.parameter'], [') ', 'punctuation'],
+    ['=>', 'operator'], [' ', null], ['sum', 'variable'], [' ', null], ['+', 'operator'],
+    [' ', null], ['high', 'variable'], [', ', 'punctuation'], ['0', 'number'],
+    [')', 'punctuation']],
+  [],
+  [['  ', null], ['return', 'keyword'], [' ', null], ['`', 'string'], ['${', 'punctuation.special'],
+    ['city', 'variable'], ['}', 'punctuation.special'], [': ', 'string'], ['${', 'punctuation.special'],
+    ['formatTemperature', 'function'], ['(', 'punctuation'], ['total', 'variable'], [' ', null],
+    ['/', 'operator'], [' ', null], ['week', 'variable'], ['.', 'punctuation'],
+    ['length', 'property'], [')', 'punctuation'], ['}', 'punctuation.special'], ['`', 'string']],
+  [['}', 'punctuation']],
+]
+
+// Made-up terminal session for the Warp preview. Each piece is [text, ANSI color name or null].
+const WARP_SAMPLE = [
+  [['~/projects/forecast', 'blue'], ['  ', null], ['main', 'magenta']],
+  [['❯ ', 'prompt'], ['git status --short', null]],
+  [[' M ', 'red'], ['src/forecast.ts', null]],
+  [['?? ', 'red'], ['src/units.ts', null]],
+  [],
+  [['~/projects/forecast', 'blue'], ['  ', null], ['main', 'magenta']],
+  [['❯ ', 'prompt'], ['pnpm test', null]],
+  [[' ✓ ', 'green'], ['src/forecast.test.ts ', null], ['(6 tests) ', 'black'], ['12ms', 'yellow']],
+  [[' ✓ ', 'green'], ['src/units.test.ts ', null], ['(4 tests) ', 'black'], ['8ms', 'yellow']],
+  [[' ✗ ', 'red'], ['src/alerts.test.ts ', null], ['(1 failed) ', 'red'], ['5ms', 'yellow']],
+  [],
+  [[' Tests  ', 'black'], ['10 passed', 'green'], [' | ', 'black'], ['1 failed', 'red'],
+    [' (11)', 'black']],
+]
+
+const esc = (text) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+
+// An editor or terminal window with colored lines of monospace text.
+// Each line is a list of { text, color, isItalic } pieces.
+function windowSvg({ variant, title, lines, hasLineNumbers, extraHeight = 0, extra = '' }) {
+  const c = VARIANTS[variant]
+  const left = hasLineNumbers ? GUTTER : 28
+  const longest = Math.max(0, ...lines.map((line) => line.reduce((n, p) => n + [...p.text].length, 0)))
+  const width = Math.round(left + longest * CHAR_WIDTH + 40)
+  const height = TOP + lines.length * LINE_HEIGHT + 20 + extraHeight
+  const rows = lines.flatMap((line, i) => {
+    const y = TOP + i * LINE_HEIGHT
+    const spans = line
+      .map((p) => `<tspan fill="${p.color}"${p.isItalic ? ITALIC : ''}>${esc(p.text)}</tspan>`)
+      .join('')
+    const lineNumber = hasLineNumbers
+      ? [`<text x="64" y="${y}" fill="${c['line-number']}" text-anchor="end">${i + 1}</text>`]
+      : []
+    return [...lineNumber, `<text x="${left}" y="${y}" xml:space="preserve">${spans}</text>`]
+  })
+  const dots = [c.terracotta, c.ochre, c.sage]
+    .map((col, i) => `<circle cx="${28 + i * 20}" cy="24" r="6" fill="${col}"/>`)
+    .join('')
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" ` +
+    `viewBox="0 0 ${width} ${height}" font-family="${MONO}" font-size="14">` +
+    `<rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="12" ` +
+    `fill="${c.charcoal}" stroke="${c.pewter}"/>` +
+    `<path d="M1 48 H${width - 1}" stroke="${c['pewter-soft']}"/>${dots}` +
+    `<text x="${width / 2}" y="29" fill="${c.silver}" text-anchor="middle" ` +
+    `font-family="${SANS}" font-size="13">${esc(title)}</text>` +
+    `${rows.join('')}${extra}</svg>\n`
+  )
+}
+
+function zedPreviewSvg(variant) {
+  const c = VARIANTS[variant]
+  const { syntax } = zedTheme(variant).style
+  const lines = ZED_SAMPLE.map((line) =>
+    line.map(([text, scope]) => {
+      const st = (scope && syntax[scope]) || {}
+      return { text, color: st.color ?? c.cloud, isItalic: st.font_style === 'italic' }
+    }),
+  )
+  return windowSvg({ variant, title: `forecast.ts · ${NAMES[variant]}`, lines, hasLineNumbers: true })
+}
+
+function warpPreviewSvg(variant) {
+  const c = VARIANTS[variant]
+  const { normal, bright } = ansi(variant)
+  const colors = { ...normal, black: c.comment, prompt: c.terracotta }
+  const lines = WARP_SAMPLE.map((line) =>
+    line.map(([text, name]) => ({ text, color: name ? colors[name] : c.cloud, isItalic: false })),
+  )
+  // The 16 ANSI colors as two rows of squares under the session.
+  const y = TOP + lines.length * LINE_HEIGHT + 4
+  const squares = [normal, bright]
+    .flatMap((palette, row) =>
+      ANSI_ORDER.map(
+        (k, col) =>
+          `<rect x="${28 + col * 30}" y="${y + row * 30}" width="22" height="22" rx="5" ` +
+          `fill="${palette[k]}" stroke="#808080" stroke-opacity="0.35"/>`,
+      ),
+    )
+    .join('')
+  return windowSvg({
+    variant,
+    title: `Warp · ${NAMES[variant]}`,
+    lines,
+    hasLineNumbers: false,
+    extraHeight: 64,
+    extra: squares,
+  })
+}
+
+function buildReadmeImages() {
+  return VARIANT_ORDER.flatMap((variant) => [
+    write({ path: join(ROOT, 'assets', `zed-${variant}.svg`), content: zedPreviewSvg(variant) }),
+    write({ path: join(ROOT, 'assets', `warp-${variant}.svg`), content: warpPreviewSvg(variant) }),
+  ])
+}
+
+// ---------------------------------------------------------------- Swatches
+
+// One small SVG per color, for the palette README.
+function buildSwatches() {
+  return Object.entries(VARIANTS).flatMap(([variant, colors]) =>
+    Object.entries(colors).map(([name, hex]) =>
+      write({
+        path: join(ROOT, 'palette', 'swatches', variant, `${name}.svg`),
+        content:
+          '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">' +
+          `<rect x="0.5" y="0.5" width="19" height="19" rx="4" fill="${hex}" ` +
+          'stroke="#808080" stroke-opacity="0.45"/></svg>\n',
+      }),
+    ),
+  )
+}
+
+// ---------------------------------------------------------------- CSS
+
+function buildCss() {
+  const block = (variant) =>
+    [
+      ...Object.entries(VARIANTS[variant]).map(([name, hex]) => `  --gh44-${name}: ${hex};`),
+      '',
+      ...Object.entries(ROLES).map(([role, name]) => `  --gh44-${role}: var(--gh44-${name});`),
+    ].join('\n')
+
+  const css =
+    '/* gh44 palette. Generated by scripts/build.mjs; edit palette/tokens.json instead. */\n' +
+    '/* Dark is the default. Set data-theme="light" on <html> for the light variant. */\n\n' +
+    `:root {\n  color-scheme: dark;\n${block('dark')}\n}\n\n` +
+    `:root[data-theme="light"] {\n  color-scheme: light;\n${block('light')}\n}\n`
+  return write({ path: join(ROOT, 'palette', 'gh44.css'), content: css })
+}
+
+const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), buildCss(), ...buildReadmeImages()]
+const swatches = buildSwatches()
+for (const path of built) console.log('built', relative(ROOT, path))
+console.log('built', swatches.length, 'swatches in palette/swatches')
