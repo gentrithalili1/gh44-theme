@@ -50,14 +50,17 @@ latest values. GitHub caches raw files for about 5 minutes after a push.
 
 ## Dark mode
 
-shadcn switches on a `dark` class on `<html>`. Add it from your theme toggle,
-or set it before the page paints so there's no flash:
+shadcn switches on a `dark` class on `<html>`. Set it from your theme toggle,
+or before the page paints so there's no flash. Set `light` too: the plain
+`palette/gh44.css` tokens follow the system setting unless one of the two is
+there.
 
 ```html
 <script>
   const isDark = localStorage.theme === 'dark' ||
     (!localStorage.theme && matchMedia('(prefers-color-scheme: dark)').matches)
   document.documentElement.classList.toggle('dark', isDark)
+  document.documentElement.classList.toggle('light', !isDark)
 </script>
 ```
 
