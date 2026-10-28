@@ -72,13 +72,14 @@ Every shadcn variable, plus three status colors shadcn doesn't have:
 | `warning` | ochre `#8C6A2E` | ochre `#DDBE8E` | `bg-warning text-warning-foreground` |
 | `info` | blue `#3F6A8C` | blue `#9FB7CC` | `bg-info text-info-foreground` |
 | `destructive` | red `#C23B32` | red `#EB6F6F` | `text-destructive`, `bg-destructive/10` |
-| `background` / `card` | `#FAF7F3` / `#F2ECE5` | `#1E1F22` / `#25262A` | `bg-background`, `bg-card` |
+| `background` / `card` | `#FAF7F3` / `#FAF7F3` | `#1E1F22` / `#25262A` | `bg-background`, `bg-card` |
 | `muted-foreground` | `#5F6269` | `#A8ABB2` | `text-muted-foreground` |
 | `chart-1` to `chart-5` | lavender, sage, blue, ochre, rose | same | `fill-chart-1` |
 
 Primary, destructive and the status colors are a deep shade with light text in
-light mode and a soft shade with dark text in dark mode. Every text and
-background pair passes WCAG AA (4.5:1).
+light mode and a soft shade with dark text in dark mode. Every foreground pair,
+and every one of those colors used as text on the page or a card, passes WCAG AA
+(4.5:1). Light cards match the page and stand out by their border.
 
 ## Editing
 

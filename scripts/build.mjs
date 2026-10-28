@@ -1040,7 +1040,9 @@ function shadcnVars(variant) {
   return {
     background: t.bg,
     foreground: t.fg,
-    card: t['bg-subtle'],
+    // Light cards match the page and stand out by their border, so status text on a
+    // card keeps AA contrast. Dark cards sit one step up.
+    card: isDark ? t['bg-subtle'] : t.bg,
     'card-foreground': t.fg,
     popover: isDark ? t.surface : t.bg,
     'popover-foreground': t.fg,
