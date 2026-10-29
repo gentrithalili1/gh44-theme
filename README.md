@@ -7,7 +7,7 @@ One theme, every tool.
 | [`zed/`](zed/)         | Editor theme for Zed                                           |
 | [`warp/`](warp/)       | Terminal theme for Warp                                        |
 | [`slack/`](slack/)     | Sidebar theme for Slack                                        |
-| [`linear/`](linear/)   | Interface theme for Linear                                     |
+| [`linear/`](linear/)   | Userstyle and custom theme for Linear                          |
 | [`chrome/`](chrome/)   | Browser theme for Chrome                                       |
 | [`github/`](github/)   | Stylus userstyle for GitHub                                    |
 | [`shadcn/`](shadcn/)   | Theme for shadcn/ui projects, installable with the shadcn CLI  |
