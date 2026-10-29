@@ -20,19 +20,20 @@ gh44 has one Linear theme, built from the light palette, the same as Slack.
 Linear doesn't sync the theme between devices, so set it on desktop, web, and
 mobile separately.
 
-## Code blocks
+## Follow the system (web)
 
-Linear's theme only sets interface colors, so code blocks keep Linear's own
-syntax colors. To give them the same colors as the gh44 Zed theme, use the
-userstyles in this folder. They work in Linear on the web, not in the desktop
-app.
+Linear's custom theme is one fixed theme, so it doesn't switch with your system.
+On linear.app, the userstyles in this folder fix that: they color Linear's
+interface and code blocks with gh44, and each one only applies in its own
+system mode.
 
-1. Install [Stylus](https://add0n.com/stylus.html) for your browser.
-2. Install both styles. Each one only applies in its own system mode, so code
+1. In Linear, set **Interface theme** to **System**, not Custom.
+2. Install [Stylus](https://add0n.com/stylus.html) for your browser.
+3. Install both styles. Each one only applies in its own system mode, so code
    blocks switch with light and dark mode. Stylus opens its install page.
    - **[Install gh44 Dark for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-dark.user.css)**
    - **[Install gh44 Light for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-light.user.css)**
-3. Click **Install style** and reload Linear.
+4. Click **Install style** and reload Linear.
 
 The links open the raw files. To find them yourself, open `gh44-dark.user.css`
 or `gh44-light.user.css` in this folder on GitHub and click **Raw** at the top
