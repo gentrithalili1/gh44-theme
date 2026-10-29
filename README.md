@@ -10,7 +10,8 @@ One theme, every tool.
 | [`linear/`](linear/)   | Interface theme for Linear                                     |
 | [`chrome/`](chrome/)   | Browser theme for Chrome                                       |
 | [`github/`](github/)   | Stylus userstyle for GitHub                                    |
-| [`palette/`](palette/) | Every color with hex values, plus `gh44.css` for web projects  |
+| [`shadcn/`](shadcn/)   | Theme for shadcn/ui projects, installable with the shadcn CLI  |
+| [`palette/`](palette/) | Color tokens and naming, plus `gh44.css` for web projects      |
 | [`fonts/`](fonts/)     | JetBrains Mono, the font the themes are set up for             |
 
 Each folder has its own README with a preview and install steps.
