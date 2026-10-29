@@ -5,6 +5,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { crc32, deflateSync } from 'node:zlib'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const TOKENS = JSON.parse(readFileSync(join(ROOT, 'palette', 'tokens.json'), 'utf8'))
@@ -580,7 +581,8 @@ function chromeManifest(variant) {
     manifest_version: 3,
     name: NAMES[variant],
     version: TOKENS.version,
-    description: `Light terracotta on charcoal. ${NAMES[variant]} for Chrome.`,
+    description: `${NAMES[variant]} for Chrome: warm neutrals with terracotta accents.`,
+    icons: { 128: 'icon-128.png' },
     theme: {
       colors: {
         frame: rgb(frame),
@@ -606,13 +608,47 @@ function chromeManifest(variant) {
   }
 }
 
+// The Chrome Web Store needs a 128px icon: a terracotta dot on the variant's background.
+function chromeIcon(variant) {
+  const c = VARIANTS[variant]
+  const size = 128
+  const [bg, dot] = [channels(c.bg), channels(c.terracotta)]
+  const row = (y) => {
+    const pixels = Array.from({ length: size }, (_, x) => {
+      const isDot = Math.hypot(x + 0.5 - size / 2, y + 0.5 - size / 2) < size * 0.3
+      return isDot ? dot : bg
+    })
+    return Buffer.from([0, ...pixels.flat()])
+  }
+  const raw = Buffer.concat(Array.from({ length: size }, (_, y) => row(y)))
+  const chunk = (type, data) => {
+    const body = Buffer.concat([Buffer.from(type), data])
+    const length = Buffer.alloc(4)
+    length.writeUInt32BE(data.length)
+    const crc = Buffer.alloc(4)
+    crc.writeUInt32BE(crc32(body))
+    return Buffer.concat([length, body, crc])
+  }
+  const header = Buffer.alloc(13)
+  header.writeUInt32BE(size, 0)
+  header.writeUInt32BE(size, 4)
+  header.set([8, 2, 0, 0, 0], 8)
+  return Buffer.concat([
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    chunk('IHDR', header),
+    chunk('IDAT', deflateSync(raw)),
+    chunk('IEND', Buffer.alloc(0)),
+  ])
+}
+
 function buildChrome() {
-  return VARIANT_ORDER.map((variant) =>
+  return VARIANT_ORDER.flatMap((variant) => [
     write({
       path: join(ROOT, 'chrome', `gh44-${variant}`, 'manifest.json'),
       content: JSON.stringify(chromeManifest(variant), null, 2) + '\n',
     }),
-  )
+    write({ path: join(ROOT, 'chrome', `gh44-${variant}`, 'icon-128.png'), content: chromeIcon(variant) }),
+  ])
 }
 
 // ---------------------------------------------------------------- GitHub

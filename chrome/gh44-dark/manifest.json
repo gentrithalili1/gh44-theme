@@ -2,7 +2,10 @@
   "manifest_version": 3,
   "name": "gh44 Dark",
   "version": "1.0.0",
-  "description": "Light terracotta on charcoal. gh44 Dark for Chrome.",
+  "description": "gh44 Dark for Chrome: warm neutrals with terracotta accents.",
+  "icons": {
+    "128": "icon-128.png"
+  },
   "theme": {
     "colors": {
       "frame": [
