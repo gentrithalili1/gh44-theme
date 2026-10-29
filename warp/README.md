@@ -12,19 +12,25 @@ gh44 theme for the [Warp](https://www.warp.dev) terminal.
 1. Create Warp's themes folder.
 
    macOS:
+
    ```sh
    mkdir -p ~/.warp/themes
    ```
+
    Linux:
+
    ```sh
    mkdir -p ${XDG_DATA_HOME:-$HOME/.local/share}/warp-terminal/themes
    ```
+
    Windows (PowerShell):
+
    ```powershell
    New-Item -Path "$env:APPDATA\warp\Warp\data\themes\" -ItemType Directory
    ```
 
 2. Copy both theme files into it. On macOS:
+
    ```sh
    cp gh44-dark.yaml gh44-light.yaml ~/.warp/themes/
    ```

@@ -2,7 +2,7 @@
 name: gh44 Light
 accent: '#A9502F'
 cursor: '#A9502F'
-background: '#FAF7F3'
+background: '#F2ECE5'
 foreground: '#2B2D30'
 details: lighter
 terminal_colors:

@@ -269,7 +269,7 @@ function buildWarp() {
       `name: ${NAMES[variant]}`,
       `accent: '${c.terracotta}'`,
       `cursor: '${c.terracotta}'`,
-      `background: '${c.charcoal}'`,
+      `background: '${variant === 'dark' ? c.charcoal : c.graphite}'`,
       `foreground: '${c.cloud}'`,
       `details: ${variant === 'dark' ? 'darker' : 'lighter'}`,
       'terminal_colors:',
@@ -287,8 +287,9 @@ function buildWarp() {
 // Slack's legacy theme format: 10 comma-separated colors.
 // Order: column background, menu hover, active item, active item text, hover item,
 // text, active presence, mention badge, top nav background, top nav text.
-function slackString(variant) {
-  const c = VARIANTS[variant]
+// One theme from the light palette: Slack derives its dark mode from it.
+function slackString() {
+  const c = VARIANTS.light
   return [
     c.graphite, c.slate, c['slate-active'], c.cloud, c.slate,
     c.cloud, c.sage, c.terracotta, c.terracotta, c.charcoal,
@@ -296,9 +297,7 @@ function slackString(variant) {
 }
 
 function buildSlack() {
-  return VARIANT_ORDER.map((variant) =>
-    write({ path: join(ROOT, 'slack', `gh44-${variant}.txt`), content: slackString(variant) + '\n' }),
-  )
+  return write({ path: join(ROOT, 'slack', 'gh44.txt'), content: slackString() + '\n' })
 }
 
 // ---------------------------------------------------------------- Linear
@@ -969,7 +968,7 @@ function buildCss() {
   return write({ path: join(ROOT, 'palette', 'gh44.css'), content: css })
 }
 
-const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), buildGithub(), buildCss(), ...buildReadmeImages()]
+const built = [buildZed(), ...buildWarp(), buildSlack(), ...buildLinear(), ...buildChrome(), buildGithub(), buildCss(), ...buildReadmeImages()]
 const swatches = buildSwatches()
 for (const path of built) console.log('built', relative(ROOT, path))
 console.log('built', swatches.length, 'swatches in palette/swatches')
