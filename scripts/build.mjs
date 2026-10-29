@@ -495,6 +495,18 @@ function linearUserCss(variant) {
     `    border-bottom-color: ${c['fg-subtle']} !important;`,
     '  }',
   ].join('\n')
+  const body = [
+    '  pre,',
+    '  pre code {',
+    `    background-color: ${c['bg-subtle']} !important;`,
+    `    color: ${c.fg} !important;`,
+    '  }',
+    '',
+    rules.join('\n\n'),
+    '',
+    diffRule,
+  ].join('\n')
+  const indent = (text) => text.split('\n').map((line) => (line ? `  ${line}` : line)).join('\n')
   return [
     '/* ==UserStyle==',
     `@name         ${NAMES[variant]} for Linear code blocks`,
@@ -505,15 +517,10 @@ function linearUserCss(variant) {
     '==/UserStyle== */',
     '',
     '@-moz-document domain("linear.app") {',
-    '  pre,',
-    '  pre code {',
-    `    background-color: ${c['bg-subtle']} !important;`,
-    `    color: ${c.fg} !important;`,
+    // Each style applies only in its own system mode, so both can stay installed.
+    `  @media (prefers-color-scheme: ${variant}) {`,
+    indent(body),
     '  }',
-    '',
-    rules.join('\n\n'),
-    '',
-    diffRule,
     '}',
     '',
   ].join('\n')

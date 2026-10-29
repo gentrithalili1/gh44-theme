@@ -28,7 +28,8 @@ userstyles in this folder. They work in Linear on the web, not in the desktop
 app.
 
 1. Install [Stylus](https://add0n.com/stylus.html) for your browser.
-2. Click the link for the mode you use Linear in. Stylus opens its install page.
+2. Install both styles. Each one only applies in its own system mode, so code
+   blocks switch with light and dark mode. Stylus opens its install page.
    - **[Install gh44 Dark for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-dark.user.css)**
    - **[Install gh44 Light for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44-light.user.css)**
 3. Click **Install style** and reload Linear.
