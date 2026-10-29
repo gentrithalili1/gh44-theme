@@ -32,7 +32,7 @@ Windows: right-click each `.ttf` file and choose **Install**.
 | App                | Code  | Text          | How                                                       |
 | ------------------ | ----- | ------------- | --------------------------------------------------------- |
 | Zed                | Lilex | IBM Plex Sans | Bundled as `.ZedMono` / `.ZedSans`, see `zed/README.md`   |
-| Warp               | Lilex | -             | Settings → Appearance → Text → Terminal font              |
+| Warp               | Lilex | -             | Install Lilex, then pick it in Warp, see `warp/README.md` |
 | GitHub, Linear     | Lilex | Site's own    | The gh44 userstyles set code blocks and diffs             |
 | shadcn/ui, web     | Lilex | IBM Plex Sans | `font-mono` and `font-sans`, or `--gh44-font-*` variables |
 | Chrome, Slack      | -     | -             | Themes can't set fonts                                    |

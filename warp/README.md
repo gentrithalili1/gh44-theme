@@ -29,16 +29,31 @@ gh44 theme for the [Warp](https://www.warp.dev) terminal.
    New-Item -Path "$env:APPDATA\warp\Warp\data\themes\" -ItemType Directory
    ```
 
-2. Copy both theme files into it. On macOS:
+2. Copy both theme files into it. On macOS, from the repository root:
 
    ```sh
-   cp gh44-dark.yaml gh44-light.yaml ~/.warp/themes/
+   cp warp/gh44-dark.yaml warp/gh44-light.yaml ~/.warp/themes/
    ```
 
-3. Open **Settings → Appearance → Themes** and pick **gh44 Dark**.
+3. Open **Settings → Appearance → Themes** and pick **gh44 Dark**. For the
+   font, see [Font](#font).
 
 Warp can take a few minutes to notice a new themes folder the first time.
 Restarting Warp speeds that up.
+
+## Font
+
+gh44 uses Lilex for code, the font Zed ships as `.ZedMono`. Warp themes can't
+set a font, so set it once:
+
+1. Install Lilex from [`fonts/`](../fonts/). On macOS, from the repository root:
+
+   ```sh
+   cp fonts/Lilex/*.ttf ~/Library/Fonts/
+   ```
+
+2. Restart Warp, open **Settings → Appearance → Text** and pick **Lilex** as
+   the terminal font.
 
 ## Editing
 
