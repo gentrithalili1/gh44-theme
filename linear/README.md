@@ -1,23 +1,24 @@
 # gh44 for Linear
 
-Two ways to use gh44 in Linear:
+gh44 for Linear has two parts:
 
-- **Userstyle (full theme, web):** a [Stylus](https://add0n.com/stylus.html)
-  userstyle that recolors Linear's interface and code blocks. It follows your
-  system appearance, so gh44 Dark shows in dark mode and gh44 Light in light
-  mode.
-- **Custom theme (interface only, desktop app too):** Linear's own theme
-  import. It colors the interface but not code blocks, and doesn't switch with
-  the system.
+- **Custom theme (interface):** Linear's own theme import colors the
+  interface, on web, desktop and mobile. Linear keeps one custom theme and
+  hides its light and dark options while it's selected, so it doesn't switch
+  with the system.
+- **Userstyle (code blocks, web):** a [Stylus](https://add0n.com/stylus.html)
+  userstyle that gives code blocks and diffs the gh44 Zed syntax colors. It
+  follows your system appearance.
+
+Linear builds its interface from hashed CSS variables (`--sx-1gxylln`) that
+can change between releases, so a userstyle can't theme the interface reliably.
 
 ## Userstyle
 
-1. In Linear, open **Settings** → **Preferences** (shortcut `G` then `S`) and
-   set **Interface theme** to **System**.
-2. Install [Stylus](https://add0n.com/stylus.html) for your browser.
-3. Click **[Install gh44 for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44.user.css)**.
+1. Install [Stylus](https://add0n.com/stylus.html) for your browser.
+2. Click **[Install gh44 for Linear](https://raw.githubusercontent.com/gentrithalili1/gh44-theme/main/linear/gh44.user.css)**.
    Stylus opens its install page.
-4. Click **Install style** and reload Linear.
+3. Click **Install style** and reload Linear.
 
 The link opens the raw file. To find it yourself, open `gh44.user.css` in this
 folder on GitHub and click **Raw** at the top right of the file. Stylus only
@@ -43,10 +44,9 @@ mobile separately.
 
 ## How it works
 
-The userstyle overrides the CSS variables Linear colors its interface with
-(`--color-bg-primary`, `--color-text-primary`, ...), its diff viewer variables
-(`--diff-view-*`) and the classes on code tokens. The accent color isn't
-covered yet, so selected items and buttons keep Linear's own accent.
+The userstyle overrides Linear's diff viewer variables (`--diff-view-*`) and
+the classes on code tokens, matched by TextMate scope prefix like editor
+themes.
 
 The custom theme uses Linear's undocumented import format, the same one
 community themes such as Catppuccin use: each color is
