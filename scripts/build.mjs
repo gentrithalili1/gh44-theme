@@ -519,17 +519,14 @@ function linearUserCss(variant) {
   ].join('\n')
 }
 
+// One theme from the light palette, like Slack. The code block userstyles stay per variant.
 function buildLinear() {
-  return VARIANT_ORDER.flatMap((variant) => [
-    write({
-      path: join(ROOT, 'linear', `gh44-${variant}.json`),
-      content: JSON.stringify(linearTheme(variant)) + '\n',
-    }),
-    write({
-      path: join(ROOT, 'linear', `gh44-${variant}.user.css`),
-      content: linearUserCss(variant),
-    }),
-  ])
+  return [
+    write({ path: join(ROOT, 'linear', 'gh44.json'), content: JSON.stringify(linearTheme('light')) + '\n' }),
+    ...VARIANT_ORDER.map((variant) =>
+      write({ path: join(ROOT, 'linear', `gh44-${variant}.user.css`), content: linearUserCss(variant) }),
+    ),
+  ]
 }
 
 // ---------------------------------------------------------------- Chrome
