@@ -7,6 +7,11 @@
 ==/UserStyle== */
 
 @-moz-document domain("github.com") {
+  /* Code font */
+  :root {
+    --fontStack-monospace: Lilex, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  }
+
   [data-color-mode="dark"] {
     color-scheme: dark;
     --bgColor-default: #1E1F22 !important;

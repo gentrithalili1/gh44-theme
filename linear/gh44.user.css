@@ -7,6 +7,13 @@
 ==/UserStyle== */
 
 @-moz-document domain("linear.app") {
+  /* Code font */
+  pre,
+  code,
+  [data-line-text] {
+    font-family: Lilex, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  }
+
   @media (prefers-color-scheme: dark) {
     pre,
     pre code {

@@ -4,8 +4,8 @@
 
 :root {
   --radius: 0.5rem;
-  --font-sans: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Var", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: Lilex, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --background: #FAF7F3;
   --foreground: #2B2D30;
   --card: #FAF7F3;

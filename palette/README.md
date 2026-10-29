@@ -94,12 +94,16 @@ For shadcn/ui projects, use [`shadcn/`](../shadcn/) instead. For anything else:
   background: var(--gh44-primary-solid);
   color: var(--gh44-on-solid);
   border-radius: var(--gh44-radius);
-  font-family: var(--gh44-font-mono);
+  font-family: var(--gh44-font-sans);
 }
 
 .note {
   background: var(--gh44-info-subtle);
   color: var(--gh44-fg);
+}
+
+code {
+  font-family: var(--gh44-font-mono);
 }
 ```
 

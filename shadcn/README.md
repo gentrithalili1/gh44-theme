@@ -2,8 +2,8 @@
 
 The gh44 theme for any [shadcn/ui](https://ui.shadcn.com) project: TanStack
 Start, Next.js, Vite, React Router, Astro. It sets every color shadcn
-components read, in light and dark, with lavender as the primary color and
-JetBrains Mono as the font.
+components read, in light and dark, with lavender as the primary color,
+IBM Plex Sans for text and Lilex for code.
 
 ## Install
 
@@ -14,8 +14,8 @@ npx shadcn@latest add https://raw.githubusercontent.com/gentrithalili1/gh44-them
 ```
 
 This writes the colors into your CSS file, installs
-`@fontsource-variable/jetbrains-mono`, and sets it as `font-sans` and
-`font-mono`. Components you add afterwards (`npx shadcn@latest add button card`)
+`@fontsource-variable/ibm-plex-sans` and `@fontsource-variable/lilex`, and
+sets them as `font-sans` and `font-mono`. Components you add afterwards (`npx shadcn@latest add button card`)
 come out in gh44.
 
 To keep your own font, install the colors only:
@@ -41,7 +41,8 @@ Then install with `npx shadcn@latest add @gh44/gh44`.
 ### Without the CLI
 
 Paste [`gh44.css`](gh44.css) below `@import "tailwindcss";` in your CSS file, and
-install `@fontsource-variable/jetbrains-mono` yourself.
+install `@fontsource-variable/ibm-plex-sans` and `@fontsource-variable/lilex`
+yourself.
 
 ## Updating
 

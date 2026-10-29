@@ -20,8 +20,9 @@ from the command palette, search for `gh44`, and install it.
 
 <details>
 
-Fonts, sizes and editor visuals. It uses JetBrains Mono from
-[`fonts/`](../fonts/).
+Fonts, sizes and editor visuals. It uses Lilex for code and IBM Plex Sans for
+the interface. Zed bundles both as `.ZedMono` and `.ZedSans`, so there's
+nothing to install.
 
 ```jsonc
 {
@@ -33,11 +34,12 @@ Fonts, sizes and editor visuals. It uses JetBrains Mono from
   },
 
   // UI font
+  "ui_font_family": ".ZedSans",
   "ui_font_size": 16.0,
   "ui_font_weight": 400.0,
 
   // Buffer font
-  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_family": ".ZedMono",
   "buffer_font_size": 14.0,
   "buffer_font_weight": 400.0,
   "buffer_line_height": {
@@ -71,7 +73,7 @@ Fonts, sizes and editor visuals. It uses JetBrains Mono from
   "terminal": {
     "cursor_shape": "bar",
     "minimum_contrast": 45.0,
-    "font_family": "JetBrains Mono",
+    "font_family": ".ZedMono",
     "font_size": 14.0,
     "font_weight": 400,
     "line_height": "comfortable"
@@ -81,12 +83,12 @@ Fonts, sizes and editor visuals. It uses JetBrains Mono from
   "markdown_preview": {
     "font_size": 14.0,
     "font_family": ".ZedSans",
-    "code_font_family": "JetBrains Mono"
+    "code_font_family": ".ZedMono"
   },
 
   // Agent panel
   "agent_ui_font_size": 14.0,
-  "agent_buffer_font_family": "JetBrains Mono",
+  "agent_buffer_font_family": ".ZedMono",
   "agent_buffer_font_size": 14.0
 }
 ```

@@ -5,7 +5,8 @@
  */
 
 :root {
-  --gh44-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --gh44-font-sans: "IBM Plex Sans", "IBM Plex Sans Var", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --gh44-font-mono: Lilex, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --gh44-radius: 0.5rem;
 }
 

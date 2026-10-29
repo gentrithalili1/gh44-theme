@@ -523,6 +523,13 @@ function linearUserCss() {
     '==/UserStyle== */',
     '',
     '@-moz-document domain("linear.app") {',
+    '  /* Code font */',
+    '  pre,',
+    '  code,',
+    '  [data-line-text] {',
+    `    font-family: ${TOKENS.font.mono.stack} !important;`,
+    '  }',
+    '',
     VARIANT_ORDER.map(linearVariantCss).join('\n\n'),
     '}',
     '',
@@ -809,6 +816,11 @@ function githubUserCss() {
     '==/UserStyle== */',
     '',
     '@-moz-document domain("github.com") {',
+    '  /* Code font */',
+    '  :root {',
+    `    --fontStack-monospace: ${TOKENS.font.mono.stack} !important;`,
+    '  }',
+    '',
     block({ selector: '[data-color-mode="dark"]', variant: 'dark', indent: 2 }),
     '',
     block({ selector: '[data-color-mode="light"]', variant: 'light', indent: 2 }),
@@ -831,9 +843,9 @@ function buildGithub() {
 
 // ---------------------------------------------------------------- README images
 
-const MONO = 'JetBrains Mono, SFMono-Regular, Menlo, Consolas, monospace'
-const SANS = 'Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif'
-const CHAR_WIDTH = 8.4 // JetBrains Mono at 14px
+const MONO = TOKENS.font.mono.stack.replaceAll('"', "'")
+const SANS = TOKENS.font.sans.stack.replaceAll('"', "'")
+const CHAR_WIDTH = 8.4 // Lilex at 14px
 const LINE_HEIGHT = 24
 const TOP = 76
 const GUTTER = 84
@@ -1039,7 +1051,8 @@ function buildCss() {
     ].join('\n')
   const roles = [
     ':root {',
-    `  --gh44-font-mono: ${TOKENS.font.stack};`,
+    `  --gh44-font-sans: ${TOKENS.font.sans.stack};`,
+    `  --gh44-font-mono: ${TOKENS.font.mono.stack};`,
     `  --gh44-radius: ${TOKENS.radius};`,
     '}',
   ].join('\n')
@@ -1137,9 +1150,9 @@ const ITEM_SCHEMA = 'https://ui.shadcn.com/schema/registry-item.json'
 
 // Two items, both installed by name. shadcn only overwrites existing variables for the
 // item you name, not for its registryDependencies, so each item carries everything itself.
-//   gh44        colors + JetBrains Mono everywhere
+//   gh44        colors + IBM Plex Sans for text and Lilex for code
 //   gh44-theme  colors only, for projects that keep their own font
-const FONT_PACKAGE = '@fontsource-variable/jetbrains-mono'
+const FONT_PACKAGES = ['@fontsource-variable/ibm-plex-sans', '@fontsource-variable/lilex']
 
 function shadcnItems() {
   const colors = {
@@ -1147,7 +1160,8 @@ function shadcnItems() {
     dark: shadcnVars('dark'),
   }
   // The full CSS value. @fontsource-variable names the family "<name> Variable".
-  const fontFamily = `'${TOKENS.font.family} Variable', ui-monospace, monospace`
+  const fontSans = `'${TOKENS.font.sans.family} Variable', ui-sans-serif, sans-serif`
+  const fontMono = `'${TOKENS.font.mono.family} Variable', ui-monospace, monospace`
   const theme = {
     $schema: ITEM_SCHEMA,
     name: 'gh44-theme',
@@ -1162,12 +1176,12 @@ function shadcnItems() {
     name: 'gh44',
     type: 'registry:theme',
     title: 'gh44',
-    description: 'gh44 colors and JetBrains Mono for shadcn/ui, light and dark.',
+    description: 'gh44 colors, IBM Plex Sans and Lilex for shadcn/ui, light and dark.',
     author: TOKENS.author,
-    dependencies: [FONT_PACKAGE],
-    css: { [`@import "${FONT_PACKAGE}"`]: {} },
+    dependencies: FONT_PACKAGES,
+    css: Object.fromEntries(FONT_PACKAGES.map((name) => [`@import "${name}"`, {}])),
     cssVars: {
-      theme: { ...SHADCN_THEME, 'font-sans': fontFamily, 'font-mono': fontFamily },
+      theme: { ...SHADCN_THEME, 'font-sans': fontSans, 'font-mono': fontMono },
       ...colors,
     },
   }
@@ -1185,8 +1199,8 @@ function shadcnCss() {
     '',
     ':root {',
     `  --radius: ${TOKENS.radius};`,
-    `  --font-sans: ${TOKENS.font.stack};`,
-    `  --font-mono: ${TOKENS.font.stack};`,
+    `  --font-sans: ${TOKENS.font.sans.stack};`,
+    `  --font-mono: ${TOKENS.font.mono.stack};`,
     ...vars('light'),
     '}',
     '',

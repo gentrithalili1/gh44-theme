@@ -12,7 +12,7 @@ One theme, every tool.
 | [`github/`](github/)   | Stylus userstyle for GitHub                                    |
 | [`shadcn/`](shadcn/)   | Theme for shadcn/ui projects, installable with the shadcn CLI  |
 | [`palette/`](palette/) | Color tokens and naming, plus `gh44.css` for web projects      |
-| [`fonts/`](fonts/)     | JetBrains Mono, the font the themes are set up for             |
+| [`fonts/`](fonts/)     | Lilex for code and IBM Plex Sans for text                      |
 
 Each folder has its own README with a preview and install steps.
 

@@ -3,13 +3,15 @@
   "name": "gh44",
   "type": "registry:theme",
   "title": "gh44",
-  "description": "gh44 colors and JetBrains Mono for shadcn/ui, light and dark.",
+  "description": "gh44 colors, IBM Plex Sans and Lilex for shadcn/ui, light and dark.",
   "author": "Gentrit Halili",
   "dependencies": [
-    "@fontsource-variable/jetbrains-mono"
+    "@fontsource-variable/ibm-plex-sans",
+    "@fontsource-variable/lilex"
   ],
   "css": {
-    "@import \"@fontsource-variable/jetbrains-mono\"": {}
+    "@import \"@fontsource-variable/ibm-plex-sans\"": {},
+    "@import \"@fontsource-variable/lilex\"": {}
   },
   "cssVars": {
     "theme": {
@@ -20,8 +22,8 @@
       "color-info": "var(--info)",
       "color-info-foreground": "var(--info-foreground)",
       "color-destructive-foreground": "var(--destructive-foreground)",
-      "font-sans": "'JetBrains Mono Variable', ui-monospace, monospace",
-      "font-mono": "'JetBrains Mono Variable', ui-monospace, monospace"
+      "font-sans": "'IBM Plex Sans Variable', ui-sans-serif, sans-serif",
+      "font-mono": "'Lilex Variable', ui-monospace, monospace"
     },
     "light": {
       "radius": "0.5rem",
