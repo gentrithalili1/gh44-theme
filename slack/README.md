@@ -16,7 +16,7 @@ your system's light and dark mode.
 4. Paste this and click **Apply**:
 
    ```
-   #F2ECE5,#EAE2D9,#D9CDC0,#2B2D30,#EAE2D9,#2B2D30,#5E7350,#A9502F,#A9502F,#FAF7F3
+   #F2ECE5,#EAE2D9,#D9CDC0,#2B2D30,#EAE2D9,#2B2D30,#497C15,#B94000,#A9502F,#FAF7F3
    ```
 
 Slack's newer theme editor uses fewer colors than the legacy format, so it may
@@ -38,7 +38,8 @@ If import isn't available, set the custom theme colors with the color pickers:
 The import line lists ten colors in this order: sidebar background, menu hover,
 active channel, active channel text, hover item, sidebar text, online
 indicator, mention badge, top bar background, and top bar text. The same line
-is in `gh44.txt`.
+is in `gh44.txt`. The online indicator and mention badge use the vivid sage and
+terracotta, so they stand out.
 
 ## Editing
 

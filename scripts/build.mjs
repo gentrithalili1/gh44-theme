@@ -319,7 +319,7 @@ function slackString() {
   const c = VARIANTS.light
   return [
     c['bg-subtle'], c.surface, c['surface-active'], c.fg, c.surface,
-    c.fg, c.sage, c.terracotta, c.terracotta, c.bg,
+    c.fg, c['sage-vivid'], c['terracotta-vivid'], c.terracotta, c.bg,
   ].join(',')
 }
 
