@@ -6,8 +6,8 @@ gh44 for Linear has two parts:
   theme import. Linear keeps one custom theme at a time, so import the one
   that matches your system mode and switch by hand.
 - **Userstyle (code blocks, web):** a [Stylus](https://add0n.com/stylus.html)
-  userstyle that gives code blocks and diffs the gh44 Zed syntax colors. It
-  follows your system appearance.
+  userstyle that gives code blocks and diffs the same colors as gh44 in Zed,
+  syntax and diff tints included. It follows your system appearance.
 
 ## Custom theme
 
@@ -18,12 +18,12 @@ gh44 for Linear has two parts:
 
    **gh44 Dark**
    ```
-   {"base":[11.744,2.222,272.716,1],"accent":[71.781,26.487,302.487,1],"contrast":30,"sidebar":{"base":[15.177,2.834,275.984,1],"accent":[71.781,26.487,302.487,1],"contrast":30}}
+   {"base":[11.744,2.222,272.716,1],"accent":[70.976,47.994,303.946,1],"contrast":30,"sidebar":{"base":[15.177,2.834,275.984,1],"accent":[70.976,47.994,303.946,1],"contrast":30}}
    ```
 
    **gh44 Light**
    ```
-   {"base":[97.382,2.356,77.304,1],"accent":[42.252,42.335,301.399,1],"contrast":30,"sidebar":{"base":[93.727,4.326,73.952,1],"accent":[42.252,42.335,301.399,1],"contrast":30}}
+   {"base":[97.382,2.356,77.304,1],"accent":[41.124,65.003,304.177,1],"contrast":30,"sidebar":{"base":[93.727,4.326,73.952,1],"accent":[41.124,65.003,304.177,1],"contrast":30}}
    ```
 
 When your system switches mode, import the other one. Linear doesn't sync the

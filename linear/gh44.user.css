@@ -304,12 +304,12 @@
       --diff-view-git-added-fg: #B8C5AC !important;
       --diff-view-git-deleted-fg: #EB6F6F !important;
       --diff-view-git-modified-fg: #9FB7CC !important;
-      --diff-view-inserted-bg: #5E73504D !important;
-      --diff-view-inserted-full-line-bg: #5E73504D !important;
-      --diff-view-inserted-inline-bg: #5E735099 !important;
-      --diff-view-removed-bg: #C23B324D !important;
-      --diff-view-removed-full-line-bg: #C23B324D !important;
-      --diff-view-removed-inline-bg: #C23B3299 !important;
+      --diff-view-inserted-bg: #B8C5AC1F !important;
+      --diff-view-inserted-full-line-bg: #B8C5AC1F !important;
+      --diff-view-inserted-inline-bg: #B8C5AC40 !important;
+      --diff-view-removed-bg: #EB6F6F1F !important;
+      --diff-view-removed-full-line-bg: #EB6F6F1F !important;
+      --diff-view-removed-inline-bg: #EB6F6F40 !important;
     }
 
     [data-diff-sticky-window] {
@@ -615,12 +615,12 @@
       --diff-view-git-added-fg: #5E7350 !important;
       --diff-view-git-deleted-fg: #C23B32 !important;
       --diff-view-git-modified-fg: #3F6A8C !important;
-      --diff-view-inserted-bg: #5E735026 !important;
-      --diff-view-inserted-full-line-bg: #5E735026 !important;
-      --diff-view-inserted-inline-bg: #5E735059 !important;
-      --diff-view-removed-bg: #C23B3226 !important;
-      --diff-view-removed-full-line-bg: #C23B3226 !important;
-      --diff-view-removed-inline-bg: #C23B3259 !important;
+      --diff-view-inserted-bg: #5E73501F !important;
+      --diff-view-inserted-full-line-bg: #5E73501F !important;
+      --diff-view-inserted-inline-bg: #5E735040 !important;
+      --diff-view-removed-bg: #C23B321F !important;
+      --diff-view-removed-full-line-bg: #C23B321F !important;
+      --diff-view-removed-inline-bg: #C23B3240 !important;
     }
 
     [data-diff-sticky-window] {

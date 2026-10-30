@@ -32,8 +32,13 @@ GitHub colors everything through Primer CSS variables (`--bgColor-default`,
 `--fgColor-accent`, `--prettylights-syntax-keyword`, ...). The userstyle only
 overrides those variables, so it survives most GitHub redesigns. Dusty blue
 replaces GitHub's blue for links and selection, and sage replaces its green.
+Status colors use the vivid hues so they stand out: checks, pending dots, PR
+state badges, the merge and danger buttons, checkboxes, the contribution graph
+and the active tab underline. Links and selection keep the base hues. Code and
+diffs use the same colors as gh44 in Zed: syntax, text, and the added and
+deleted tints. Dark mode lifts the page background and text slightly.
 Solid badges and buttons use gh44 Light's deeper colors in both modes, so they
-carry light text. Terracotta is kept for the active tab underline.
+carry light text.
 
 ## Editing
 

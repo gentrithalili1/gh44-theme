@@ -12,7 +12,10 @@ const TOKENS = JSON.parse(readFileSync(join(ROOT, 'palette', 'tokens.json'), 'ut
 // Each variant has neutral colors named by job (bg, fg, border) and hues named by color.
 // Themes read one flat map per variant: VARIANTS.dark.bg, VARIANTS.dark.lavender.
 const VARIANTS = Object.fromEntries(
-  Object.entries(TOKENS.variants).map(([variant, { neutral, hue }]) => [variant, { ...neutral, ...hue }]),
+  Object.entries(TOKENS.variants).map(([variant, { neutral, hue, vivid }]) => [
+    variant,
+    { ...neutral, ...hue, ...Object.fromEntries(Object.entries(vivid).map(([name, hex]) => [`${name}-vivid`, hex])) },
+  ]),
 )
 const ROLES = TOKENS.roles
 const NAMES = { dark: 'gh44 Dark', light: 'gh44 Light' }
@@ -64,6 +67,24 @@ function ansi(variant) {
   return { normal, bright }
 }
 
+// ---------------------------------------------------------------- Code
+
+function codeColors(variant) {
+  const c = VARIANTS[variant]
+  return {
+    fg: c.fg,
+    lineNumber: c['fg-faint'],
+    added: c.sage,
+    deleted: c.red,
+    modified: c['blue'],
+    addedLine: alpha({ color: c.sage, amount: 0.12 }),
+    deletedLine: alpha({ color: c.red, amount: 0.12 }),
+    modifiedLine: alpha({ color: c['blue'], amount: 0.12 }),
+    addedWord: alpha({ color: c.sage, amount: 0.25 }),
+    deletedWord: alpha({ color: c.red, amount: 0.25 }),
+  }
+}
+
 // ---------------------------------------------------------------- Zed
 
 function style(color, { isItalic = false, isBold = false } = {}) {
@@ -74,6 +95,7 @@ function zedTheme(variant) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   const { normal, bright } = ansi(variant)
+  const code = codeColors(variant)
   const a = (color, amount) => alpha({ color, amount })
 
   const s = {
@@ -168,11 +190,11 @@ function zedTheme(variant) {
     'terminal.dim_foreground': c['fg-subtle'],
     'terminal.ansi.background': c.bg,
 
-    'version_control.added': c.sage,
-    'version_control.modified': c['blue'],
-    'version_control.deleted': c.red,
-    'version_control.word_added': a(c.sage, 0.25),
-    'version_control.word_deleted': a(c.red, 0.25),
+    'version_control.added': code.added,
+    'version_control.modified': code.modified,
+    'version_control.deleted': code.deleted,
+    'version_control.word_added': code.addedWord,
+    'version_control.word_deleted': code.deletedWord,
     'version_control.conflict_marker.ours': a(c.sage, 0.18),
     'version_control.conflict_marker.theirs': a(c['blue'], 0.18),
   }
@@ -339,9 +361,9 @@ function linearTheme(variant) {
   const contrast = 30
   return {
     base: lch(c.bg),
-    accent: lch(c.lavender),
+    accent: lch(c['lavender-vivid']),
     contrast,
-    sidebar: { base: lch(c['bg-subtle']), accent: lch(c.lavender), contrast },
+    sidebar: { base: lch(c['bg-subtle']), accent: lch(c['lavender-vivid']), contrast },
   }
 }
 
@@ -457,25 +479,23 @@ function linearVariantCss(variant) {
   const rules = [...scopeRules, ...contextRules, mutedRule, ...inlineRules]
   // The diff viewer reads --diff-view-* variables that Linear sets at runtime. Set them
   // on every element so they win over whichever ancestor Linear puts them on.
-  const isDark = variant === 'dark'
-  const deep = VARIANTS.light
-  const a = (color, amount) => alpha({ color, amount })
+  const code = codeColors(variant)
   const diffVars = {
     'editor-background': c.bg,
     'editor-background-opaque': c.bg,
-    'editor-foreground': c.fg,
-    'line-number-fg': c['fg-faint'],
+    'editor-foreground': code.fg,
+    'line-number-fg': code.lineNumber,
     'blank-bg': c['bg-subtle'],
     'focus-bg': c['surface-hover'],
-    'git-added-fg': c.sage,
-    'git-deleted-fg': c.red,
-    'git-modified-fg': c['blue'],
-    'inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
-    'inserted-full-line-bg': a(deep.sage, isDark ? 0.3 : 0.15),
-    'inserted-inline-bg': a(deep.sage, isDark ? 0.6 : 0.35),
-    'removed-bg': a(deep.red, isDark ? 0.3 : 0.15),
-    'removed-full-line-bg': a(deep.red, isDark ? 0.3 : 0.15),
-    'removed-inline-bg': a(deep.red, isDark ? 0.6 : 0.35),
+    'git-added-fg': code.added,
+    'git-deleted-fg': code.deleted,
+    'git-modified-fg': code.modified,
+    'inserted-bg': code.addedLine,
+    'inserted-full-line-bg': code.addedLine,
+    'inserted-inline-bg': code.addedWord,
+    'removed-bg': code.deletedLine,
+    'removed-full-line-bg': code.deletedLine,
+    'removed-inline-bg': code.deletedWord,
   }
   const diffRule = [
     '  /* Diff viewer */',
@@ -636,10 +656,24 @@ function buildChrome() {
 
 // GitHub's UI reads Primer CSS variables, so the userstyle only overrides those.
 // Primer sets them per theme on [data-color-mode], which is why every value is !important.
+const GITHUB_DARK_LIFT = 0.04
+const GITHUB_LIFTED = ['bg', 'bg-subtle', 'surface', 'surface-hover', 'surface-active', 'border', 'border-subtle']
+
 function githubVars(variant) {
-  const c = VARIANTS[variant]
   const isDark = variant === 'dark'
+  const c = isDark
+    ? {
+        ...VARIANTS.dark,
+        ...Object.fromEntries(
+          GITHUB_LIFTED.map((name) => [
+            name,
+            mix({ from: VARIANTS.dark[name], to: '#FFFFFF', amount: GITHUB_DARK_LIFT }),
+          ]),
+        ),
+      }
+    : VARIANTS[variant]
   const { syntax } = zedTheme(variant).style
+  const code = codeColors(variant)
   const a = (color, amount) => alpha({ color, amount })
   const shade = (color, amount) => mix({ from: color, to: isDark ? '#FFFFFF' : '#000000', amount })
   const inset = isDark ? mix({ from: c.bg, to: '#000000', amount: 0.2 }) : c['bg-subtle']
@@ -647,17 +681,24 @@ function githubVars(variant) {
   // both variants, so they carry light text and read as real color on charcoal.
   const deep = VARIANTS.light
   const onEmphasis = deep.bg
+  const v = (hue) => c[`${hue}-vivid`]
+  const deepV = (hue) => deep[`${hue}-vivid`]
+  const text = isDark ? mix({ from: c.fg, to: '#FFFFFF', amount: 0.4 }) : c.fg
+  const textMuted = isDark ? mix({ from: c['fg-muted'], to: '#FFFFFF', amount: 0.15 }) : c['fg-muted']
   const states = {
     accent: 'blue',
     success: 'sage',
+    open: 'sage',
     attention: 'ochre',
     danger: 'red',
+    closed: 'red',
     done: 'lavender',
+    upsell: 'lavender',
     severe: 'terracotta',
     sponsors: 'rose',
   }
   const contribution = [0.25, 0.5, 0.75, 1].map((amount) =>
-    mix({ from: c['bg-subtle'], to: c.sage, amount }),
+    mix({ from: c['bg-subtle'], to: v('sage'), amount }),
   )
   return {
     'bgColor-default': c.bg,
@@ -669,18 +710,18 @@ function githubVars(variant) {
     'bgColor-neutral-emphasis': isDark ? c['fg-faint'] : c['fg-subtle'],
     'bgColor-neutral-muted': a(c['fg-subtle'], 0.2),
     ...Object.fromEntries(
-      Object.entries(states).flatMap(([state, name]) => [
-        [`bgColor-${state}-emphasis`, deep[name]],
-        [`bgColor-${state}-muted`, a(deep[name], isDark ? 0.3 : 0.15)],
-        [`borderColor-${state}-emphasis`, c[name]],
-        [`borderColor-${state}-muted`, a(c[name], 0.4)],
-        [`fgColor-${state}`, c[name]],
+      Object.entries(states).flatMap(([state, hue]) => [
+        [`bgColor-${state}-emphasis`, deepV(hue)],
+        [`bgColor-${state}-muted`, a(deepV(hue), isDark ? 0.3 : 0.15)],
+        [`borderColor-${state}-emphasis`, v(hue)],
+        [`borderColor-${state}-muted`, a(v(hue), 0.4)],
+        [`fgColor-${state}`, v(hue)],
       ]),
     ),
 
-    'fgColor-default': c.fg,
-    'fgColor-muted': c['fg-muted'],
-    'fgColor-neutral': c['fg-muted'],
+    'fgColor-default': text,
+    'fgColor-muted': textMuted,
+    'fgColor-neutral': textMuted,
     'fgColor-disabled': c['fg-disabled'],
     'fgColor-link': c['blue'],
     'fgColor-onEmphasis': onEmphasis,
@@ -696,10 +737,14 @@ function githubVars(variant) {
     'control-bgColor-active': c['surface-active'],
     'control-bgColor-disabled': c['bg-subtle'],
     'control-borderColor-selected': c.fg,
-    'control-checked-bgColor-hover': shade(deep['blue'], 0.1),
-    'control-checked-bgColor-active': shade(deep['blue'], 0.2),
-    'control-danger-fgColor-hover': shade(c.red, 0.15),
-    'control-danger-bgColor-active': a(c.red, 0.4),
+    'control-checked-bgColor-rest': deepV('blue'),
+    'control-checked-bgColor-hover': shade(deepV('blue'), 0.1),
+    'control-checked-bgColor-active': shade(deepV('blue'), 0.2),
+    'control-checked-borderColor-rest': deepV('blue'),
+    'control-danger-fgColor-rest': v('red'),
+    'control-danger-fgColor-hover': shade(v('red'), 0.15),
+    'control-danger-bgColor-hover': a(v('red'), 0.15),
+    'control-danger-bgColor-active': a(v('red'), 0.4),
     'control-transparent-bgColor-hover': a(c['fg-subtle'], 0.2),
     'control-transparent-bgColor-active': a(c['fg-subtle'], 0.25),
     'control-transparent-bgColor-selected': a(c['fg-subtle'], 0.2),
@@ -709,11 +754,17 @@ function githubVars(variant) {
     'controlTrack-bgColor-hover': c['surface-hover'],
     'controlTrack-bgColor-active': c['surface-active'],
 
-    'button-primary-bgColor-rest': deep.sage,
-    'button-primary-bgColor-hover': shade(deep.sage, 0.1),
-    'button-primary-bgColor-active': shade(deep.sage, 0.2),
-    'button-primary-bgColor-disabled': a(deep.sage, 0.4),
-    'button-primary-borderColor-disabled': a(deep.sage, 0.4),
+    'button-primary-bgColor-rest': deepV('sage'),
+    'button-primary-bgColor-hover': shade(deepV('sage'), 0.1),
+    'button-primary-bgColor-active': shade(deepV('sage'), 0.2),
+    'button-primary-bgColor-disabled': a(deepV('sage'), 0.4),
+    'button-primary-borderColor-disabled': a(deepV('sage'), 0.4),
+    'button-danger-fgColor-rest': v('red'),
+    'button-danger-iconColor-rest': v('red'),
+    'button-danger-bgColor-hover': deepV('red'),
+    'button-danger-bgColor-active': shade(deepV('red'), 0.1),
+    'button-danger-fgColor-hover': onEmphasis,
+    'button-danger-iconColor-hover': onEmphasis,
     'button-primary-fgColor-rest': onEmphasis,
     'button-primary-fgColor-disabled': a(onEmphasis, 0.6),
     'button-primary-iconColor-rest': onEmphasis,
@@ -724,8 +775,8 @@ function githubVars(variant) {
 
     'header-bgColor': a(c['bg-subtle'], 0.95),
     'header-borderColor-divider': c['fg-faint'],
-    'header-fgColor-default': c['fg-muted'],
-    'header-fgColor-logo': c.fg,
+    'header-fgColor-default': textMuted,
+    'header-fgColor-logo': text,
     'headerSearch-bgColor': c.bg,
     'headerSearch-borderColor': c['surface-active'],
 
@@ -736,8 +787,8 @@ function githubVars(variant) {
     'timelineBadge-bgColor': c.surface,
     'selectMenu-bgColor-active': a(c['blue'], 0.2),
     'selection-bgColor': a(c['blue'], isDark ? 0.35 : 0.25),
-    'underlineNav-borderColor-active': c.terracotta,
-    'highlight-neutral-bgColor': a(c.ochre, 0.4),
+    'underlineNav-borderColor-active': v('terracotta'),
+    'highlight-neutral-bgColor': a(v('ochre'), 0.4),
     'skeletonLoader-bgColor': a(c['fg-subtle'], 0.2),
     'reactionButton-selected-bgColor-rest': a(c['blue'], 0.2),
     'reactionButton-selected-bgColor-hover': a(c['blue'], 0.35),
@@ -746,10 +797,21 @@ function githubVars(variant) {
     'contribution-default-bgColor-0': c['bg-subtle'],
     ...Object.fromEntries(contribution.map((color, i) => [`contribution-default-bgColor-${i + 1}`, color])),
 
-    'diffBlob-additionNum-bgColor': a(deep.sage, isDark ? 0.45 : 0.25),
-    'diffBlob-additionWord-bgColor': a(deep.sage, isDark ? 0.6 : 0.35),
-    'diffBlob-deletionNum-bgColor': a(deep.red, isDark ? 0.45 : 0.25),
-    'diffBlob-deletionWord-bgColor': a(deep.red, isDark ? 0.6 : 0.35),
+    'codeMirror-fgColor': code.fg,
+    'codeMirror-lineNumber-fgColor': code.lineNumber,
+    'codeMirror-matchingBracket-fgColor': code.fg,
+
+    'diffBlob-additionLine-bgColor': code.addedLine,
+    'diffBlob-additionNum-bgColor': code.addedWord,
+    'diffBlob-additionWord-bgColor': code.addedWord,
+    'diffBlob-deletionLine-bgColor': code.deletedLine,
+    'diffBlob-deletionNum-bgColor': code.deletedWord,
+    'diffBlob-deletionWord-bgColor': code.deletedWord,
+    ...Object.fromEntries(
+      ['addition', 'deletion'].flatMap((kind) =>
+        ['Line', 'Num', 'Word'].map((part) => [`diffBlob-${kind}${part}-fgColor`, code.fg]),
+      ),
+    ),
     'diffBlob-hunkLine-bgColor': a(c['blue'], 0.15),
     'diffBlob-hunkNum-bgColor-rest': a(c['blue'], 0.3),
     'diffBlob-hunkNum-bgColor-hover': c['blue'],
@@ -763,7 +825,7 @@ function githubVars(variant) {
     'prettylights-syntax-string': syntax.string.color,
     'prettylights-syntax-stringRegexp': syntax['string.regex'].color,
     'prettylights-syntax-variable': syntax['variable.parameter'].color,
-    'prettylights-syntax-storageModifierImport': c.fg,
+    'prettylights-syntax-storageModifierImport': code.fg,
     'prettylights-syntax-bracketHighlighterAngle': c['fg-muted'],
     'prettylights-syntax-bracketHighlighterUnmatched': c.red,
     'prettylights-syntax-sublimeLinterGutterMark': c.border,
@@ -772,12 +834,12 @@ function githubVars(variant) {
     'prettylights-syntax-markup-list': c.ochre,
     'prettylights-syntax-markup-bold': c.fg,
     'prettylights-syntax-markup-italic': c.fg,
-    'prettylights-syntax-markup-inserted-bg': a(deep.sage, isDark ? 0.3 : 0.15),
-    'prettylights-syntax-markup-inserted-text': c.sage,
-    'prettylights-syntax-markup-deleted-bg': a(deep.red, isDark ? 0.3 : 0.15),
-    'prettylights-syntax-markup-deleted-text': c.red,
-    'prettylights-syntax-markup-changed-bg': a(c.ochre, 0.15),
-    'prettylights-syntax-markup-changed-text': c.ochre,
+    'prettylights-syntax-markup-inserted-bg': code.addedLine,
+    'prettylights-syntax-markup-inserted-text': code.added,
+    'prettylights-syntax-markup-deleted-bg': code.deletedLine,
+    'prettylights-syntax-markup-deleted-text': code.deleted,
+    'prettylights-syntax-markup-changed-bg': code.modifiedLine,
+    'prettylights-syntax-markup-changed-text': code.modified,
     'prettylights-syntax-markup-ignored-bg': a(c['blue'], 0.15),
     'prettylights-syntax-markup-ignored-text': c['blue'],
 
@@ -1013,10 +1075,12 @@ function buildSwatches() {
 const HUES = Object.keys(TOKENS.variants.dark.hue)
 const NEUTRALS = Object.keys(TOKENS.variants.dark.neutral)
 
-// Every hue comes in three steps:
+// Every hue comes in these steps:
 //   lavender         text and icons on bg (light enough on dark, dark enough on light)
 //   lavender-solid   fills that carry on-solid text, the same deep color in both variants
 //   lavender-subtle  tinted backgrounds, like callouts and diff lines
+// plus vivid versions of the first two, for status that has to stand out:
+//   lavender-vivid, lavender-vivid-solid
 function scale(variant) {
   const c = VARIANTS[variant]
   const solid = VARIANTS.light
@@ -1029,12 +1093,14 @@ function scale(variant) {
         [hue, c[hue]],
         [`${hue}-solid`, solid[hue]],
         [`${hue}-subtle`, alpha({ color: solid[hue], amount: subtle })],
+        [`${hue}-vivid`, c[`${hue}-vivid`]],
+        [`${hue}-vivid-solid`, solid[`${hue}-vivid`]],
       ]),
     ),
   }
 }
 
-const STEPS = ['', '-solid', '-subtle']
+const STEPS = ['', '-solid', '-subtle', '-vivid', '-vivid-solid']
 
 function buildCss() {
   const block = ({ selector, variant }) =>

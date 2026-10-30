@@ -12,7 +12,7 @@ Tokens come in three layers. Apps should use the top two.
 | --- | --- | --- |
 | **Roles** | `primary`, `success`, `danger` | What a color is for. Change a role in `tokens.json` and every theme follows. |
 | **Neutrals** | `bg`, `fg-muted`, `border` | Named by job, so `fg` is the main text color in both light and dark. |
-| **Hues** | `lavender`, `sage`, `red` | Named by color. Each has three steps, below. |
+| **Hues** | `lavender`, `sage`, `red` | Named by color. Each has the steps below. |
 
 ## Roles
 
@@ -57,15 +57,35 @@ Tokens come in three layers. Apps should use the top two.
 | `seafoam` | ![seafoam dark](swatches/dark/seafoam.svg) `#9CC4C0` | ![seafoam light](swatches/light/seafoam.svg) `#3D7A75` | Symbols, terminal cyan |
 | `red` | ![red dark](swatches/dark/red.svg) `#EB6F6F` | ![red light](swatches/light/red.svg) `#C23B32` | Errors, deletions |
 
+### Vivid hues
+
+The same hues with more chroma, for status that has to stand out in app UIs
+(check marks, pending dots, badges). GitHub uses them for every status color.
+Code and terminal themes keep the base hues.
+
+| Token | Dark | Light |
+| --- | --- | --- |
+| `terracotta-vivid` | ![terracotta-vivid dark](swatches/dark/terracotta-vivid.svg) `#FE8B60` | ![terracotta-vivid light](swatches/light/terracotta-vivid.svg) `#B94000` |
+| `sage-vivid` | ![sage-vivid dark](swatches/dark/sage-vivid.svg) `#A4D074` | ![sage-vivid light](swatches/light/sage-vivid.svg) `#497C15` |
+| `lavender-vivid` | ![lavender-vivid dark](swatches/dark/lavender-vivid.svg) `#C29EF7` | ![lavender-vivid light](swatches/light/lavender-vivid.svg) `#744BBB` |
+| `sand-vivid` | ![sand-vivid dark](swatches/dark/sand-vivid.svg) `#F2DBC6` | ![sand-vivid light](swatches/light/sand-vivid.svg) `#8D532A` |
+| `blue-vivid` | ![blue-vivid dark](swatches/dark/blue-vivid.svg) `#68BCFE` | ![blue-vivid light](swatches/light/blue-vivid.svg) `#026BA6` |
+| `ochre-vivid` | ![ochre-vivid dark](swatches/dark/ochre-vivid.svg) `#FBB42A` | ![ochre-vivid light](swatches/light/ochre-vivid.svg) `#936705` |
+| `rose-vivid` | ![rose-vivid dark](swatches/dark/rose-vivid.svg) `#F389A1` | ![rose-vivid light](swatches/light/rose-vivid.svg) `#B93667` |
+| `seafoam-vivid` | ![seafoam-vivid dark](swatches/dark/seafoam-vivid.svg) `#2BD5CB` | ![seafoam-vivid light](swatches/light/seafoam-vivid.svg) `#077F78` |
+| `red-vivid` | ![red-vivid dark](swatches/dark/red-vivid.svg) `#FF5A60` | ![red-vivid light](swatches/light/red-vivid.svg) `#D50310` |
+
 ### Steps
 
-Every hue and role comes in three steps:
+Every hue and role comes in these steps:
 
 | Step | Example | Use |
 | --- | --- | --- |
 | base | `lavender` | Text and icons on `bg`. Soft in dark, deep in light. |
 | `-solid` | `lavender-solid` | Fills that carry text, like buttons and badges. The deep shade in both variants. Put `on-solid` text on it. |
 | `-subtle` | `lavender-subtle` | Tinted backgrounds, like callouts and diff lines. |
+| `-vivid` | `lavender-vivid` | Like base, with more chroma. Status icons and text that have to stand out. |
+| `-vivid-solid` | `lavender-vivid-solid` | Like `-solid`, with more chroma. Status badges. Put `on-solid` text on it. |
 
 ## Syntax at a glance
 
