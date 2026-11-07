@@ -1,25 +1,24 @@
 # gh44 theme
 
-One theme, every tool.
+One palette for every tool I use, in dark and light.
 
-| Folder                 | What's inside                                                  |
-| ---------------------- | -------------------------------------------------------------- |
-| [`zed/`](zed/)         | Editor theme for Zed                                           |
-| [`warp/`](warp/)       | Terminal theme for Warp                                        |
-| [`slack/`](slack/)     | Sidebar theme for Slack                                        |
-| [`linear/`](linear/)   | Custom theme and code block userstyle for Linear               |
-| [`chrome/`](chrome/)   | Browser theme for Chrome                                       |
-| [`github/`](github/)   | Stylus userstyle for GitHub                                    |
-| [`shadcn/`](shadcn/)   | Theme for shadcn/ui projects, installable with the shadcn CLI  |
-| [`palette/`](palette/) | Color tokens and naming, plus `gh44.css` for web projects      |
-| [`fonts/`](fonts/)     | Lilex for code and IBM Plex Sans for text                      |
+![A React component in gh44 Dark in Zed](assets/zed-dark.svg)
 
-Each folder has its own README with a preview and install steps.
+| App                  | What you get                             |
+| -------------------- | ---------------------------------------- |
+| [Zed](zed/)          | Editor theme                             |
+| [Warp](warp/)        | Terminal theme                           |
+| [GitHub](github/)    | Userstyle for the interface and code     |
+| [Linear](linear/)    | Interface theme and code block userstyle |
+| [Slack](slack/)      | Sidebar theme                            |
+| [Chrome](chrome/)    | Browser theme                            |
+| [shadcn/ui](shadcn/) | Theme for shadcn projects                |
+| [Palette](palette/)  | Color tokens and `gh44.css`              |
+| [Fonts](fonts/)      | Lilex for code, IBM Plex Sans for text   |
 
-## How it's built
+## Build
 
-[`palette/tokens.json`](palette/tokens.json) is the only file to edit. One
-command rebuilds every theme and preview:
+Every theme is generated from [`palette/tokens.json`](palette/tokens.json):
 
 ```sh
 node scripts/build.mjs

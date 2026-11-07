@@ -2,36 +2,36 @@
   "manifest_version": 3,
   "name": "gh44 Dark",
   "version": "1.0.0",
-  "description": "gh44 Dark for Chrome: warm neutrals with terracotta accents.",
+  "description": "gh44 Dark for Chrome: warm neutrals with clay accents.",
   "icons": {
     "128": "icon-128.png"
   },
   "theme": {
     "colors": {
       "frame": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "frame_inactive": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "frame_incognito": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "frame_incognito_inactive": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "toolbar": [
-        43,
-        45,
-        48
+        38,
+        40,
+        42
       ],
       "toolbar_text": [
         223,
@@ -74,9 +74,9 @@
         229
       ],
       "omnibox_background": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "omnibox_text": [
         223,
@@ -84,9 +84,9 @@
         229
       ],
       "ntp_background": [
-        30,
-        31,
-        34
+        25,
+        26,
+        28
       ],
       "ntp_text": [
         223,
@@ -94,9 +94,9 @@
         229
       ],
       "ntp_link": [
-        228,
-        155,
-        128
+        197,
+        145,
+        114
       ]
     }
   }

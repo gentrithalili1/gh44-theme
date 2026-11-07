@@ -2,10 +2,10 @@
 
 The fonts the gh44 themes are set up for.
 
-| Font                                                         | Folder                         | Use  | License                    |
-| ------------------------------------------------------------ | ------------------------------ | ---- | -------------------------- |
-| [Lilex](https://github.com/mishamyrt/Lilex)                  | [`Lilex/`](Lilex/)             | Code | [OFL](Lilex/OFL.txt)       |
-| [IBM Plex Sans](https://github.com/IBM/plex)                 | [`IBMPlexSans/`](IBMPlexSans/) | Text | [OFL](IBMPlexSans/OFL.txt) |
+| Font                                         | Folder                         | Use  | License                    |
+| -------------------------------------------- | ------------------------------ | ---- | -------------------------- |
+| [Lilex](https://github.com/mishamyrt/Lilex)  | [`Lilex/`](Lilex/)             | Code | [OFL](Lilex/OFL.txt)       |
+| [IBM Plex Sans](https://github.com/IBM/plex) | [`IBMPlexSans/`](IBMPlexSans/) | Text | [OFL](IBMPlexSans/OFL.txt) |
 
 Each font ships as a variable font, so one file covers every weight. They're
 the same fonts Zed ships as `.ZedMono` and `.ZedSans`. The variable IBM Plex
@@ -29,10 +29,10 @@ Windows: right-click each `.ttf` file and choose **Install**.
 
 ## Per app
 
-| App                | Code  | Text          | How                                                       |
-| ------------------ | ----- | ------------- | --------------------------------------------------------- |
-| Zed                | Lilex | IBM Plex Sans | Bundled as `.ZedMono` / `.ZedSans`, see `zed/README.md`   |
-| Warp               | Lilex | -             | Install Lilex, then pick it in Warp, see `warp/README.md` |
-| GitHub, Linear     | Lilex | Site's own    | The gh44 userstyles set code blocks and diffs             |
-| shadcn/ui, web     | Lilex | IBM Plex Sans | `font-mono` and `font-sans`, or `--gh44-font-*` variables |
-| Chrome, Slack      | -     | -             | Themes can't set fonts                                    |
+| App            | Code  | Text          | How                                                       |
+| -------------- | ----- | ------------- | --------------------------------------------------------- |
+| Zed            | Lilex | IBM Plex Sans | Bundled as `.ZedMono` / `.ZedSans`, see `zed/README.md`   |
+| Warp           | Lilex | -             | Install Lilex, then pick it in Warp, see `warp/README.md` |
+| GitHub, Linear | Lilex | Site's own    | The gh44 userstyles set code blocks and diffs             |
+| shadcn/ui, web | Lilex | IBM Plex Sans | `font-mono` and `font-sans`, or `--gh44-font-*` variables |
+| Chrome, Slack  | -     | -             | Themes can't set fonts                                    |
