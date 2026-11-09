@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "gh44 Light",
   "version": "1.0.0",
-  "description": "gh44 Light for Chrome: warm neutrals with terracotta accents.",
+  "description": "gh44 Light for Chrome: warm neutrals with clay accents.",
   "icons": {
     "128": "icon-128.png"
   },
@@ -94,9 +94,9 @@
         48
       ],
       "ntp_link": [
-        169,
-        80,
-        47
+        182,
+        67,
+        9
       ]
     }
   }

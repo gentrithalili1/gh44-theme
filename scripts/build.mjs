@@ -12,10 +12,7 @@ const TOKENS = JSON.parse(readFileSync(join(ROOT, 'palette', 'tokens.json'), 'ut
 // Each variant has neutral colors named by job (bg, fg, border) and hues named by color.
 // Themes read one flat map per variant: VARIANTS.dark.bg, VARIANTS.dark.lavender.
 const VARIANTS = Object.fromEntries(
-  Object.entries(TOKENS.variants).map(([variant, { neutral, hue, vivid }]) => [
-    variant,
-    { ...neutral, ...hue, ...Object.fromEntries(Object.entries(vivid).map(([name, hex]) => [`${name}-vivid`, hex])) },
-  ]),
+  Object.entries(TOKENS.variants).map(([variant, { neutral, hue }]) => [variant, { ...neutral, ...hue }]),
 )
 const ROLES = TOKENS.roles
 const NAMES = { dark: 'gh44 Dark', light: 'gh44 Light' }
@@ -43,15 +40,16 @@ function write({ path, content }) {
 }
 
 // 16 ANSI colors shared by Zed's terminal and Warp.
-function ansi(variant) {
+
+function ansi({ variant }) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   const normal = {
-    black: isDark ? '#3A3C41' : c.fg,
+    black: isDark ? c['surface-active'] : c.fg,
     red: c.red,
     green: c.sage,
     yellow: c.ochre,
-    blue: c['blue'],
+    blue: c.sky,
     magenta: c.lavender,
     cyan: c.seafoam,
     white: isDark ? c.fg : c.border,
@@ -62,24 +60,24 @@ function ansi(variant) {
       ? mix({ from: color, to: '#FFFFFF', amount: 0.25 })
       : mix({ from: color, to: '#000000', amount: 0.18 })
   }
-  bright.black = isDark ? '#6F737A' : c['fg-subtle']
-  bright.white = isDark ? '#F2F3F5' : '#FFFFFF'
+  bright.black = c['fg-subtle']
+  bright.white = isDark ? c.fg : c.bg
   return { normal, bright }
 }
 
 // ---------------------------------------------------------------- Code
 
-function codeColors(variant) {
+function codeColors({ variant }) {
   const c = VARIANTS[variant]
   return {
-    fg: c.fg,
+    fg: c['fg-code'],
     lineNumber: c['fg-faint'],
     added: c.sage,
     deleted: c.red,
-    modified: c['blue'],
+    modified: c.sky,
     addedLine: alpha({ color: c.sage, amount: 0.12 }),
     deletedLine: alpha({ color: c.red, amount: 0.12 }),
-    modifiedLine: alpha({ color: c['blue'], amount: 0.12 }),
+    modifiedLine: alpha({ color: c.sky, amount: 0.12 }),
     addedWord: alpha({ color: c.sage, amount: 0.25 }),
     deletedWord: alpha({ color: c.red, amount: 0.25 }),
   }
@@ -91,21 +89,21 @@ function style(color, { isItalic = false, isBold = false } = {}) {
   return { color, font_style: isItalic ? 'italic' : null, font_weight: isBold ? 700 : null }
 }
 
-function zedTheme(variant) {
+function zedTheme({ variant }) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
-  const { normal, bright } = ansi(variant)
-  const code = codeColors(variant)
+  const { normal, bright } = ansi({ variant })
+  const code = codeColors({ variant })
   const a = (color, amount) => alpha({ color, amount })
 
   const s = {
     'background.appearance': 'opaque',
-    accents: [c.terracotta, c.sage, c.lavender, c['blue'], c.ochre, c.rose],
+    accents: [c.clay, c.sage, c.lavender, c.sky, c.ochre, c.rose],
 
     border: c.border,
     'border.variant': c['border-subtle'],
-    'border.focused': c.terracotta,
-    'border.selected': a(c.terracotta, 0.6),
+    'border.focused': c.clay,
+    'border.selected': a(c.clay, 0.6),
     'border.transparent': TRANSPARENT,
     'border.disabled': c['border-subtle'],
 
@@ -117,7 +115,7 @@ function zedTheme(variant) {
     'element.active': c['surface-active'],
     'element.selected': c['surface-active'],
     'element.disabled': c.surface,
-    'drop_target.background': a(c.terracotta, 0.14),
+    'drop_target.background': a(c.clay, 0.14),
     'ghost_element.background': TRANSPARENT,
     'ghost_element.hover': c.surface,
     'ghost_element.active': c['surface-hover'],
@@ -128,13 +126,13 @@ function zedTheme(variant) {
     'text.muted': c['fg-muted'],
     'text.placeholder': c['fg-subtle'],
     'text.disabled': c['fg-disabled'],
-    'text.accent': c.terracotta,
+    'text.accent': c.clay,
     icon: c.fg,
     'icon.muted': c['fg-muted'],
     'icon.disabled': c['fg-disabled'],
     'icon.placeholder': c['fg-subtle'],
-    'icon.accent': c.terracotta,
-    'link_text.hover': c.terracotta,
+    'icon.accent': c.clay,
+    'link_text.hover': c.clay,
 
     'title_bar.background': c['bg-subtle'],
     'title_bar.inactive_background': c['bg-subtle'],
@@ -145,27 +143,27 @@ function zedTheme(variant) {
     'tab.active_background': c.bg,
     'search.match_background': a(c.ochre, isDark ? 0.28 : 0.3),
     'panel.background': c['bg-subtle'],
-    'panel.focused_border': a(c.terracotta, 0.7),
+    'panel.focused_border': a(c.clay, 0.7),
     'panel.indent_guide': c['border-subtle'],
     'panel.indent_guide_active': c.border,
     'panel.indent_guide_hover': c['fg-faint'],
     'panel.overlay_background': c.surface,
     'panel.overlay_hover': c['surface-hover'],
-    'pane.focused_border': a(c.terracotta, 0.7),
+    'pane.focused_border': a(c.clay, 0.7),
     'pane_group.border': c['border-subtle'],
 
     'scrollbar.thumb.background': a(c['fg-muted'], 0.18),
     'scrollbar.thumb.hover_background': a(c['fg-muted'], 0.32),
-    'scrollbar.thumb.active_background': a(c.terracotta, 0.45),
+    'scrollbar.thumb.active_background': a(c.clay, 0.45),
     'scrollbar.thumb.border': TRANSPARENT,
     'scrollbar.track.background': TRANSPARENT,
     'scrollbar.track.border': TRANSPARENT,
     'minimap.thumb.background': a(c['fg-muted'], 0.14),
     'minimap.thumb.hover_background': a(c['fg-muted'], 0.24),
-    'minimap.thumb.active_background': a(c.terracotta, 0.3),
+    'minimap.thumb.active_background': a(c.clay, 0.3),
     'minimap.thumb.border': TRANSPARENT,
 
-    'editor.foreground': c.fg,
+    'editor.foreground': code.fg,
     'editor.background': c.bg,
     'editor.gutter.background': c.bg,
     'editor.subheader.background': c['bg-subtle'],
@@ -180,13 +178,13 @@ function zedTheme(variant) {
     'editor.active_wrap_guide': c.border,
     'editor.indent_guide': c['border-subtle'],
     'editor.indent_guide_active': c.border,
-    'editor.document_highlight.read_background': a(c['blue'], 0.14),
-    'editor.document_highlight.write_background': a(c.terracotta, 0.16),
-    'editor.document_highlight.bracket_background': a(c.terracotta, 0.18),
+    'editor.document_highlight.read_background': a(c.sky, 0.14),
+    'editor.document_highlight.write_background': a(c.clay, 0.16),
+    'editor.document_highlight.bracket_background': a(c.clay, 0.18),
 
     'terminal.background': c.bg,
     'terminal.foreground': c.fg,
-    'terminal.bright_foreground': isDark ? '#F2F3F5' : '#1E1F22',
+    'terminal.bright_foreground': c.fg,
     'terminal.dim_foreground': c['fg-subtle'],
     'terminal.ansi.background': c.bg,
 
@@ -196,7 +194,7 @@ function zedTheme(variant) {
     'version_control.word_added': code.addedWord,
     'version_control.word_deleted': code.deletedWord,
     'version_control.conflict_marker.ours': a(c.sage, 0.18),
-    'version_control.conflict_marker.theirs': a(c['blue'], 0.18),
+    'version_control.conflict_marker.theirs': a(c.sky, 0.18),
   }
   for (const key of Object.keys(normal)) {
     s[`terminal.ansi.${key}`] = normal[key]
@@ -207,7 +205,7 @@ function zedTheme(variant) {
   const statuses = [
     ['conflict', c.lavender], ['created', c.sage], ['deleted', c.red],
     ['error', c.red], ['hidden', c['fg-subtle']], ['hint', c['fg-subtle']],
-    ['ignored', c['fg-faint']], ['info', c['blue']], ['modified', c['blue']],
+    ['ignored', c['fg-faint']], ['info', c.sky], ['modified', c.sky],
     ['predictive', c['fg-subtle']], ['renamed', c.lavender], ['success', c.sage],
     ['unreachable', c['fg-subtle']], ['warning', c.ochre],
   ]
@@ -217,60 +215,73 @@ function zedTheme(variant) {
     s[`${key}.border`] = a(color, 0.45)
   }
 
-  const players = [c.terracotta, c.sage, c.lavender, c['blue'], c.ochre, c.rose, c.seafoam, c.sand]
+  const players = [c.clay, c.sage, c.lavender, c.sky, c.ochre, c.rose, c.seafoam]
   s.players = players.map((p, i) => ({
     cursor: p,
     background: p,
     selection: i === 0 ? a(p, isDark ? 0.24 : 0.2) : a(p, 0.22),
   }))
 
-  const italic = { isItalic: true }
+  // Code roles. Swap hues here to try another mix.
+  const r = {
+    keyword: c.clay,
+    function: c.sky,
+    type: c.lavender,
+    component: c.seafoam,
+    string: c.sage,
+    literal: c.rose,
+  }
   s.syntax = {
-    attribute: style(c.ochre),
-    boolean: style(c.ochre),
-    comment: style(c['fg-subtle'], italic),
-    'comment.doc': style(mix({ from: c['fg-subtle'], to: c.fg, amount: 0.25 }), italic),
-    constant: style(c.ochre),
-    constructor: style(c.lavender),
-    embedded: style(c.fg),
-    emphasis: style(c.rose, italic),
-    'emphasis.strong': style(c.terracotta, { isBold: true }),
-    enum: style(c.lavender),
-    function: style(c.lavender),
+    attribute: style(code.fg),
+    boolean: style(r.literal),
+    comment: style(c['fg-subtle']),
+    'comment.doc': style(mix({ from: c['fg-subtle'], to: c.fg, amount: 0.25 })),
+    constant: style(code.fg),
+    'constant.builtin': style(r.literal),
+    constructor: style(code.fg),
+    embedded: style(code.fg),
+    emphasis: style(c.rose, { isItalic: true }),
+    'emphasis.strong': style(c.clay, { isBold: true }),
+    enum: style(code.fg),
+    function: style(r.function),
     hint: style(c['fg-subtle']),
-    keyword: style(c.terracotta),
-    label: style(c.lavender),
-    link_text: style(c['blue']),
-    link_uri: style(c.sage, italic),
-    namespace: style(c.fg),
-    number: style(c.ochre),
+    keyword: style(r.keyword),
+    label: style(c.sky),
+    link_text: style(c.lavender),
+    link_uri: style(c.sage),
+    namespace: style(code.fg),
+    number: style(r.literal),
     operator: style(c['fg-muted']),
-    predictive: style(c['fg-subtle'], italic),
-    preproc: style(c.terracotta),
-    primary: style(c.fg),
-    property: style(c.rose),
+    predictive: style(c['fg-subtle']),
+    preproc: style(r.keyword),
+    primary: style(code.fg),
+    property: style(code.fg),
+    // Property access (object.name). Zed only reaches it through a semantic token rule in user settings.
+    'property.access': style(c.rose),
     punctuation: style(c['fg-muted']),
     'punctuation.bracket': style(c['fg-muted']),
     'punctuation.delimiter': style(c['fg-muted']),
-    'punctuation.list_marker': style(c.terracotta),
-    'punctuation.markup': style(c.terracotta),
+    'punctuation.list_marker': style(c.clay),
+    'punctuation.markup': style(c.clay),
     'punctuation.special': style(c.rose),
-    selector: style(c.terracotta),
-    'selector.pseudo': style(c.lavender),
-    string: style(c.sage),
+    selector: style(c.clay),
+    'selector.pseudo': style(c.sky),
+    string: style(r.string),
     'string.escape': style(c.rose),
     'string.regex': style(c.rose),
     'string.special': style(c.rose),
     'string.special.symbol': style(c.seafoam),
-    tag: style(c.terracotta),
-    'text.literal': style(c.sage),
-    title: style(c.terracotta, { isBold: true }),
-    type: style(c['blue']),
-    'type.builtin': style(c['blue']),
-    variable: style(c.fg),
-    'variable.special': style(c.terracotta, italic),
-    'variable.parameter': style(c.rose),
-    variant: style(c.lavender),
+    tag: style(r.keyword),
+    'tag.component': style(r.component),
+    'text.literal': style(r.string),
+    title: style(c.clay, { isBold: true }),
+    type: style(r.type),
+    'type.class': style(r.component),
+    'type.builtin': style(r.keyword),
+    variable: style(code.fg),
+    'variable.special': style(r.keyword),
+    'variable.parameter': style(code.fg),
+    variant: style(c.sky),
   }
   return { name: NAMES[variant], appearance: variant, style: s }
 }
@@ -280,7 +291,7 @@ function buildZed() {
     $schema: 'https://zed.dev/schema/themes/v0.2.0.json',
     name: 'gh44',
     author: TOKENS.author,
-    themes: VARIANT_ORDER.map(zedTheme),
+    themes: VARIANT_ORDER.map((variant) => zedTheme({ variant })),
   }
   return write({ path: join(ROOT, 'zed', 'themes', 'gh44.json'), content: JSON.stringify(family, null, 2) + '\n' })
 }
@@ -289,24 +300,26 @@ function buildZed() {
 
 function buildWarp() {
   return VARIANT_ORDER.map((variant) => {
-    const c = VARIANTS[variant]
-    const { normal, bright } = ansi(variant)
-    const lines = [
-      `# ${NAMES[variant]} for Warp. Generated by scripts/build.mjs; edit palette/tokens.json instead.`,
-      `name: ${NAMES[variant]}`,
-      `accent: '${c.terracotta}'`,
-      `cursor: '${c.terracotta}'`,
-      `background: '${variant === 'dark' ? c.bg : c['bg-subtle']}'`,
-      `foreground: '${c.fg}'`,
-      `details: ${variant === 'dark' ? 'darker' : 'lighter'}`,
-      'terminal_colors:',
-      '  normal:',
-      ...ANSI_ORDER.map((k) => `    ${k}: '${normal[k]}'`),
-      '  bright:',
-      ...ANSI_ORDER.map((k) => `    ${k}: '${bright[k]}'`),
-    ]
-    return write({ path: join(ROOT, 'warp', `gh44-${variant}.yaml`), content: lines.join('\n') + '\n' })
-  })
+      const c = VARIANTS[variant]
+      const { normal, bright } = ansi({ variant })
+      const name = NAMES[variant]
+      const lines = [
+        `# ${name} for Warp. Generated by scripts/build.mjs; edit palette/tokens.json instead.`,
+        `name: ${name}`,
+        `accent: '${c.clay}'`,
+        `cursor: '${c.clay}'`,
+        `background: '${variant === 'dark' ? c.bg : c['bg-subtle']}'`,
+        `foreground: '${c.fg}'`,
+        `details: ${variant === 'dark' ? 'darker' : 'lighter'}`,
+        'terminal_colors:',
+        '  normal:',
+        ...ANSI_ORDER.map((k) => `    ${k}: '${normal[k]}'`),
+        '  bright:',
+        ...ANSI_ORDER.map((k) => `    ${k}: '${bright[k]}'`),
+      ]
+      const file = `gh44-${variant}.yaml`
+      return write({ path: join(ROOT, 'warp', file), content: lines.join('\n') + '\n' })
+    })
 }
 
 // ---------------------------------------------------------------- Slack
@@ -314,17 +327,21 @@ function buildWarp() {
 // Slack's legacy theme format: 10 comma-separated colors.
 // Order: column background, menu hover, active item, active item text, hover item,
 // text, active presence, mention badge, top nav background, top nav text.
-// One theme from the light palette: Slack derives its dark mode from it.
-function slackString() {
-  const c = VARIANTS.light
+// Slack keeps one custom theme, so each variant is its own line, pasted by hand.
+// The mention badge carries Slack's white text, so it uses gh44 Light's deep clay.
+function slackString({ variant }) {
+  const c = VARIANTS[variant]
+  const deep = VARIANTS.light
   return [
     c['bg-subtle'], c.surface, c['surface-active'], c.fg, c.surface,
-    c.fg, c['sage-vivid'], c['terracotta-vivid'], c.terracotta, c.bg,
+    c.fg, c.sage, deep.clay, c.bg, c.fg,
   ].join(',')
 }
 
 function buildSlack() {
-  return write({ path: join(ROOT, 'slack', 'gh44.txt'), content: slackString() + '\n' })
+  return VARIANT_ORDER.map((variant) =>
+    write({ path: join(ROOT, 'slack', `gh44-${variant}.txt`), content: slackString({ variant }) + '\n' }),
+  )
 }
 
 // ---------------------------------------------------------------- Linear
@@ -356,14 +373,14 @@ function lch(color) {
 
 // Linear's custom theme import: base, accent, and contrast, with the same for the sidebar.
 // Linear derives every other color from these.
-function linearTheme(variant) {
+function linearTheme({ variant }) {
   const c = VARIANTS[variant]
   const contrast = 30
   return {
     base: lch(c.bg),
-    accent: lch(c['lavender-vivid']),
+    accent: lch(c.lavender),
     contrast,
-    sidebar: { base: lch(c['bg-subtle']), accent: lch(c['lavender-vivid']), contrast },
+    sidebar: { base: lch(c['bg-subtle']), accent: lch(c.lavender), contrast },
   }
 }
 
@@ -382,28 +399,49 @@ const LINEAR_SYNTAX_SCOPES = [
   ['constant', 'constant'],
   ['constant-numeric', 'number'],
   ['constant-language', 'boolean'],
+  ['constant-character-escape', 'string.escape'],
   ['keyword', 'keyword'],
   ['keyword-operator', 'operator'],
+  // new, typeof, instanceof, keyof, in, of, void and delete: operators to TextMate, keywords to Zed.
+  ['keyword-operator-new', 'keyword'],
+  ['keyword-operator-expression', 'keyword'],
+  // Type punctuation: `:` in annotations, `?` on optional members, `|` and `&` in unions.
+  ['keyword-operator-type', 'punctuation.special'],
+  ['keyword-operator-optional', 'punctuation.special'],
   ['storage', 'keyword'],
+  ['storage-type-function-arrow', 'operator'],
   ['variable', 'variable'],
   ['variable-parameter', 'variable.parameter'],
-  ['variable-other-property', 'property'],
-  ['variable-other-object-property', 'property'],
+  ['variable-language', 'variable.special'],
+  ['variable-other-property', 'property.access'],
+  ['variable-other-object-property', 'property.access'],
   // Linear tags every const local this way; Zed only colors real constants.
   ['variable-other-constant', 'variable'],
-  ['support-variable-property', 'property'],
+  ['support-variable-property', 'property.access'],
   ['meta-object-literal-key', 'property'],
+  ['meta-brace', 'punctuation.bracket'],
   ['entity-name-function', 'function'],
   ['support-function', 'function'],
   ['entity-name-type', 'type'],
-  ['entity-name-class', 'type'],
-  ['entity-other-inherited-class', 'type'],
+  ['entity-name-type-class', 'type.class'],
+  ['entity-name-class', 'type.class'],
+  ['entity-other-inherited-class', 'type.class'],
   ['support-type', 'type'],
+  ['support-type-primitive', 'type.builtin'],
+  ['support-type-property-name', 'property'],
   ['support-class', 'type'],
   ['entity-name-tag', 'tag'],
-  ['support-class-component', 'tag'],
+  ['support-class-component', 'tag.component'],
   ['entity-other-attribute-name', 'attribute'],
+  ['entity-other-attribute-name-class', 'selector'],
+  ['entity-other-attribute-name-id', 'selector'],
+  ['entity-other-attribute-name-pseudo', 'selector.pseudo'],
   ['punctuation', 'punctuation'],
+  // Zed colors quotes with the string and `//` with the comment.
+  ['punctuation-definition-string', 'string'],
+  ['punctuation-definition-comment', 'comment'],
+  ['punctuation-definition-template-expression', 'punctuation.special'],
+  ['punctuation-decorator', 'punctuation.special'],
   ['markup-heading', 'title'],
   ['markup-bold', 'emphasis.strong'],
   ['markup-italic', 'emphasis'],
@@ -420,13 +458,13 @@ const LINEAR_SYMBOL_LINK = 'sx-p9b3b8'
 // Symbols Linear can link to sit inside a wrapper span, so each rule has both forms.
 const LINEAR_OPERATOR = '[class^="syntax-keyword-operator"]'
 const LINEAR_SYNTAX_CONTEXT = [
-  // <Stack: a type right after the < operator is a JSX tag.
+  // <Stack: a type right after the < operator is a JSX component.
   [
     [
       `${LINEAR_OPERATOR} + [class^="syntax-entity-name-type"]`,
       `${LINEAR_OPERATOR} + .${LINEAR_SYMBOL_LINK} > [class^="syntax-entity-name-type"]`,
     ],
-    'tag',
+    'tag.component',
   ],
   // gap="4": a property right before = is a JSX attribute.
   [
@@ -451,9 +489,9 @@ const LINEAR_INLINE_COLORS = [
 const LINEAR_CODE_MUTED = ['sx-d5ldbw', 'sx-sy73al']
 const LINEAR_CODE_TOKEN = 'sx-14rh7hd'
 
-function linearVariantCss(variant) {
+function linearVariantCss({ variant }) {
   const c = VARIANTS[variant]
-  const { syntax } = zedTheme(variant).style
+  const { syntax } = zedTheme({ variant }).style
   const rule = ({ selectors, name }) => {
     const st = syntax[name]
     const decls = [`color: ${st.color} !important;`]
@@ -479,7 +517,7 @@ function linearVariantCss(variant) {
   const rules = [...scopeRules, ...contextRules, mutedRule, ...inlineRules]
   // The diff viewer reads --diff-view-* variables that Linear sets at runtime. Set them
   // on every element so they win over whichever ancestor Linear puts them on.
-  const code = codeColors(variant)
+  const code = codeColors({ variant })
   const diffVars = {
     'editor-background': c.bg,
     'editor-background-opaque': c.bg,
@@ -535,7 +573,7 @@ function linearVariantCss(variant) {
 function linearUserCss() {
   return [
     '/* ==UserStyle==',
-    '@name         gh44 for Linear code blocks',
+    `@name         gh44 for Linear code blocks`,
     '@namespace    gh44',
     `@version      ${TOKENS.version}`,
     `@description  gh44 syntax colors for Linear's code blocks and diffs. Follows your system appearance. Generated by scripts/build.mjs.`,
@@ -550,7 +588,7 @@ function linearUserCss() {
     `    font-family: ${TOKENS.font.mono.stack} !important;`,
     '  }',
     '',
-    VARIANT_ORDER.map(linearVariantCss).join('\n\n'),
+    VARIANT_ORDER.map((variant) => linearVariantCss({ variant })).join('\n\n'),
     '}',
     '',
   ].join('\n')
@@ -560,7 +598,10 @@ function linearUserCss() {
 function buildLinear() {
   return [
     ...VARIANT_ORDER.map((variant) =>
-      write({ path: join(ROOT, 'linear', `gh44-${variant}.json`), content: JSON.stringify(linearTheme(variant)) + '\n' }),
+      write({
+        path: join(ROOT, 'linear', `gh44-${variant}.json`),
+        content: JSON.stringify(linearTheme({ variant })) + '\n',
+      }),
     ),
     write({ path: join(ROOT, 'linear', 'gh44.user.css'), content: linearUserCss() }),
   ]
@@ -571,18 +612,19 @@ function buildLinear() {
 const rgb = (color) => channels(color)
 
 // Chrome themes don't follow the system mode, so each variant is its own extension.
-function chromeManifest(variant) {
+function chromeManifest({ variant }) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   // The tab strip sits behind the active tab, which shares the toolbar color.
+  // Dark lifts the toolbar one step above `surface` so the active tab reads against the frame.
   const frame = isDark ? c.bg : c.surface
-  const toolbar = isDark ? c.surface : c.bg
+  const toolbar = isDark ? c['surface-hover'] : c.bg
   const omnibox = isDark ? c.bg : c['bg-subtle']
   return {
     manifest_version: 3,
     name: NAMES[variant],
     version: TOKENS.version,
-    description: `${NAMES[variant]} for Chrome: warm neutrals with terracotta accents.`,
+    description: `${NAMES[variant]} for Chrome: warm neutrals with clay accents.`,
     icons: { 128: 'icon-128.png' },
     theme: {
       colors: {
@@ -603,17 +645,17 @@ function chromeManifest(variant) {
         omnibox_text: rgb(c.fg),
         ntp_background: rgb(c.bg),
         ntp_text: rgb(c.fg),
-        ntp_link: rgb(c.terracotta),
+        ntp_link: rgb(c.clay),
       },
     },
   }
 }
 
-// The Chrome Web Store needs a 128px icon: a terracotta dot on the variant's background.
-function chromeIcon(variant) {
+// The Chrome Web Store needs a 128px icon: a clay dot on the variant's background.
+function chromeIcon({ variant }) {
   const c = VARIANTS[variant]
   const size = 128
-  const [bg, dot] = [channels(c.bg), channels(c.terracotta)]
+  const [bg, dot] = [channels(c.bg), channels(c.clay)]
   const row = (y) => {
     const pixels = Array.from({ length: size }, (_, x) => {
       const isDot = Math.hypot(x + 0.5 - size / 2, y + 0.5 - size / 2) < size * 0.3
@@ -643,37 +685,27 @@ function chromeIcon(variant) {
 }
 
 function buildChrome() {
-  return VARIANT_ORDER.flatMap((variant) => [
-    write({
-      path: join(ROOT, 'chrome', `gh44-${variant}`, 'manifest.json'),
-      content: JSON.stringify(chromeManifest(variant), null, 2) + '\n',
-    }),
-    write({ path: join(ROOT, 'chrome', `gh44-${variant}`, 'icon-128.png'), content: chromeIcon(variant) }),
-  ])
+  return VARIANT_ORDER.flatMap((variant) => {
+      const dir = join(ROOT, 'chrome', `gh44-${variant}`)
+      return [
+        write({
+          path: join(dir, 'manifest.json'),
+          content: JSON.stringify(chromeManifest({ variant }), null, 2) + '\n',
+        }),
+        write({ path: join(dir, 'icon-128.png'), content: chromeIcon({ variant }) }),
+      ]
+    })
 }
 
 // ---------------------------------------------------------------- GitHub
 
 // GitHub's UI reads Primer CSS variables, so the userstyle only overrides those.
 // Primer sets them per theme on [data-color-mode], which is why every value is !important.
-const GITHUB_DARK_LIFT = 0.04
-const GITHUB_LIFTED = ['bg', 'bg-subtle', 'surface', 'surface-hover', 'surface-active', 'border', 'border-subtle']
-
-function githubVars(variant) {
+function githubVars({ variant }) {
+  const c = VARIANTS[variant]
   const isDark = variant === 'dark'
-  const c = isDark
-    ? {
-        ...VARIANTS.dark,
-        ...Object.fromEntries(
-          GITHUB_LIFTED.map((name) => [
-            name,
-            mix({ from: VARIANTS.dark[name], to: '#FFFFFF', amount: GITHUB_DARK_LIFT }),
-          ]),
-        ),
-      }
-    : VARIANTS[variant]
-  const { syntax } = zedTheme(variant).style
-  const code = codeColors(variant)
+  const { syntax } = zedTheme({ variant }).style
+  const code = codeColors({ variant })
   const a = (color, amount) => alpha({ color, amount })
   const shade = (color, amount) => mix({ from: color, to: isDark ? '#FFFFFF' : '#000000', amount })
   const inset = isDark ? mix({ from: c.bg, to: '#000000', amount: 0.2 }) : c['bg-subtle']
@@ -681,12 +713,8 @@ function githubVars(variant) {
   // both variants, so they carry light text and read as real color on charcoal.
   const deep = VARIANTS.light
   const onEmphasis = deep.bg
-  const v = (hue) => c[`${hue}-vivid`]
-  const deepV = (hue) => deep[`${hue}-vivid`]
-  const text = isDark ? mix({ from: c.fg, to: '#FFFFFF', amount: 0.4 }) : c.fg
-  const textMuted = isDark ? mix({ from: c['fg-muted'], to: '#FFFFFF', amount: 0.15 }) : c['fg-muted']
   const states = {
-    accent: 'blue',
+    accent: 'sky',
     success: 'sage',
     open: 'sage',
     attention: 'ochre',
@@ -694,11 +722,11 @@ function githubVars(variant) {
     closed: 'red',
     done: 'lavender',
     upsell: 'lavender',
-    severe: 'terracotta',
+    severe: 'clay',
     sponsors: 'rose',
   }
   const contribution = [0.25, 0.5, 0.75, 1].map((amount) =>
-    mix({ from: c['bg-subtle'], to: v('sage'), amount }),
+    mix({ from: c['bg-subtle'], to: c.sage, amount }),
   )
   return {
     'bgColor-default': c.bg,
@@ -711,19 +739,19 @@ function githubVars(variant) {
     'bgColor-neutral-muted': a(c['fg-subtle'], 0.2),
     ...Object.fromEntries(
       Object.entries(states).flatMap(([state, hue]) => [
-        [`bgColor-${state}-emphasis`, deepV(hue)],
-        [`bgColor-${state}-muted`, a(deepV(hue), isDark ? 0.3 : 0.15)],
-        [`borderColor-${state}-emphasis`, v(hue)],
-        [`borderColor-${state}-muted`, a(v(hue), 0.4)],
-        [`fgColor-${state}`, v(hue)],
+        [`bgColor-${state}-emphasis`, deep[hue]],
+        [`bgColor-${state}-muted`, a(deep[hue], isDark ? 0.3 : 0.15)],
+        [`borderColor-${state}-emphasis`, c[hue]],
+        [`borderColor-${state}-muted`, a(c[hue], 0.4)],
+        [`fgColor-${state}`, c[hue]],
       ]),
     ),
 
-    'fgColor-default': text,
-    'fgColor-muted': textMuted,
-    'fgColor-neutral': textMuted,
+    'fgColor-default': c.fg,
+    'fgColor-muted': c['fg-muted'],
+    'fgColor-neutral': c['fg-muted'],
     'fgColor-disabled': c['fg-disabled'],
-    'fgColor-link': c['blue'],
+    'fgColor-link': c.sky,
     'fgColor-onEmphasis': onEmphasis,
     'fgColor-onInverse': c.bg,
 
@@ -737,14 +765,14 @@ function githubVars(variant) {
     'control-bgColor-active': c['surface-active'],
     'control-bgColor-disabled': c['bg-subtle'],
     'control-borderColor-selected': c.fg,
-    'control-checked-bgColor-rest': deepV('blue'),
-    'control-checked-bgColor-hover': shade(deepV('blue'), 0.1),
-    'control-checked-bgColor-active': shade(deepV('blue'), 0.2),
-    'control-checked-borderColor-rest': deepV('blue'),
-    'control-danger-fgColor-rest': v('red'),
-    'control-danger-fgColor-hover': shade(v('red'), 0.15),
-    'control-danger-bgColor-hover': a(v('red'), 0.15),
-    'control-danger-bgColor-active': a(v('red'), 0.4),
+    'control-checked-bgColor-rest': deep.sky,
+    'control-checked-bgColor-hover': shade(deep.sky, 0.1),
+    'control-checked-bgColor-active': shade(deep.sky, 0.2),
+    'control-checked-borderColor-rest': deep.sky,
+    'control-danger-fgColor-rest': c.red,
+    'control-danger-fgColor-hover': shade(c.red, 0.15),
+    'control-danger-bgColor-hover': a(c.red, 0.15),
+    'control-danger-bgColor-active': a(c.red, 0.4),
     'control-transparent-bgColor-hover': a(c['fg-subtle'], 0.2),
     'control-transparent-bgColor-active': a(c['fg-subtle'], 0.25),
     'control-transparent-bgColor-selected': a(c['fg-subtle'], 0.2),
@@ -754,15 +782,15 @@ function githubVars(variant) {
     'controlTrack-bgColor-hover': c['surface-hover'],
     'controlTrack-bgColor-active': c['surface-active'],
 
-    'button-primary-bgColor-rest': deepV('sage'),
-    'button-primary-bgColor-hover': shade(deepV('sage'), 0.1),
-    'button-primary-bgColor-active': shade(deepV('sage'), 0.2),
-    'button-primary-bgColor-disabled': a(deepV('sage'), 0.4),
-    'button-primary-borderColor-disabled': a(deepV('sage'), 0.4),
-    'button-danger-fgColor-rest': v('red'),
-    'button-danger-iconColor-rest': v('red'),
-    'button-danger-bgColor-hover': deepV('red'),
-    'button-danger-bgColor-active': shade(deepV('red'), 0.1),
+    'button-primary-bgColor-rest': deep.sage,
+    'button-primary-bgColor-hover': shade(deep.sage, 0.1),
+    'button-primary-bgColor-active': shade(deep.sage, 0.2),
+    'button-primary-bgColor-disabled': a(deep.sage, 0.4),
+    'button-primary-borderColor-disabled': a(deep.sage, 0.4),
+    'button-danger-fgColor-rest': c.red,
+    'button-danger-iconColor-rest': c.red,
+    'button-danger-bgColor-hover': deep.red,
+    'button-danger-bgColor-active': shade(deep.red, 0.1),
     'button-danger-fgColor-hover': onEmphasis,
     'button-danger-iconColor-hover': onEmphasis,
     'button-primary-fgColor-rest': onEmphasis,
@@ -775,8 +803,8 @@ function githubVars(variant) {
 
     'header-bgColor': a(c['bg-subtle'], 0.95),
     'header-borderColor-divider': c['fg-faint'],
-    'header-fgColor-default': textMuted,
-    'header-fgColor-logo': text,
+    'header-fgColor-default': c['fg-muted'],
+    'header-fgColor-logo': c.fg,
     'headerSearch-bgColor': c.bg,
     'headerSearch-borderColor': c['surface-active'],
 
@@ -785,14 +813,14 @@ function githubVars(variant) {
     'menu-bgColor-active': c.surface,
     'sideNav-bgColor-selected': c.surface,
     'timelineBadge-bgColor': c.surface,
-    'selectMenu-bgColor-active': a(c['blue'], 0.2),
-    'selection-bgColor': a(c['blue'], isDark ? 0.35 : 0.25),
-    'underlineNav-borderColor-active': v('terracotta'),
-    'highlight-neutral-bgColor': a(v('ochre'), 0.4),
+    'selectMenu-bgColor-active': a(c.sky, 0.2),
+    'selection-bgColor': a(c.sky, isDark ? 0.35 : 0.25),
+    'underlineNav-borderColor-active': c.clay,
+    'highlight-neutral-bgColor': a(c.ochre, 0.4),
     'skeletonLoader-bgColor': a(c['fg-subtle'], 0.2),
-    'reactionButton-selected-bgColor-rest': a(c['blue'], 0.2),
-    'reactionButton-selected-bgColor-hover': a(c['blue'], 0.35),
-    'reactionButton-selected-fgColor-hover': c['blue'],
+    'reactionButton-selected-bgColor-rest': a(c.sky, 0.2),
+    'reactionButton-selected-bgColor-hover': a(c.sky, 0.35),
+    'reactionButton-selected-fgColor-hover': c.sky,
 
     'contribution-default-bgColor-0': c['bg-subtle'],
     ...Object.fromEntries(contribution.map((color, i) => [`contribution-default-bgColor-${i + 1}`, color])),
@@ -812,26 +840,31 @@ function githubVars(variant) {
         ['Line', 'Num', 'Word'].map((part) => [`diffBlob-${kind}${part}-fgColor`, code.fg]),
       ),
     ),
-    'diffBlob-hunkLine-bgColor': a(c['blue'], 0.15),
-    'diffBlob-hunkNum-bgColor-rest': a(c['blue'], 0.3),
-    'diffBlob-hunkNum-bgColor-hover': c['blue'],
+    'diffBlob-hunkLine-bgColor': a(c.sky, 0.15),
+    'diffBlob-hunkNum-bgColor-rest': a(c.sky, 0.3),
+    'diffBlob-hunkNum-bgColor-hover': c.sky,
 
     'prettylights-syntax-comment': syntax.comment.color,
-    'prettylights-syntax-constant': syntax.constant.color,
+    // GitHub's TSX highlighting gives attributes, operators, properties and constants one
+    // class (pl-c1), PascalCase names another (pl-v) and types a third (pl-smi). These
+    // pick the Zed color that matches most of what each class covers in JSX.
+    'prettylights-syntax-constant': code.fg,
     'prettylights-syntax-constantOtherReferenceLink': syntax.link_text.color,
     'prettylights-syntax-entity': syntax.function.color,
     'prettylights-syntax-entityTag': syntax.tag.color,
     'prettylights-syntax-keyword': syntax.keyword.color,
     'prettylights-syntax-string': syntax.string.color,
     'prettylights-syntax-stringRegexp': syntax['string.regex'].color,
-    'prettylights-syntax-variable': syntax['variable.parameter'].color,
-    'prettylights-syntax-storageModifierImport': code.fg,
+    // PascalCase names (pl-v): imports, JSX tags, `new X`, `extends X`, enums and function
+    // names. Zed colors most of them as functions; GITHUB_SYNTAX_CLASSES picks out JSX tags.
+    'prettylights-syntax-variable': syntax.function.color,
+    'prettylights-syntax-storageModifierImport': syntax.type.color,
     'prettylights-syntax-bracketHighlighterAngle': c['fg-muted'],
     'prettylights-syntax-bracketHighlighterUnmatched': c.red,
     'prettylights-syntax-sublimeLinterGutterMark': c.border,
     'prettylights-syntax-metaDiffRange': c.lavender,
-    'prettylights-syntax-markup-heading': c['blue'],
-    'prettylights-syntax-markup-list': c.ochre,
+    'prettylights-syntax-markup-heading': syntax.title.color,
+    'prettylights-syntax-markup-list': syntax['punctuation.list_marker'].color,
     'prettylights-syntax-markup-bold': c.fg,
     'prettylights-syntax-markup-italic': c.fg,
     'prettylights-syntax-markup-inserted-bg': code.addedLine,
@@ -840,8 +873,8 @@ function githubVars(variant) {
     'prettylights-syntax-markup-deleted-text': code.deleted,
     'prettylights-syntax-markup-changed-bg': code.modifiedLine,
     'prettylights-syntax-markup-changed-text': code.modified,
-    'prettylights-syntax-markup-ignored-bg': a(c['blue'], 0.15),
-    'prettylights-syntax-markup-ignored-text': c['blue'],
+    'prettylights-syntax-markup-ignored-bg': a(c.sky, 0.15),
+    'prettylights-syntax-markup-ignored-text': c.sky,
 
     'codeMirror-syntax-fgColor-comment': syntax.comment.color,
     'codeMirror-syntax-fgColor-constant': syntax.constant.color,
@@ -854,23 +887,44 @@ function githubVars(variant) {
   }
 }
 
+// Token classes GitHub leaves to the default text color or colors by context.
+// Each entry is [class selector, Zed scope].
+const GITHUB_SYNTAX_CLASSES = [
+  // Punctuation: GitHub has no rule for pl-kos, so it inherits the text color.
+  ['.pl-kos', 'punctuation'],
+  // Variables inside template literals: GitHub gives them the type color.
+  ['.pl-s .pl-s1', 'variable'],
+  ['.pl-s .pl-pse .pl-s1', 'variable'],
+  // `${` and `}` around a template substitution.
+  ['.pl-s .pl-kos', 'punctuation.special'],
+  // JSX components: a PascalCase name right after `<` (pl-c1) or `</` (pl-kos, with `>` after).
+  ['.pl-c1 + .pl-v', 'tag.component'],
+  ['.pl-kos + .pl-v:has(+ .pl-c1)', 'tag.component'],
+]
+
 // Follows GitHub's own appearance setting: dark, light, or sync with system.
 function githubUserCss() {
   const block = ({ selector, variant, indent }) => {
     const pad = ' '.repeat(indent)
-    const decls = Object.entries(githubVars(variant)).map(
+    const decls = Object.entries(githubVars({ variant })).map(
       ([name, value]) => `${pad}  --${name}: ${value} !important;`,
     )
-    return [
-      `${pad}${selector} {`,
-      `${pad}  color-scheme: ${variant};`,
-      ...decls,
-      `${pad}}`,
-    ].join('\n')
+    const { syntax } = zedTheme({ variant }).style
+    const classRules = GITHUB_SYNTAX_CLASSES.map(([cls, name]) =>
+      [
+        `${pad}${selector} ${cls} {`,
+        `${pad}  color: ${syntax[name].color} !important;`,
+        `${pad}}`,
+      ].join('\n'),
+    )
+    const vars = [`${pad}${selector} {`, `${pad}  color-scheme: ${variant};`, ...decls, `${pad}}`].join('\n')
+    // Regex escapes: GitHub bolds them; Zed doesn't.
+    const boldRule = [`${pad}${selector} .pl-sr .pl-cce {`, `${pad}  font-weight: 400 !important;`, `${pad}}`].join('\n')
+    return [vars, boldRule, ...classRules].join('\n\n')
   }
   return [
     '/* ==UserStyle==',
-    '@name         gh44 for GitHub',
+    `@name         gh44 for GitHub`,
     '@namespace    gh44',
     `@version      ${TOKENS.version}`,
     '@description  gh44 colors for GitHub. Follows your GitHub appearance setting. Generated by scripts/build.mjs.',
@@ -900,7 +954,7 @@ function githubUserCss() {
 }
 
 function buildGithub() {
-  return write({ path: join(ROOT, 'github', 'gh44.user.css'), content: githubUserCss() })
+  return [write({ path: join(ROOT, 'github', 'gh44.user.css'), content: githubUserCss() })]
 }
 
 // ---------------------------------------------------------------- README images
@@ -913,45 +967,46 @@ const TOP = 76
 const GUTTER = 84
 const ITALIC = ' font-style="italic"'
 
-// Made-up TypeScript for the Zed preview. Each piece is [text, Zed syntax scope or null].
+// Made-up React component for the Zed preview. Each line is a list of [text, Zed syntax scope].
+// Plain text (spaces, names Zed leaves uncolored) uses null.
+const kw = (text) => [text, 'keyword']
+const punc = (text) => [text, 'punctuation']
 const ZED_SAMPLE = [
-  [['import', 'keyword'], [' { ', 'punctuation'], ['formatTemperature', 'variable'],
-    [' } ', 'punctuation'], ['from', 'keyword'], [' ', null], ["'./units'", 'string']],
+  [kw('import'), punc(' { '), ['useState', 'function'], punc(' } '), kw('from'), [' ', null], ["'react'", 'string']],
   [],
-  [['type', 'keyword'], [' ', null], ['Forecast', 'type'], [' ', null], ['=', 'operator'],
-    [' {', 'punctuation']],
-  [['  ', null], ['city', 'property'], [': ', 'punctuation'], ['string', 'type.builtin']],
-  [['  ', null], ['highs', 'property'], [': ', 'punctuation'], ['number', 'type.builtin'],
-    ['[]', 'punctuation']],
-  [['  ', null], ['isRaining', 'property'], [': ', 'punctuation'], ['boolean', 'type.builtin']],
-  [['}', 'punctuation']],
+  [kw('interface'), [' ', null], ['BadgeProps', 'type'], punc(' {')],
+  [['  label', 'property'], punc(': '), ['string', 'type.builtin']],
+  [['  count', 'property'], punc(': '), ['number', 'type.builtin']],
+  [['  isActive', 'property'], punc('?: '), ['boolean', 'type.builtin']],
+  [punc('}')],
   [],
-  [['const', 'keyword'], [' ', null], ['MAX_DAYS', 'constant'], [' ', null], ['=', 'operator'],
-    [' ', null], ['7', 'number']],
+  [['// Keeps the badge short: 120 becomes 99+', 'comment']],
+  [kw('const'), [' ', null], ['formatCount', 'function'], [' ', null], ['=', 'operator'], punc(' ('),
+    ['count', 'variable.parameter'], punc(': '), ['number', 'type.builtin'], punc(') '), ['=>', 'operator'],
+    [' ', null], ['count', 'variable'], [' ', null], ['>', 'operator'], [' ', null], ['99', 'number'],
+    [' ', null], ['?', 'operator'], [' ', null], ["'99+'", 'string'], [' ', null], [':', 'operator'],
+    [' ', null], ['String', 'type'], punc('('), ['count', 'variable'], punc(')')],
   [],
-  [["// Average of the week's highs, rounded", 'comment']],
-  [['export', 'keyword'], [' ', null], ['function', 'keyword'], [' ', null],
-    ['getWeeklyHigh', 'function'], ['({ ', 'punctuation'], ['city', 'variable.parameter'],
-    [', ', 'punctuation'], ['highs', 'variable.parameter'], [' }: ', 'punctuation'],
-    ['Forecast', 'type'], ['): ', 'punctuation'], ['string', 'type.builtin'], [' {', 'punctuation']],
-  [['  ', null], ['const', 'keyword'], [' ', null], ['week', 'variable'], [' ', null],
-    ['=', 'operator'], [' ', null], ['highs', 'variable'], ['.', 'punctuation'],
-    ['slice', 'function'], ['(', 'punctuation'], ['0', 'number'], [', ', 'punctuation'],
-    ['MAX_DAYS', 'constant'], [')', 'punctuation']],
-  [['  ', null], ['const', 'keyword'], [' ', null], ['total', 'variable'], [' ', null],
-    ['=', 'operator'], [' ', null], ['week', 'variable'], ['.', 'punctuation'],
-    ['reduce', 'function'], ['((', 'punctuation'], ['sum', 'variable.parameter'],
-    [', ', 'punctuation'], ['high', 'variable.parameter'], [') ', 'punctuation'],
-    ['=>', 'operator'], [' ', null], ['sum', 'variable'], [' ', null], ['+', 'operator'],
-    [' ', null], ['high', 'variable'], [', ', 'punctuation'], ['0', 'number'],
-    [')', 'punctuation']],
+  [kw('export'), [' ', null], kw('function'), [' ', null], ['Badge', 'function'], punc('({ '),
+    ['label', 'variable.parameter'], punc(', '), ['count', 'variable.parameter'], punc(', '),
+    ['isActive', 'variable.parameter'], [' ', null], ['=', 'operator'], [' ', null], ['false', 'boolean'],
+    punc(' }: '), ['BadgeProps', 'type'], punc(') {')],
+  [['  ', null], kw('const'), punc(' ['), ['isOpen', 'variable'], punc(', '), ['setIsOpen', 'function'],
+    punc('] '), ['=', 'operator'], [' ', null], ['useState', 'function'], punc('('), ['false', 'boolean'], punc(')')],
   [],
-  [['  ', null], ['return', 'keyword'], [' ', null], ['`', 'string'], ['${', 'punctuation.special'],
-    ['city', 'variable'], ['}', 'punctuation.special'], [': ', 'string'], ['${', 'punctuation.special'],
-    ['formatTemperature', 'function'], ['(', 'punctuation'], ['total', 'variable'], [' ', null],
-    ['/', 'operator'], [' ', null], ['week', 'variable'], ['.', 'punctuation'],
-    ['length', 'property'], [')', 'punctuation'], ['}', 'punctuation.special'], ['`', 'string']],
-  [['}', 'punctuation']],
+  [['  ', null], kw('return'), punc(' (')],
+  [['    ', null], punc('<'), ['button', 'tag'], [' ', null], ['className', 'attribute'], ['=', 'operator'],
+    ['"badge"', 'string'], [' ', null], ['onClick', 'attribute'], ['=', 'operator'], punc('{() '),
+    ['=>', 'operator'], [' ', null], ['setIsOpen', 'function'], punc('(!'), ['isOpen', 'variable'], punc(')}>')],
+  [['      ', null], punc('<'), ['Icon', 'tag.component'], [' ', null], ['name', 'attribute'],
+    ['=', 'operator'], ['"bell"', 'string'], punc(' />')],
+  [['      ', null], punc('<'), ['span', 'tag'], punc('>{'), ['label', 'variable'], punc('}</'), ['span', 'tag'], punc('>')],
+  [['      ', null], punc('{'), ['isActive', 'variable'], [' ', null], ['&&', 'operator'], [' ', null], punc('<'),
+    ['Count', 'tag.component'], [' ', null], ['value', 'attribute'], ['=', 'operator'], punc('{'),
+    ['formatCount', 'function'], punc('('), ['count', 'variable'], punc(')} />}')],
+  [['    ', null], punc('</'), ['button', 'tag'], punc('>')],
+  [['  ', null], punc(')')],
+  [punc('}')],
 ]
 
 // Made-up terminal session for the Warp preview. Each piece is [text, ANSI color name or null].
@@ -991,7 +1046,7 @@ function windowSvg({ variant, title, lines, hasLineNumbers, extraHeight = 0, ext
       : []
     return [...lineNumber, `<text x="${left}" y="${y}" xml:space="preserve">${spans}</text>`]
   })
-  const dots = [c.terracotta, c.ochre, c.sage]
+  const dots = [c.clay, c.ochre, c.sage]
     .map((col, i) => `<circle cx="${28 + i * 20}" cy="24" r="6" fill="${col}"/>`)
     .join('')
   return (
@@ -1008,20 +1063,20 @@ function windowSvg({ variant, title, lines, hasLineNumbers, extraHeight = 0, ext
 
 function zedPreviewSvg(variant) {
   const c = VARIANTS[variant]
-  const { syntax } = zedTheme(variant).style
+  const { syntax } = zedTheme({ variant }).style
   const lines = ZED_SAMPLE.map((line) =>
     line.map(([text, scope]) => {
       const st = (scope && syntax[scope]) || {}
       return { text, color: st.color ?? c.fg, isItalic: st.font_style === 'italic' }
     }),
   )
-  return windowSvg({ variant, title: `forecast.ts · ${NAMES[variant]}`, lines, hasLineNumbers: true })
+  return windowSvg({ variant, title: `Badge.tsx · ${NAMES[variant]}`, lines, hasLineNumbers: true })
 }
 
 function warpPreviewSvg(variant) {
   const c = VARIANTS[variant]
-  const { normal, bright } = ansi(variant)
-  const colors = { ...normal, black: c['fg-subtle'], prompt: c.terracotta }
+  const { normal, bright } = ansi({ variant })
+  const colors = { ...normal, black: c['fg-subtle'], prompt: c.clay }
   const lines = WARP_SAMPLE.map((line) =>
     line.map(([text, name]) => ({ text, color: name ? colors[name] : c.fg, isItalic: false })),
   )
@@ -1079,9 +1134,7 @@ const NEUTRALS = Object.keys(TOKENS.variants.dark.neutral)
 //   lavender         text and icons on bg (light enough on dark, dark enough on light)
 //   lavender-solid   fills that carry on-solid text, the same deep color in both variants
 //   lavender-subtle  tinted backgrounds, like callouts and diff lines
-// plus vivid versions of the first two, for status that has to stand out:
-//   lavender-vivid, lavender-vivid-solid
-function scale(variant) {
+function scale({ variant }) {
   const c = VARIANTS[variant]
   const solid = VARIANTS.light
   const subtle = variant === 'dark' ? 0.3 : 0.15
@@ -1093,21 +1146,19 @@ function scale(variant) {
         [hue, c[hue]],
         [`${hue}-solid`, solid[hue]],
         [`${hue}-subtle`, alpha({ color: solid[hue], amount: subtle })],
-        [`${hue}-vivid`, c[`${hue}-vivid`]],
-        [`${hue}-vivid-solid`, solid[`${hue}-vivid`]],
       ]),
     ),
   }
 }
 
-const STEPS = ['', '-solid', '-subtle', '-vivid', '-vivid-solid']
+const STEPS = ['', '-solid', '-subtle']
 
 function buildCss() {
   const block = ({ selector, variant }) =>
     [
       `${selector} {`,
       `  color-scheme: ${variant};`,
-      ...Object.entries(scale(variant)).map(([name, value]) => `  --gh44-${name}: ${value};`),
+      ...Object.entries(scale({ variant })).map(([name, value]) => `  --gh44-${name}: ${value};`),
       '',
       // Roles sit in every variant block so a nested .dark section resolves them too.
       ...Object.entries(ROLES).flatMap(([role, hue]) =>
@@ -1153,8 +1204,8 @@ function buildCss() {
 // they're a soft color with dark text in dark mode and a deep color with light text in
 // light mode. shadcn also uses them as text on a tint of themselves (bg-destructive/10
 // text-destructive), which the plain hue reads well in.
-function shadcnVars(variant) {
-  const t = scale(variant)
+function shadcnVars({ variant }) {
+  const t = scale({ variant })
   const role = (name) => t[ROLES[name]]
   const isDark = variant === 'dark'
   return {
@@ -1187,7 +1238,7 @@ function shadcnVars(variant) {
     ring: role('primary'),
     'chart-1': t.lavender,
     'chart-2': t.sage,
-    'chart-3': t.blue,
+    'chart-3': t.sky,
     'chart-4': t.ochre,
     'chart-5': t.rose,
     sidebar: t['bg-subtle'],
@@ -1222,18 +1273,19 @@ const FONT_PACKAGES = ['@fontsource-variable/ibm-plex-sans', '@fontsource-variab
 
 function shadcnItems() {
   const colors = {
-    light: { radius: TOKENS.radius, ...shadcnVars('light') },
-    dark: shadcnVars('dark'),
+    light: { radius: TOKENS.radius, ...shadcnVars({ variant: 'light' }) },
+    dark: shadcnVars({ variant: 'dark' }),
   }
   // The full CSS value. @fontsource-variable names the family "<name> Variable".
   const fontSans = `'${TOKENS.font.sans.family} Variable', ui-sans-serif, sans-serif`
   const fontMono = `'${TOKENS.font.mono.family} Variable', ui-monospace, monospace`
+  const label = 'gh44'
   const theme = {
     $schema: ITEM_SCHEMA,
     name: 'gh44-theme',
     type: 'registry:theme',
-    title: 'gh44 colors',
-    description: 'gh44 colors for shadcn/ui, light and dark, with lavender as primary.',
+    title: `${label} colors`,
+    description: `${label} colors for shadcn/ui, light and dark, with lavender as primary.`,
     author: TOKENS.author,
     cssVars: { theme: SHADCN_THEME, ...colors },
   }
@@ -1241,8 +1293,8 @@ function shadcnItems() {
     $schema: ITEM_SCHEMA,
     name: 'gh44',
     type: 'registry:theme',
-    title: 'gh44',
-    description: 'gh44 colors, IBM Plex Sans and Lilex for shadcn/ui, light and dark.',
+    title: label,
+    description: `${label} colors, IBM Plex Sans and Lilex for shadcn/ui, light and dark.`,
     author: TOKENS.author,
     dependencies: FONT_PACKAGES,
     css: Object.fromEntries(FONT_PACKAGES.map((name) => [`@import "${name}"`, {}])),
@@ -1257,9 +1309,9 @@ function shadcnItems() {
 // The same theme as plain CSS, for projects that don't use the shadcn CLI.
 function shadcnCss() {
   const vars = (variant) =>
-    Object.entries(shadcnVars(variant)).map(([name, value]) => `  --${name}: ${value};`)
+    Object.entries(shadcnVars({ variant })).map(([name, value]) => `  --${name}: ${value};`)
   return [
-    '/* gh44 for shadcn/ui. Generated by scripts/build.mjs; edit palette/tokens.json instead.',
+    `/* gh44 for shadcn/ui. Generated by scripts/build.mjs; edit palette/tokens.json instead.`,
     ' * Paste below your Tailwind import, or install with the shadcn CLI (see README.md).',
     ' */',
     '',
@@ -1293,7 +1345,7 @@ function buildShadcn() {
   ]
 }
 
-const built = [buildZed(), ...buildWarp(), buildSlack(), ...buildLinear(), ...buildChrome(), buildGithub(), buildCss(), ...buildShadcn(), ...buildReadmeImages()]
+const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), ...buildGithub(), buildCss(), ...buildShadcn(), ...buildReadmeImages()]
 const swatches = buildSwatches()
 for (const path of built) console.log('built', relative(ROOT, path))
 console.log('built', swatches.length, 'swatches in palette/swatches')

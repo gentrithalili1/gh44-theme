@@ -17,49 +17,55 @@
   @media (prefers-color-scheme: dark) {
     pre,
     pre code {
-      background-color: #25262A !important;
+      background-color: #202124 !important;
       color: #DFE1E5 !important;
     }
 
     [class^="syntax-comment"],
     [class*=" syntax-comment"] {
       color: #868A92 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     [class^="syntax-string"],
     [class*=" syntax-string"] {
-      color: #B8C5AC !important;
+      color: #9EBF7A !important;
       font-style: normal !important;
     }
 
     [class^="syntax-string-regexp"],
     [class*=" syntax-string-regexp"] {
-      color: #D99AA6 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant"],
     [class*=" syntax-constant"] {
-      color: #DDBE8E !important;
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant-numeric"],
     [class*=" syntax-constant-numeric"] {
-      color: #DDBE8E !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant-language"],
     [class*=" syntax-constant-language"] {
-      color: #DDBE8E !important;
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-constant-character-escape"],
+    [class*=" syntax-constant-character-escape"] {
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-keyword"],
     [class*=" syntax-keyword"] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
       font-style: normal !important;
     }
 
@@ -69,111 +75,189 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-keyword-operator-new"],
+    [class*=" syntax-keyword-operator-new"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-expression"],
+    [class*=" syntax-keyword-operator-expression"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-type"],
+    [class*=" syntax-keyword-operator-type"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-optional"],
+    [class*=" syntax-keyword-operator-optional"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-storage"],
     [class*=" syntax-storage"] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-storage-type-function-arrow"],
+    [class*=" syntax-storage-type-function-arrow"] {
+      color: #A8ABB2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable"],
     [class*=" syntax-variable"] {
-      color: #DFE1E5 !important;
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-parameter"],
     [class*=" syntax-variable-parameter"] {
-      color: #D99AA6 !important;
+      color: #CCCED3 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-variable-language"],
+    [class*=" syntax-variable-language"] {
+      color: #C59172 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-property"],
     [class*=" syntax-variable-other-property"] {
-      color: #D99AA6 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-object-property"],
     [class*=" syntax-variable-other-object-property"] {
-      color: #D99AA6 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-constant"],
     [class*=" syntax-variable-other-constant"] {
-      color: #DFE1E5 !important;
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-variable-property"],
     [class*=" syntax-support-variable-property"] {
-      color: #D99AA6 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-meta-object-literal-key"],
     [class*=" syntax-meta-object-literal-key"] {
-      color: #D99AA6 !important;
+      color: #CCCED3 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-meta-brace"],
+    [class*=" syntax-meta-brace"] {
+      color: #A8ABB2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-function"],
     [class*=" syntax-entity-name-function"] {
-      color: #BBA8D9 !important;
+      color: #75ADDB !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-function"],
     [class*=" syntax-support-function"] {
-      color: #BBA8D9 !important;
+      color: #75ADDB !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-type"],
     [class*=" syntax-entity-name-type"] {
-      color: #9FB7CC !important;
+      color: #C1A0F4 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-name-type-class"],
+    [class*=" syntax-entity-name-type-class"] {
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-class"],
     [class*=" syntax-entity-name-class"] {
-      color: #9FB7CC !important;
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-other-inherited-class"],
     [class*=" syntax-entity-other-inherited-class"] {
-      color: #9FB7CC !important;
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-type"],
     [class*=" syntax-support-type"] {
-      color: #9FB7CC !important;
+      color: #C1A0F4 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-support-type-primitive"],
+    [class*=" syntax-support-type-primitive"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-support-type-property-name"],
+    [class*=" syntax-support-type-property-name"] {
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-class"],
     [class*=" syntax-support-class"] {
-      color: #9FB7CC !important;
+      color: #C1A0F4 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-tag"],
     [class*=" syntax-entity-name-tag"] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-class-component"],
     [class*=" syntax-support-class-component"] {
-      color: #E49B80 !important;
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-other-attribute-name"],
     [class*=" syntax-entity-other-attribute-name"] {
-      color: #DDBE8E !important;
+      color: #CCCED3 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-class"],
+    [class*=" syntax-entity-other-attribute-name-class"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-id"],
+    [class*=" syntax-entity-other-attribute-name-id"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-pseudo"],
+    [class*=" syntax-entity-other-attribute-name-pseudo"] {
+      color: #75ADDB !important;
       font-style: normal !important;
     }
 
@@ -183,137 +267,161 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-punctuation-definition-string"],
+    [class*=" syntax-punctuation-definition-string"] {
+      color: #9EBF7A !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-comment"],
+    [class*=" syntax-punctuation-definition-comment"] {
+      color: #868A92 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-template-expression"],
+    [class*=" syntax-punctuation-definition-template-expression"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-decorator"],
+    [class*=" syntax-punctuation-decorator"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-markup-heading"],
     [class*=" syntax-markup-heading"] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
       font-style: normal !important;
       font-weight: 700 !important;
     }
 
     [class^="syntax-markup-bold"],
     [class*=" syntax-markup-bold"] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
       font-style: normal !important;
       font-weight: 700 !important;
     }
 
     [class^="syntax-markup-italic"],
     [class*=" syntax-markup-italic"] {
-      color: #D99AA6 !important;
+      color: #F08BA2 !important;
       font-style: italic !important;
     }
 
     [class^="syntax-markup-quote"],
     [class*=" syntax-markup-quote"] {
       color: #868A92 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     [class^="syntax-markup-underline-link"],
     [class*=" syntax-markup-underline-link"] {
-      color: #9FB7CC !important;
+      color: #C1A0F4 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-inline-raw"],
     [class*=" syntax-markup-inline-raw"] {
-      color: #B8C5AC !important;
+      color: #9EBF7A !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-inserted"],
     [class*=" syntax-markup-inserted"] {
-      color: #B8C5AC !important;
+      color: #9EBF7A !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-deleted"],
     [class*=" syntax-markup-deleted"] {
-      color: #DDBE8E !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-keyword-operator"] + [class^="syntax-entity-name-type"],
     [class^="syntax-keyword-operator"] + .sx-p9b3b8 > [class^="syntax-entity-name-type"] {
-      color: #E49B80 !important;
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-property"]:has(+ [class^="syntax-keyword-operator"]),
     .sx-p9b3b8:has(+ [class^="syntax-keyword-operator"]) > [class^="syntax-variable-other-property"] {
-      color: #DDBE8E !important;
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-d5ldbw,
     :is(pre, code) .sx-sy73al {
       color: #868A92 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#9532A4" i],
     :is(pre, code) .sx-14rh7hd[style*="#E394DC" i] {
-      color: #E49B80 !important;
+      color: #C59172 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#025F8C" i],
     :is(pre, code) .sx-14rh7hd[style*="#00C5F0" i] {
-      color: #B8C5AC !important;
+      color: #9EBF7A !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#BF1420" i],
     :is(pre, code) .sx-14rh7hd[style*="#EC3B40" i] {
-      color: #DDBE8E !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#00755C" i],
     :is(pre, code) .sx-14rh7hd[style*="#25F8CA" i] {
-      color: #BBA8D9 !important;
+      color: #75ADDB !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#A74002" i],
     :is(pre, code) .sx-14rh7hd[style*="#EB6E3D" i] {
-      color: #9FB7CC !important;
+      color: #C1A0F4 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#8A5D00" i],
     :is(pre, code) .sx-14rh7hd[style*="#FCE27D" i] {
-      color: #D99AA6 !important;
+      color: #CCCED3 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#00264D" i],
     :is(pre, code) .sx-14rh7hd[style*="#2482D8" i] {
-      color: #DDBE8E !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     /* Diff viewer */
     * {
-      --diff-view-editor-background: #1E1F22 !important;
-      --diff-view-editor-background-opaque: #1E1F22 !important;
-      --diff-view-editor-foreground: #DFE1E5 !important;
+      --diff-view-editor-background: #191A1C !important;
+      --diff-view-editor-background-opaque: #191A1C !important;
+      --diff-view-editor-foreground: #CCCED3 !important;
       --diff-view-line-number-fg: #5C5F66 !important;
-      --diff-view-blank-bg: #25262A !important;
-      --diff-view-focus-bg: #323439 !important;
-      --diff-view-git-added-fg: #B8C5AC !important;
-      --diff-view-git-deleted-fg: #EB6F6F !important;
-      --diff-view-git-modified-fg: #9FB7CC !important;
-      --diff-view-inserted-bg: #B8C5AC1F !important;
-      --diff-view-inserted-full-line-bg: #B8C5AC1F !important;
-      --diff-view-inserted-inline-bg: #B8C5AC40 !important;
-      --diff-view-removed-bg: #EB6F6F1F !important;
-      --diff-view-removed-full-line-bg: #EB6F6F1F !important;
-      --diff-view-removed-inline-bg: #EB6F6F40 !important;
+      --diff-view-blank-bg: #202124 !important;
+      --diff-view-focus-bg: #2D2F33 !important;
+      --diff-view-git-added-fg: #9EBF7A !important;
+      --diff-view-git-deleted-fg: #FD5D62 !important;
+      --diff-view-git-modified-fg: #75ADDB !important;
+      --diff-view-inserted-bg: #9EBF7A1F !important;
+      --diff-view-inserted-full-line-bg: #9EBF7A1F !important;
+      --diff-view-inserted-inline-bg: #9EBF7A40 !important;
+      --diff-view-removed-bg: #FD5D621F !important;
+      --diff-view-removed-full-line-bg: #FD5D621F !important;
+      --diff-view-removed-inline-bg: #FD5D6240 !important;
     }
 
     [data-diff-sticky-window] {
-      background-color: #1E1F22 !important;
+      background-color: #191A1C !important;
     }
 
     [data-line-text] .sx-p9b3b8 {
@@ -335,42 +443,48 @@
     [class^="syntax-comment"],
     [class*=" syntax-comment"] {
       color: #6E6A66 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     [class^="syntax-string"],
     [class*=" syntax-string"] {
-      color: #5E7350 !important;
+      color: #4C7B1D !important;
       font-style: normal !important;
     }
 
     [class^="syntax-string-regexp"],
     [class*=" syntax-string-regexp"] {
-      color: #A4506A !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant"],
     [class*=" syntax-constant"] {
-      color: #8C6A2E !important;
+      color: #2B2D30 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant-numeric"],
     [class*=" syntax-constant-numeric"] {
-      color: #8C6A2E !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-constant-language"],
     [class*=" syntax-constant-language"] {
-      color: #8C6A2E !important;
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-constant-character-escape"],
+    [class*=" syntax-constant-character-escape"] {
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-keyword"],
     [class*=" syntax-keyword"] {
-      color: #A9502F !important;
+      color: #B64309 !important;
       font-style: normal !important;
     }
 
@@ -380,9 +494,39 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-keyword-operator-new"],
+    [class*=" syntax-keyword-operator-new"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-expression"],
+    [class*=" syntax-keyword-operator-expression"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-type"],
+    [class*=" syntax-keyword-operator-type"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-optional"],
+    [class*=" syntax-keyword-operator-optional"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-storage"],
     [class*=" syntax-storage"] {
-      color: #A9502F !important;
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-storage-type-function-arrow"],
+    [class*=" syntax-storage-type-function-arrow"] {
+      color: #5F6269 !important;
       font-style: normal !important;
     }
 
@@ -394,19 +538,25 @@
 
     [class^="syntax-variable-parameter"],
     [class*=" syntax-variable-parameter"] {
-      color: #A4506A !important;
+      color: #2B2D30 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-variable-language"],
+    [class*=" syntax-variable-language"] {
+      color: #B64309 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-property"],
     [class*=" syntax-variable-other-property"] {
-      color: #A4506A !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-object-property"],
     [class*=" syntax-variable-other-object-property"] {
-      color: #A4506A !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
@@ -418,73 +568,115 @@
 
     [class^="syntax-support-variable-property"],
     [class*=" syntax-support-variable-property"] {
-      color: #A4506A !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-meta-object-literal-key"],
     [class*=" syntax-meta-object-literal-key"] {
-      color: #A4506A !important;
+      color: #2B2D30 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-meta-brace"],
+    [class*=" syntax-meta-brace"] {
+      color: #5F6269 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-function"],
     [class*=" syntax-entity-name-function"] {
-      color: #6F58A0 !important;
+      color: #0A6BA3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-function"],
     [class*=" syntax-support-function"] {
-      color: #6F58A0 !important;
+      color: #0A6BA3 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-type"],
     [class*=" syntax-entity-name-type"] {
-      color: #3F6A8C !important;
+      color: #744DB8 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-name-type-class"],
+    [class*=" syntax-entity-name-type-class"] {
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-class"],
     [class*=" syntax-entity-name-class"] {
-      color: #3F6A8C !important;
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-other-inherited-class"],
     [class*=" syntax-entity-other-inherited-class"] {
-      color: #3F6A8C !important;
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-type"],
     [class*=" syntax-support-type"] {
-      color: #3F6A8C !important;
+      color: #744DB8 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-support-type-primitive"],
+    [class*=" syntax-support-type-primitive"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-support-type-property-name"],
+    [class*=" syntax-support-type-property-name"] {
+      color: #2B2D30 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-class"],
     [class*=" syntax-support-class"] {
-      color: #3F6A8C !important;
+      color: #744DB8 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-name-tag"],
     [class*=" syntax-entity-name-tag"] {
-      color: #A9502F !important;
+      color: #B64309 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-support-class-component"],
     [class*=" syntax-support-class-component"] {
-      color: #A9502F !important;
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-entity-other-attribute-name"],
     [class*=" syntax-entity-other-attribute-name"] {
-      color: #8C6A2E !important;
+      color: #2B2D30 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-class"],
+    [class*=" syntax-entity-other-attribute-name-class"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-id"],
+    [class*=" syntax-entity-other-attribute-name-id"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-pseudo"],
+    [class*=" syntax-entity-other-attribute-name-pseudo"] {
+      color: #0A6BA3 !important;
       font-style: normal !important;
     }
 
@@ -494,113 +686,137 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-punctuation-definition-string"],
+    [class*=" syntax-punctuation-definition-string"] {
+      color: #4C7B1D !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-comment"],
+    [class*=" syntax-punctuation-definition-comment"] {
+      color: #6E6A66 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-template-expression"],
+    [class*=" syntax-punctuation-definition-template-expression"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-decorator"],
+    [class*=" syntax-punctuation-decorator"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-markup-heading"],
     [class*=" syntax-markup-heading"] {
-      color: #A9502F !important;
+      color: #B64309 !important;
       font-style: normal !important;
       font-weight: 700 !important;
     }
 
     [class^="syntax-markup-bold"],
     [class*=" syntax-markup-bold"] {
-      color: #A9502F !important;
+      color: #B64309 !important;
       font-style: normal !important;
       font-weight: 700 !important;
     }
 
     [class^="syntax-markup-italic"],
     [class*=" syntax-markup-italic"] {
-      color: #A4506A !important;
+      color: #B73A68 !important;
       font-style: italic !important;
     }
 
     [class^="syntax-markup-quote"],
     [class*=" syntax-markup-quote"] {
       color: #6E6A66 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     [class^="syntax-markup-underline-link"],
     [class*=" syntax-markup-underline-link"] {
-      color: #3F6A8C !important;
+      color: #744DB8 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-inline-raw"],
     [class*=" syntax-markup-inline-raw"] {
-      color: #5E7350 !important;
+      color: #4C7B1D !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-inserted"],
     [class*=" syntax-markup-inserted"] {
-      color: #5E7350 !important;
+      color: #4C7B1D !important;
       font-style: normal !important;
     }
 
     [class^="syntax-markup-deleted"],
     [class*=" syntax-markup-deleted"] {
-      color: #8C6A2E !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-keyword-operator"] + [class^="syntax-entity-name-type"],
     [class^="syntax-keyword-operator"] + .sx-p9b3b8 > [class^="syntax-entity-name-type"] {
-      color: #A9502F !important;
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-property"]:has(+ [class^="syntax-keyword-operator"]),
     .sx-p9b3b8:has(+ [class^="syntax-keyword-operator"]) > [class^="syntax-variable-other-property"] {
-      color: #8C6A2E !important;
+      color: #2B2D30 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-d5ldbw,
     :is(pre, code) .sx-sy73al {
       color: #6E6A66 !important;
-      font-style: italic !important;
+      font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#9532A4" i],
     :is(pre, code) .sx-14rh7hd[style*="#E394DC" i] {
-      color: #A9502F !important;
+      color: #B64309 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#025F8C" i],
     :is(pre, code) .sx-14rh7hd[style*="#00C5F0" i] {
-      color: #5E7350 !important;
+      color: #4C7B1D !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#BF1420" i],
     :is(pre, code) .sx-14rh7hd[style*="#EC3B40" i] {
-      color: #8C6A2E !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#00755C" i],
     :is(pre, code) .sx-14rh7hd[style*="#25F8CA" i] {
-      color: #6F58A0 !important;
+      color: #0A6BA3 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#A74002" i],
     :is(pre, code) .sx-14rh7hd[style*="#EB6E3D" i] {
-      color: #3F6A8C !important;
+      color: #744DB8 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#8A5D00" i],
     :is(pre, code) .sx-14rh7hd[style*="#FCE27D" i] {
-      color: #A4506A !important;
+      color: #2B2D30 !important;
       font-style: normal !important;
     }
 
     :is(pre, code) .sx-14rh7hd[style*="#00264D" i],
     :is(pre, code) .sx-14rh7hd[style*="#2482D8" i] {
-      color: #8C6A2E !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
@@ -612,15 +828,15 @@
       --diff-view-line-number-fg: #A39C94 !important;
       --diff-view-blank-bg: #F2ECE5 !important;
       --diff-view-focus-bg: #E2D8CD !important;
-      --diff-view-git-added-fg: #5E7350 !important;
-      --diff-view-git-deleted-fg: #C23B32 !important;
-      --diff-view-git-modified-fg: #3F6A8C !important;
-      --diff-view-inserted-bg: #5E73501F !important;
-      --diff-view-inserted-full-line-bg: #5E73501F !important;
-      --diff-view-inserted-inline-bg: #5E735040 !important;
-      --diff-view-removed-bg: #C23B321F !important;
-      --diff-view-removed-full-line-bg: #C23B321F !important;
-      --diff-view-removed-inline-bg: #C23B3240 !important;
+      --diff-view-git-added-fg: #4C7B1D !important;
+      --diff-view-git-deleted-fg: #D30A15 !important;
+      --diff-view-git-modified-fg: #0A6BA3 !important;
+      --diff-view-inserted-bg: #4C7B1D1F !important;
+      --diff-view-inserted-full-line-bg: #4C7B1D1F !important;
+      --diff-view-inserted-inline-bg: #4C7B1D40 !important;
+      --diff-view-removed-bg: #D30A151F !important;
+      --diff-view-removed-full-line-bg: #D30A151F !important;
+      --diff-view-removed-inline-bg: #D30A1540 !important;
     }
 
     [data-diff-sticky-window] {

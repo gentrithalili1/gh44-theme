@@ -1,22 +1,13 @@
 # gh44 for Zed
 
-gh44 theme for the [Zed](https://zed.dev) editor.
-
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="../assets/zed-light.svg">
-  <img alt="TypeScript code in gh44 Dark in Zed" src="../assets/zed-dark.svg">
-</picture>
+![A React component in gh44 Dark in Zed](../assets/zed-dark.svg)
 
 ## Install
 
-**From the Zed extension registry** run: `zed: extensions`
-from the command palette, search for `gh44`, and install it.
+1. Run `zed: extensions`, search for `gh44` and install it.
+2. Run `theme selector: toggle` and pick **gh44 Dark** or **gh44 Light**.
 
-**From this repository:**
-
-1. Clone the repository.
-2. In Zed, run `zed: install dev extension` and select this `zed` folder.
-3. Run `theme selector: toggle` and choose **gh44 Dark**.
+To use this folder instead, run `zed: install dev extension` and select it.
 
 <details>
 
@@ -95,7 +86,6 @@ nothing to install.
 
 </details>
 
-## Editing
+## Edit
 
-Don't edit `themes/gh44.json` directly. Change `palette/tokens.json` and run
-`node scripts/build.mjs` from the repository root.
+These files are generated. Edit [`palette/tokens.json`](../palette/tokens.json) and run `node scripts/build.mjs` from the repository root.
