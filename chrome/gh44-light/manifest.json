@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "gh44 Light",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "gh44 Light for Chrome: warm neutrals with clay accents.",
   "icons": {
     "128": "icon-128.png"
