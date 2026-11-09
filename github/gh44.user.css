@@ -172,7 +172,7 @@
     --prettylights-syntax-keyword: #C59172 !important;
     --prettylights-syntax-string: #9EBF7A !important;
     --prettylights-syntax-stringRegexp: #F08BA2 !important;
-    --prettylights-syntax-variable: #5CB8A2 !important;
+    --prettylights-syntax-variable: #75ADDB !important;
     --prettylights-syntax-storageModifierImport: #C1A0F4 !important;
     --prettylights-syntax-bracketHighlighterAngle: #A8ABB2 !important;
     --prettylights-syntax-bracketHighlighterUnmatched: #FD5D62 !important;
@@ -198,6 +198,34 @@
     --codeMirror-syntax-fgColor-string: #9EBF7A !important;
     --codeMirror-syntax-fgColor-support: #C1A0F4 !important;
     --codeMirror-syntax-fgColor-variable: #CCCED3 !important;
+  }
+
+  [data-color-mode="dark"] .pl-sr .pl-cce {
+    font-weight: 400 !important;
+  }
+
+  [data-color-mode="dark"] .pl-kos {
+    color: #A8ABB2 !important;
+  }
+
+  [data-color-mode="dark"] .pl-s .pl-s1 {
+    color: #CCCED3 !important;
+  }
+
+  [data-color-mode="dark"] .pl-s .pl-pse .pl-s1 {
+    color: #CCCED3 !important;
+  }
+
+  [data-color-mode="dark"] .pl-s .pl-kos {
+    color: #F08BA2 !important;
+  }
+
+  [data-color-mode="dark"] .pl-c1 + .pl-v {
+    color: #5CB8A2 !important;
+  }
+
+  [data-color-mode="dark"] .pl-kos + .pl-v:has(+ .pl-c1) {
+    color: #5CB8A2 !important;
   }
 
   [data-color-mode="light"] {
@@ -360,7 +388,7 @@
     --prettylights-syntax-keyword: #B64309 !important;
     --prettylights-syntax-string: #4C7B1D !important;
     --prettylights-syntax-stringRegexp: #B73A68 !important;
-    --prettylights-syntax-variable: #157E77 !important;
+    --prettylights-syntax-variable: #0A6BA3 !important;
     --prettylights-syntax-storageModifierImport: #744DB8 !important;
     --prettylights-syntax-bracketHighlighterAngle: #5F6269 !important;
     --prettylights-syntax-bracketHighlighterUnmatched: #D30A15 !important;
@@ -386,6 +414,34 @@
     --codeMirror-syntax-fgColor-string: #4C7B1D !important;
     --codeMirror-syntax-fgColor-support: #744DB8 !important;
     --codeMirror-syntax-fgColor-variable: #2B2D30 !important;
+  }
+
+  [data-color-mode="light"] .pl-sr .pl-cce {
+    font-weight: 400 !important;
+  }
+
+  [data-color-mode="light"] .pl-kos {
+    color: #5F6269 !important;
+  }
+
+  [data-color-mode="light"] .pl-s .pl-s1 {
+    color: #2B2D30 !important;
+  }
+
+  [data-color-mode="light"] .pl-s .pl-pse .pl-s1 {
+    color: #2B2D30 !important;
+  }
+
+  [data-color-mode="light"] .pl-s .pl-kos {
+    color: #B73A68 !important;
+  }
+
+  [data-color-mode="light"] .pl-c1 + .pl-v {
+    color: #157E77 !important;
+  }
+
+  [data-color-mode="light"] .pl-kos + .pl-v:has(+ .pl-c1) {
+    color: #157E77 !important;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -549,7 +605,7 @@
       --prettylights-syntax-keyword: #C59172 !important;
       --prettylights-syntax-string: #9EBF7A !important;
       --prettylights-syntax-stringRegexp: #F08BA2 !important;
-      --prettylights-syntax-variable: #5CB8A2 !important;
+      --prettylights-syntax-variable: #75ADDB !important;
       --prettylights-syntax-storageModifierImport: #C1A0F4 !important;
       --prettylights-syntax-bracketHighlighterAngle: #A8ABB2 !important;
       --prettylights-syntax-bracketHighlighterUnmatched: #FD5D62 !important;
@@ -575,6 +631,34 @@
       --codeMirror-syntax-fgColor-string: #9EBF7A !important;
       --codeMirror-syntax-fgColor-support: #C1A0F4 !important;
       --codeMirror-syntax-fgColor-variable: #CCCED3 !important;
+    }
+
+    [data-color-mode="auto"] .pl-sr .pl-cce {
+      font-weight: 400 !important;
+    }
+
+    [data-color-mode="auto"] .pl-kos {
+      color: #A8ABB2 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-s1 {
+      color: #CCCED3 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-pse .pl-s1 {
+      color: #CCCED3 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-kos {
+      color: #F08BA2 !important;
+    }
+
+    [data-color-mode="auto"] .pl-c1 + .pl-v {
+      color: #5CB8A2 !important;
+    }
+
+    [data-color-mode="auto"] .pl-kos + .pl-v:has(+ .pl-c1) {
+      color: #5CB8A2 !important;
     }
   }
 
@@ -739,7 +823,7 @@
       --prettylights-syntax-keyword: #B64309 !important;
       --prettylights-syntax-string: #4C7B1D !important;
       --prettylights-syntax-stringRegexp: #B73A68 !important;
-      --prettylights-syntax-variable: #157E77 !important;
+      --prettylights-syntax-variable: #0A6BA3 !important;
       --prettylights-syntax-storageModifierImport: #744DB8 !important;
       --prettylights-syntax-bracketHighlighterAngle: #5F6269 !important;
       --prettylights-syntax-bracketHighlighterUnmatched: #D30A15 !important;
@@ -765,6 +849,34 @@
       --codeMirror-syntax-fgColor-string: #4C7B1D !important;
       --codeMirror-syntax-fgColor-support: #744DB8 !important;
       --codeMirror-syntax-fgColor-variable: #2B2D30 !important;
+    }
+
+    [data-color-mode="auto"] .pl-sr .pl-cce {
+      font-weight: 400 !important;
+    }
+
+    [data-color-mode="auto"] .pl-kos {
+      color: #5F6269 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-s1 {
+      color: #2B2D30 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-pse .pl-s1 {
+      color: #2B2D30 !important;
+    }
+
+    [data-color-mode="auto"] .pl-s .pl-kos {
+      color: #B73A68 !important;
+    }
+
+    [data-color-mode="auto"] .pl-c1 + .pl-v {
+      color: #157E77 !important;
+    }
+
+    [data-color-mode="auto"] .pl-kos + .pl-v:has(+ .pl-c1) {
+      color: #157E77 !important;
     }
   }
 }

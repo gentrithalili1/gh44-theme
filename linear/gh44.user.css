@@ -57,6 +57,12 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-constant-character-escape"],
+    [class*=" syntax-constant-character-escape"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-keyword"],
     [class*=" syntax-keyword"] {
       color: #C59172 !important;
@@ -69,9 +75,39 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-keyword-operator-new"],
+    [class*=" syntax-keyword-operator-new"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-expression"],
+    [class*=" syntax-keyword-operator-expression"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-type"],
+    [class*=" syntax-keyword-operator-type"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-optional"],
+    [class*=" syntax-keyword-operator-optional"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-storage"],
     [class*=" syntax-storage"] {
       color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-storage-type-function-arrow"],
+    [class*=" syntax-storage-type-function-arrow"] {
+      color: #A8ABB2 !important;
       font-style: normal !important;
     }
 
@@ -87,15 +123,21 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-variable-language"],
+    [class*=" syntax-variable-language"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-variable-other-property"],
     [class*=" syntax-variable-other-property"] {
-      color: #CCCED3 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-object-property"],
     [class*=" syntax-variable-other-object-property"] {
-      color: #CCCED3 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
@@ -107,13 +149,19 @@
 
     [class^="syntax-support-variable-property"],
     [class*=" syntax-support-variable-property"] {
-      color: #CCCED3 !important;
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-meta-object-literal-key"],
     [class*=" syntax-meta-object-literal-key"] {
       color: #CCCED3 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-meta-brace"],
+    [class*=" syntax-meta-brace"] {
+      color: #A8ABB2 !important;
       font-style: normal !important;
     }
 
@@ -132,6 +180,12 @@
     [class^="syntax-entity-name-type"],
     [class*=" syntax-entity-name-type"] {
       color: #C1A0F4 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-name-type-class"],
+    [class*=" syntax-entity-name-type-class"] {
+      color: #5CB8A2 !important;
       font-style: normal !important;
     }
 
@@ -159,6 +213,12 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-support-type-property-name"],
+    [class*=" syntax-support-type-property-name"] {
+      color: #CCCED3 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-support-class"],
     [class*=" syntax-support-class"] {
       color: #C1A0F4 !important;
@@ -183,9 +243,51 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-entity-other-attribute-name-class"],
+    [class*=" syntax-entity-other-attribute-name-class"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-id"],
+    [class*=" syntax-entity-other-attribute-name-id"] {
+      color: #C59172 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-pseudo"],
+    [class*=" syntax-entity-other-attribute-name-pseudo"] {
+      color: #75ADDB !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-punctuation"],
     [class*=" syntax-punctuation"] {
       color: #A8ABB2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-string"],
+    [class*=" syntax-punctuation-definition-string"] {
+      color: #9EBF7A !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-comment"],
+    [class*=" syntax-punctuation-definition-comment"] {
+      color: #868A92 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-template-expression"],
+    [class*=" syntax-punctuation-definition-template-expression"] {
+      color: #F08BA2 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-decorator"],
+    [class*=" syntax-punctuation-decorator"] {
+      color: #F08BA2 !important;
       font-style: normal !important;
     }
 
@@ -374,6 +476,12 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-constant-character-escape"],
+    [class*=" syntax-constant-character-escape"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-keyword"],
     [class*=" syntax-keyword"] {
       color: #B64309 !important;
@@ -386,9 +494,39 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-keyword-operator-new"],
+    [class*=" syntax-keyword-operator-new"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-expression"],
+    [class*=" syntax-keyword-operator-expression"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-type"],
+    [class*=" syntax-keyword-operator-type"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-keyword-operator-optional"],
+    [class*=" syntax-keyword-operator-optional"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-storage"],
     [class*=" syntax-storage"] {
       color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-storage-type-function-arrow"],
+    [class*=" syntax-storage-type-function-arrow"] {
+      color: #5F6269 !important;
       font-style: normal !important;
     }
 
@@ -404,15 +542,21 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-variable-language"],
+    [class*=" syntax-variable-language"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-variable-other-property"],
     [class*=" syntax-variable-other-property"] {
-      color: #2B2D30 !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-variable-other-object-property"],
     [class*=" syntax-variable-other-object-property"] {
-      color: #2B2D30 !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
@@ -424,13 +568,19 @@
 
     [class^="syntax-support-variable-property"],
     [class*=" syntax-support-variable-property"] {
-      color: #2B2D30 !important;
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 
     [class^="syntax-meta-object-literal-key"],
     [class*=" syntax-meta-object-literal-key"] {
       color: #2B2D30 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-meta-brace"],
+    [class*=" syntax-meta-brace"] {
+      color: #5F6269 !important;
       font-style: normal !important;
     }
 
@@ -449,6 +599,12 @@
     [class^="syntax-entity-name-type"],
     [class*=" syntax-entity-name-type"] {
       color: #744DB8 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-name-type-class"],
+    [class*=" syntax-entity-name-type-class"] {
+      color: #157E77 !important;
       font-style: normal !important;
     }
 
@@ -476,6 +632,12 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-support-type-property-name"],
+    [class*=" syntax-support-type-property-name"] {
+      color: #2B2D30 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-support-class"],
     [class*=" syntax-support-class"] {
       color: #744DB8 !important;
@@ -500,9 +662,51 @@
       font-style: normal !important;
     }
 
+    [class^="syntax-entity-other-attribute-name-class"],
+    [class*=" syntax-entity-other-attribute-name-class"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-id"],
+    [class*=" syntax-entity-other-attribute-name-id"] {
+      color: #B64309 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-entity-other-attribute-name-pseudo"],
+    [class*=" syntax-entity-other-attribute-name-pseudo"] {
+      color: #0A6BA3 !important;
+      font-style: normal !important;
+    }
+
     [class^="syntax-punctuation"],
     [class*=" syntax-punctuation"] {
       color: #5F6269 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-string"],
+    [class*=" syntax-punctuation-definition-string"] {
+      color: #4C7B1D !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-comment"],
+    [class*=" syntax-punctuation-definition-comment"] {
+      color: #6E6A66 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-definition-template-expression"],
+    [class*=" syntax-punctuation-definition-template-expression"] {
+      color: #B73A68 !important;
+      font-style: normal !important;
+    }
+
+    [class^="syntax-punctuation-decorator"],
+    [class*=" syntax-punctuation-decorator"] {
+      color: #B73A68 !important;
       font-style: normal !important;
     }
 

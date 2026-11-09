@@ -256,6 +256,8 @@ function zedTheme({ variant }) {
     preproc: style(r.keyword),
     primary: style(code.fg),
     property: style(code.fg),
+    // Property access (object.name). Zed only reaches it through a semantic token rule in user settings.
+    'property.access': style(c.rose),
     punctuation: style(c['fg-muted']),
     'punctuation.bracket': style(c['fg-muted']),
     'punctuation.delimiter': style(c['fg-muted']),
@@ -397,29 +399,49 @@ const LINEAR_SYNTAX_SCOPES = [
   ['constant', 'constant'],
   ['constant-numeric', 'number'],
   ['constant-language', 'boolean'],
+  ['constant-character-escape', 'string.escape'],
   ['keyword', 'keyword'],
   ['keyword-operator', 'operator'],
+  // new, typeof, instanceof, keyof, in, of, void and delete: operators to TextMate, keywords to Zed.
+  ['keyword-operator-new', 'keyword'],
+  ['keyword-operator-expression', 'keyword'],
+  // Type punctuation: `:` in annotations, `?` on optional members, `|` and `&` in unions.
+  ['keyword-operator-type', 'punctuation.special'],
+  ['keyword-operator-optional', 'punctuation.special'],
   ['storage', 'keyword'],
+  ['storage-type-function-arrow', 'operator'],
   ['variable', 'variable'],
   ['variable-parameter', 'variable.parameter'],
-  ['variable-other-property', 'property'],
-  ['variable-other-object-property', 'property'],
+  ['variable-language', 'variable.special'],
+  ['variable-other-property', 'property.access'],
+  ['variable-other-object-property', 'property.access'],
   // Linear tags every const local this way; Zed only colors real constants.
   ['variable-other-constant', 'variable'],
-  ['support-variable-property', 'property'],
+  ['support-variable-property', 'property.access'],
   ['meta-object-literal-key', 'property'],
+  ['meta-brace', 'punctuation.bracket'],
   ['entity-name-function', 'function'],
   ['support-function', 'function'],
   ['entity-name-type', 'type'],
+  ['entity-name-type-class', 'type.class'],
   ['entity-name-class', 'type.class'],
   ['entity-other-inherited-class', 'type.class'],
   ['support-type', 'type'],
   ['support-type-primitive', 'type.builtin'],
+  ['support-type-property-name', 'property'],
   ['support-class', 'type'],
   ['entity-name-tag', 'tag'],
   ['support-class-component', 'tag.component'],
   ['entity-other-attribute-name', 'attribute'],
+  ['entity-other-attribute-name-class', 'selector'],
+  ['entity-other-attribute-name-id', 'selector'],
+  ['entity-other-attribute-name-pseudo', 'selector.pseudo'],
   ['punctuation', 'punctuation'],
+  // Zed colors quotes with the string and `//` with the comment.
+  ['punctuation-definition-string', 'string'],
+  ['punctuation-definition-comment', 'comment'],
+  ['punctuation-definition-template-expression', 'punctuation.special'],
+  ['punctuation-decorator', 'punctuation.special'],
   ['markup-heading', 'title'],
   ['markup-bold', 'emphasis.strong'],
   ['markup-italic', 'emphasis'],
@@ -594,8 +616,9 @@ function chromeManifest({ variant }) {
   const c = VARIANTS[variant]
   const isDark = variant === 'dark'
   // The tab strip sits behind the active tab, which shares the toolbar color.
+  // Dark lifts the toolbar one step above `surface` so the active tab reads against the frame.
   const frame = isDark ? c.bg : c.surface
-  const toolbar = isDark ? c.surface : c.bg
+  const toolbar = isDark ? c['surface-hover'] : c.bg
   const omnibox = isDark ? c.bg : c['bg-subtle']
   return {
     manifest_version: 3,
@@ -832,7 +855,9 @@ function githubVars({ variant }) {
     'prettylights-syntax-keyword': syntax.keyword.color,
     'prettylights-syntax-string': syntax.string.color,
     'prettylights-syntax-stringRegexp': syntax['string.regex'].color,
-    'prettylights-syntax-variable': syntax['tag.component'].color,
+    // PascalCase names (pl-v): imports, JSX tags, `new X`, `extends X`, enums and function
+    // names. Zed colors most of them as functions; GITHUB_SYNTAX_CLASSES picks out JSX tags.
+    'prettylights-syntax-variable': syntax.function.color,
     'prettylights-syntax-storageModifierImport': syntax.type.color,
     'prettylights-syntax-bracketHighlighterAngle': c['fg-muted'],
     'prettylights-syntax-bracketHighlighterUnmatched': c.red,
@@ -862,6 +887,21 @@ function githubVars({ variant }) {
   }
 }
 
+// Token classes GitHub leaves to the default text color or colors by context.
+// Each entry is [class selector, Zed scope].
+const GITHUB_SYNTAX_CLASSES = [
+  // Punctuation: GitHub has no rule for pl-kos, so it inherits the text color.
+  ['.pl-kos', 'punctuation'],
+  // Variables inside template literals: GitHub gives them the type color.
+  ['.pl-s .pl-s1', 'variable'],
+  ['.pl-s .pl-pse .pl-s1', 'variable'],
+  // `${` and `}` around a template substitution.
+  ['.pl-s .pl-kos', 'punctuation.special'],
+  // JSX components: a PascalCase name right after `<` (pl-c1) or `</` (pl-kos, with `>` after).
+  ['.pl-c1 + .pl-v', 'tag.component'],
+  ['.pl-kos + .pl-v:has(+ .pl-c1)', 'tag.component'],
+]
+
 // Follows GitHub's own appearance setting: dark, light, or sync with system.
 function githubUserCss() {
   const block = ({ selector, variant, indent }) => {
@@ -869,12 +909,18 @@ function githubUserCss() {
     const decls = Object.entries(githubVars({ variant })).map(
       ([name, value]) => `${pad}  --${name}: ${value} !important;`,
     )
-    return [
-      `${pad}${selector} {`,
-      `${pad}  color-scheme: ${variant};`,
-      ...decls,
-      `${pad}}`,
-    ].join('\n')
+    const { syntax } = zedTheme({ variant }).style
+    const classRules = GITHUB_SYNTAX_CLASSES.map(([cls, name]) =>
+      [
+        `${pad}${selector} ${cls} {`,
+        `${pad}  color: ${syntax[name].color} !important;`,
+        `${pad}}`,
+      ].join('\n'),
+    )
+    const vars = [`${pad}${selector} {`, `${pad}  color-scheme: ${variant};`, ...decls, `${pad}}`].join('\n')
+    // Regex escapes: GitHub bolds them; Zed doesn't.
+    const boldRule = [`${pad}${selector} .pl-sr .pl-cce {`, `${pad}  font-weight: 400 !important;`, `${pad}}`].join('\n')
+    return [vars, boldRule, ...classRules].join('\n\n')
   }
   return [
     '/* ==UserStyle==',

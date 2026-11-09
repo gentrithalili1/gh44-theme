@@ -328,6 +328,11 @@
             "font_style": null,
             "font_weight": null
           },
+          "property.access": {
+            "color": "#F08BA2",
+            "font_style": null,
+            "font_weight": null
+          },
           "punctuation": {
             "color": "#A8ABB2",
             "font_style": null,
@@ -773,6 +778,11 @@
           },
           "property": {
             "color": "#2B2D30",
+            "font_style": null,
+            "font_weight": null
+          },
+          "property.access": {
+            "color": "#B73A68",
             "font_style": null,
             "font_weight": null
           },
