@@ -39,7 +39,7 @@ To update, run the same command again.
 | `warning`              | ochre `#916913`                  | ochre `#D4B25E`       | `bg-warning text-warning-foreground`    |
 | `info`                 | sky `#0A6BA3`                    | sky `#75ADDB`         | `bg-info text-info-foreground`          |
 | `destructive`          | red `#D30A15`                    | red `#FD5D62`         | `text-destructive`, `bg-destructive/10` |
-| `background` / `card`  | `#FAF7F3` / `#FAF7F3`            | `#191A1C` / `#202124` | `bg-background`, `bg-card`              |
+| `background` / `card`  | `#FAF7F3` / `#FAF7F3`            | `#101114` / `#17181C` | `bg-background`, `bg-card`              |
 | `muted-foreground`     | `#5F6269`                        | `#A8ABB2`             | `text-muted-foreground`                 |
 | `chart-1` to `chart-5` | lavender, sage, sky, ochre, rose | same                  | `fill-chart-1`                          |
 

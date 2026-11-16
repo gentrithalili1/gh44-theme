@@ -2,12 +2,12 @@
 name: gh44 Dark
 accent: '#C59172'
 cursor: '#C59172'
-background: '#191A1C'
+background: '#101114'
 foreground: '#DFE1E5'
 details: darker
 terminal_colors:
   normal:
-    black: '#34363B'
+    black: '#2B2D33'
     red: '#FD5D62'
     green: '#9EBF7A'
     yellow: '#D4B25E'

@@ -34,13 +34,13 @@ with `--gh44-on-solid` text, and `--gh44-sage-subtle` for tinted backgrounds.
 
 | Token            | Dark                                                               | Light                                                                |
 | ---------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| `bg`             | ![bg dark](swatches/dark/bg.svg) `#191A1C`                         | ![bg light](swatches/light/bg.svg) `#FAF7F3`                         |
-| `bg-subtle`      | ![bg-subtle dark](swatches/dark/bg-subtle.svg) `#202124`           | ![bg-subtle light](swatches/light/bg-subtle.svg) `#F2ECE5`           |
-| `surface`        | ![surface dark](swatches/dark/surface.svg) `#26282A`               | ![surface light](swatches/light/surface.svg) `#EAE2D9`               |
-| `surface-hover`  | ![surface-hover dark](swatches/dark/surface-hover.svg) `#2D2F33`   | ![surface-hover light](swatches/light/surface-hover.svg) `#E2D8CD`   |
-| `surface-active` | ![surface-active dark](swatches/dark/surface-active.svg) `#34363B` | ![surface-active light](swatches/light/surface-active.svg) `#D9CDC0` |
-| `border-subtle`  | ![border-subtle dark](swatches/dark/border-subtle.svg) `#2C2D30`   | ![border-subtle light](swatches/light/border-subtle.svg) `#E4DAD0`   |
-| `border`         | ![border dark](swatches/dark/border.svg) `#3C3E43`                 | ![border light](swatches/light/border.svg) `#D2C4B6`                 |
+| `bg`             | ![bg dark](swatches/dark/bg.svg) `#101114`                         | ![bg light](swatches/light/bg.svg) `#FAF7F3`                         |
+| `bg-subtle`      | ![bg-subtle dark](swatches/dark/bg-subtle.svg) `#17181C`           | ![bg-subtle light](swatches/light/bg-subtle.svg) `#F2ECE5`           |
+| `surface`        | ![surface dark](swatches/dark/surface.svg) `#1D1F22`               | ![surface light](swatches/light/surface.svg) `#EAE2D9`               |
+| `surface-hover`  | ![surface-hover dark](swatches/dark/surface-hover.svg) `#24262B`   | ![surface-hover light](swatches/light/surface-hover.svg) `#E2D8CD`   |
+| `surface-active` | ![surface-active dark](swatches/dark/surface-active.svg) `#2B2D33` | ![surface-active light](swatches/light/surface-active.svg) `#D9CDC0` |
+| `border-subtle`  | ![border-subtle dark](swatches/dark/border-subtle.svg) `#232428`   | ![border-subtle light](swatches/light/border-subtle.svg) `#E4DAD0`   |
+| `border`         | ![border dark](swatches/dark/border.svg) `#33353B`                 | ![border light](swatches/light/border.svg) `#D2C4B6`                 |
 | `fg-disabled`    | ![fg-disabled dark](swatches/dark/fg-disabled.svg) `#55585F`       | ![fg-disabled light](swatches/light/fg-disabled.svg) `#B3ACA4`       |
 | `fg-faint`       | ![fg-faint dark](swatches/dark/fg-faint.svg) `#5C5F66`             | ![fg-faint light](swatches/light/fg-faint.svg) `#A39C94`             |
 | `fg-subtle`      | ![fg-subtle dark](swatches/dark/fg-subtle.svg) `#868A92`           | ![fg-subtle light](swatches/light/fg-subtle.svg) `#6E6A66`           |
