@@ -8,6 +8,7 @@ One palette for every tool I use, in dark and light.
 | -------------------- | ---------------------------------------- |
 | [Zed](zed/)          | Editor theme                             |
 | [Warp](warp/)        | Terminal theme                           |
+| [Herdr](herdr/)      | App theme, dark and light                |
 | [GitHub](github/)    | Userstyle for the interface and code     |
 | [Linear](linear/)    | Interface theme and code block userstyle |
 | [Slack](slack/)      | Sidebar theme                            |

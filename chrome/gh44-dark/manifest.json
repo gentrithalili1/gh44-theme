@@ -9,29 +9,29 @@
   "theme": {
     "colors": {
       "frame": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "frame_inactive": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "frame_incognito": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "frame_incognito_inactive": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "toolbar": [
-        45,
-        47,
-        51
+        36,
+        38,
+        43
       ],
       "toolbar_text": [
         223,
@@ -74,9 +74,9 @@
         229
       ],
       "omnibox_background": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "omnibox_text": [
         223,
@@ -84,9 +84,9 @@
         229
       ],
       "ntp_background": [
-        25,
-        26,
-        28
+        16,
+        17,
+        20
       ],
       "ntp_text": [
         223,

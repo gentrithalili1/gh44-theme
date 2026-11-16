@@ -322,6 +322,55 @@ function buildWarp() {
     })
 }
 
+// ---------------------------------------------------------------- Herdr
+
+// Herdr.app reads ~/.config/herdr-app/themes/<name>.json: terminal colors plus
+// optional panel colors, which Herdr otherwise derives. Panels match Zed's.
+function herdrTheme({ variant }) {
+  const c = VARIANTS[variant]
+  const { normal, bright } = ansi({ variant })
+  return {
+    background: c.bg,
+    foreground: c.fg,
+    selection: c['surface-active'],
+    cursor: c.clay,
+    ansi: [...ANSI_ORDER.map((k) => normal[k]), ...ANSI_ORDER.map((k) => bright[k])],
+    colors: {
+      canvas: c['bg-subtle'],
+      chrome: c['bg-subtle'],
+      surface: c['bg-subtle'],
+      popover: c.surface,
+      // The active tab is a raised pill on chrome, so raised needs a clear step up.
+      raised: c['surface-active'],
+      hover: c['surface-hover'],
+      selected: c['surface-active'],
+      border: c.border,
+      input: c['fg-disabled'],
+      muted: c['fg-muted'],
+      dim: c['fg-subtle'],
+      // Actions (icons, links, primary buttons) are blue, like Linear's.
+      accent: c.sky,
+      accent_foreground: c.bg,
+      solid: c.sky,
+      solid_foreground: c.bg,
+      working: c.ochre,
+      blocked: c.red,
+      done: c.sage,
+      idle: c['fg-subtle'],
+      unknown: c['fg-faint'],
+    },
+  }
+}
+
+function buildHerdr() {
+  return VARIANT_ORDER.map((variant) =>
+    write({
+      path: join(ROOT, 'herdr', `gh44-${variant}.json`),
+      content: JSON.stringify(herdrTheme({ variant }), null, 2) + '\n',
+    }),
+  )
+}
+
 // ---------------------------------------------------------------- Slack
 
 // Slack's legacy theme format: 10 comma-separated colors.
@@ -1345,7 +1394,7 @@ function buildShadcn() {
   ]
 }
 
-const built = [buildZed(), ...buildWarp(), ...buildSlack(), ...buildLinear(), ...buildChrome(), ...buildGithub(), buildCss(), ...buildShadcn(), ...buildReadmeImages()]
+const built = [buildZed(), ...buildWarp(), ...buildHerdr(), ...buildSlack(), ...buildLinear(), ...buildChrome(), ...buildGithub(), buildCss(), ...buildShadcn(), ...buildReadmeImages()]
 const swatches = buildSwatches()
 for (const path of built) console.log('built', relative(ROOT, path))
 console.log('built', swatches.length, 'swatches in palette/swatches')

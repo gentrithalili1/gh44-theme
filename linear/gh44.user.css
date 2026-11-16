@@ -17,7 +17,7 @@
   @media (prefers-color-scheme: dark) {
     pre,
     pre code {
-      background-color: #202124 !important;
+      background-color: #17181C !important;
       color: #DFE1E5 !important;
     }
 
@@ -403,12 +403,12 @@
 
     /* Diff viewer */
     * {
-      --diff-view-editor-background: #191A1C !important;
-      --diff-view-editor-background-opaque: #191A1C !important;
+      --diff-view-editor-background: #101114 !important;
+      --diff-view-editor-background-opaque: #101114 !important;
       --diff-view-editor-foreground: #CCCED3 !important;
       --diff-view-line-number-fg: #5C5F66 !important;
-      --diff-view-blank-bg: #202124 !important;
-      --diff-view-focus-bg: #2D2F33 !important;
+      --diff-view-blank-bg: #17181C !important;
+      --diff-view-focus-bg: #24262B !important;
       --diff-view-git-added-fg: #9EBF7A !important;
       --diff-view-git-deleted-fg: #FD5D62 !important;
       --diff-view-git-modified-fg: #75ADDB !important;
@@ -421,7 +421,7 @@
     }
 
     [data-diff-sticky-window] {
-      background-color: #191A1C !important;
+      background-color: #101114 !important;
     }
 
     [data-line-text] .sx-p9b3b8 {

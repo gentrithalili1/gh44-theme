@@ -76,13 +76,13 @@
 .dark,
 [data-theme="dark"] {
   color-scheme: dark;
-  --gh44-bg: #191A1C;
-  --gh44-bg-subtle: #202124;
-  --gh44-surface: #26282A;
-  --gh44-surface-hover: #2D2F33;
-  --gh44-surface-active: #34363B;
-  --gh44-border-subtle: #2C2D30;
-  --gh44-border: #3C3E43;
+  --gh44-bg: #101114;
+  --gh44-bg-subtle: #17181C;
+  --gh44-surface: #1D1F22;
+  --gh44-surface-hover: #24262B;
+  --gh44-surface-active: #2B2D33;
+  --gh44-border-subtle: #232428;
+  --gh44-border: #33353B;
   --gh44-fg-disabled: #55585F;
   --gh44-fg-faint: #5C5F66;
   --gh44-fg-subtle: #868A92;
@@ -138,13 +138,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not([data-theme="light"]) {
     color-scheme: dark;
-    --gh44-bg: #191A1C;
-    --gh44-bg-subtle: #202124;
-    --gh44-surface: #26282A;
-    --gh44-surface-hover: #2D2F33;
-    --gh44-surface-active: #34363B;
-    --gh44-border-subtle: #2C2D30;
-    --gh44-border: #3C3E43;
+    --gh44-bg: #101114;
+    --gh44-bg-subtle: #17181C;
+    --gh44-surface: #1D1F22;
+    --gh44-surface-hover: #24262B;
+    --gh44-surface-active: #2B2D33;
+    --gh44-border-subtle: #232428;
+    --gh44-border: #33353B;
     --gh44-fg-disabled: #55585F;
     --gh44-fg-faint: #5C5F66;
     --gh44-fg-subtle: #868A92;
