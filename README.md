@@ -1,6 +1,8 @@
-# gh44 theme
+<p align="center"><img src="docs/banner.png" alt="gh44-theme: one theme, 7 tools"></p>
 
-One palette for every tool I use, in dark and light.
+# gh44-theme
+
+**One palette for every tool, in dark and light.**
 
 ![A React component in gh44 Dark in Zed](assets/zed-dark.svg)
 
